@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.db import models
 
 # Se crean las clases para los modelos 
@@ -24,7 +25,7 @@ class ubicacion(models.Model):
 
 class investigador(models.Model):
     numerodocumento = models.CharField(max_length=50, primary_key=True)
-    contrasena = models.CharField(max_length=50)
+    contrasena = models.CharField(max_length=128)  # se aumenta la longitud para almacenar la contraseña encriptada
     correo = models.CharField(max_length=50)
     nombre = models.CharField(max_length=50)
     apellidos = models.CharField(max_length=50)
@@ -56,6 +57,10 @@ class investigador(models.Model):
     lineainvestigacion = models.CharField(max_length=50)
     ies = models.CharField(max_length=50)
     ubicacion = models.ForeignKey(ubicacion,null=False,blank=False,on_delete=models.CASCADE)
+    def save(self, *args, **kwargs):
+        # Encriptar la contraseña antes de guardar el objeto Investigador
+        self.contrasena = make_password(self.contrasena)
+        super().save(*args, **kwargs)
 
 # ----------------------- Producto -----------------------
 class eventos(models.Model):
@@ -156,26 +161,214 @@ class maestria(models.Model):
 
 class listaProducto(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    articulos = models.ForeignKey(articulos,null=False,blank=False,on_delete=models.CASCADE)
-    capitulos = models.ForeignKey(capitulos,null=False,blank=False,on_delete=models.CASCADE)
-    software = models.ForeignKey(software,null=False,blank=False,on_delete=models.CASCADE)
-    libros = models.ForeignKey(libros,null=False,blank=False,on_delete=models.CASCADE)
-    prototipoIndustrial = models.ForeignKey(industrial,null=False,blank=False,on_delete=models.CASCADE)
-    eventos = models.ForeignKey(eventos,null=False,blank=False,on_delete=models.CASCADE)
-    reconocimientos = models.ForeignKey(reconocimientos,null=False,blank=False,on_delete=models.CASCADE)
-    consultoria = models.ForeignKey(consultoria,null=False,blank=False,on_delete=models.CASCADE)
-    contenido = models.ForeignKey(contenido,null=False,blank=False,on_delete=models.CASCADE)
-    pregFinalizadoyCurso = models.ForeignKey(pregFinalizadoyCurso,null=False,blank=False,on_delete=models.CASCADE)
-    apropiacion = models.ForeignKey(apropiacion,null=False,blank=False,on_delete=models.CASCADE)
-    maestria = models.ForeignKey(maestria,null=False,blank=False,on_delete=models.CASCADE)
-    proyectoCursoProducto = models.CharField(max_length=50)
-    proyectoFormuladoProducto = models.CharField(max_length=50)
-    proyectoRSUProducto = models.CharField(max_length=50)
+    articulo = models.ForeignKey(articulos, null=True, blank=True, on_delete=models.CASCADE)
+    capitulo = models.ForeignKey(capitulos, null=True, blank=True, on_delete=models.CASCADE)
+    software = models.ForeignKey(software, null=True, blank=True, on_delete=models.CASCADE)
+    libro = models.ForeignKey(libros, null=True, blank=True, on_delete=models.CASCADE)
+    prototipoIndustrial = models.ForeignKey(industrial, null=True, blank=True, on_delete=models.CASCADE)
+    evento = models.ForeignKey(eventos, null=True, blank=True, on_delete=models.CASCADE)
+    reconocimiento = models.ForeignKey(reconocimientos, null=True, blank=True, on_delete=models.CASCADE)
+    consultoria = models.ForeignKey(consultoria, null=True, blank=True, on_delete=models.CASCADE)
+    contenido = models.ForeignKey(contenido, null=True, blank=True, on_delete=models.CASCADE)
+    pregFinalizadoyCurso = models.ForeignKey(pregFinalizadoyCurso, null=True, blank=True, on_delete=models.CASCADE)
+    apropiacion = models.ForeignKey(apropiacion, null=True, blank=True, on_delete=models.CASCADE)
+    maestria = models.ForeignKey(maestria, null=True, blank=True, on_delete=models.CASCADE)
+    proyectoCursoProducto = models.CharField(max_length=50, blank=True, null=True)
+    proyectoFormuladoProducto = models.CharField(max_length=50, blank=True, null=True)
+    proyectoRSUProducto = models.CharField(max_length=50, blank=True, null=True)
 
 
 
+class rolProducto(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    rol = models.CharField(max_length=50)
+
+class cuartilEsperado(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    cuartil = [
+        ("A", "A"),
+        ("B", "B"),
+        ("C", "C"),
+        ("D", "D"),
+        ("Q", "Q"),
+        ("RNT", "RNT"),
+    ]
+    cuartil = models.CharField(max_length=50, choices=cuartil, default='A')
+
+class categoriaMinciencias(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    categoria = [
+        ("A1", "A1"),
+        ("A2", "A2"),
+        ("B", "B"),
+        ("C", "C"),
+    ]
+    categoria = models.CharField(max_length=50, choices=categoria, default='Junior')
+
+class estudiantes(models.Model):
+    nombres = models.CharField(max_length=50)
+    apellidos = models.CharField(max_length=50)
+    semestre = models.IntegerField()
+    fechaGrado = models.DateField()
+    codigoGrupo = models.CharField(max_length=50)
+    tipoDocumento = [
+        ("CC", "Cédula de ciudadanía"),
+        ("TI", "Tarjeta de identidad"),
+        ("CE", "Cédula de extranjería"),
+        ("RC", "Registro civil"),
+        ("PA", "Pasaporte"),
+    ]
+    tipoDocumento = models.CharField(max_length=50, choices=tipoDocumento, default='CC')
+    numeroDocumento = models.CharField(max_length=50, primary_key=True)
+
+class estadoProducto(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    estado = [
+        ("resaccion", "resaccion"),
+        ("sometido", "sometido"),
+        ("publicado", "publicado"),
+    ]
+    estado = models.CharField(max_length=50, choices=estado, default='En proceso')
+
+class producto(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    tituloProducto = models.CharField(max_length=50)
+    rolProducto = models.ForeignKey(rolProducto,null=False,blank=False,on_delete=models.CASCADE)
+    investigador = models.ForeignKey(investigador,null=False,blank=False,on_delete=models.CASCADE)
+    listaProducto = models.ForeignKey(listaProducto,null=False,blank=False,on_delete=models.CASCADE)
+    cuartilEsperado = models.ForeignKey(cuartilEsperado,null=False,blank=False,on_delete=models.CASCADE)
+    categoriaMinciencias = models.ForeignKey(categoriaMinciencias,null=False,blank=False,on_delete=models.CASCADE)
+    tipologiaProducto = models.CharField(max_length=50)
+    publicacion = models.CharField(max_length=50)
+    estudiantes = models.ForeignKey(estudiantes,null=False,blank=False,on_delete=models.CASCADE)
+    estadoProdIniSemestre = models.CharField(max_length=50)
+    porcentanjeAvanFinSemestre= models.IntegerField()
+    observaciones = models.CharField(max_length=50)
+    estadoProducto = models.ForeignKey(estadoProducto,null=False,blank=False,on_delete=models.CASCADE)
+    porcentajeComSemestral = models.IntegerField()
+    porcentajeRealMensual = models.IntegerField()
+    fecha = models.DateField()
+    origen = models.CharField(max_length=50)
+    Soporte = models.CharField(max_length=50)
 
 # ----------------------- Proyecto -----------------------
+
+class unidadAcademica(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    nombre = models.CharField(max_length=50)
+
+class entidadPostulo(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    nombreInstitucion = models.CharField(max_length=50)
+    nombreGrupo = models.CharField(max_length=50)
+
+class financiacion(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    valorPropuestoFin = models.CharField(max_length=50)
+    valorEjecutadoFin = models.CharField(max_length=50)
+
+class grupoInvestigacionPro(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    nombre = models.CharField(max_length=50)
+
+class transacciones(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    fecha = models.DateField()
+    acta = models.CharField(max_length=50)
+    descripcion = models.CharField(max_length=50)
+
+class origen(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    origen = [
+        ("nacional", "nacional"),
+        ("internacional", "internacional"),
+    ]
+    origen = models.CharField(max_length=50, choices=origen, default='nacional')
+
+class ubicacionProyecto(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    instalacion = models.CharField(max_length=50)
+    municipio = models.CharField(max_length=50)
+    pais = models.CharField(max_length=50)
+    departamento = models.CharField(max_length=50)
+
+class estadoProyecto(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    estado = [
+        ("Propuesta", "Propuesta"),
+        ("Iniciado", "Iniciado"),
+        ("Ejecucion", "Ejecucion"),
+        ("Finalizado", "Finalizado"),
+        ("Detenido", "Detenido"),
+    ]
+    estado = models.CharField(max_length=50, choices=estado, default='En proceso')
+
+class modalidadProyecto(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    modalidad = [
+        ("general", "general"),
+        ("clinical", "clinical"),
+        ("creación", "creación"),
+    ]
+    modalidad = models.CharField(max_length=50, choices=modalidad, default='Convocatoria')
+
+class avanceProyecto(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    reporte = models.CharField(max_length=50)
+    entregablesComprometidos = models.CharField(max_length=50)
+    entregablesReal = models.CharField(max_length=50)
+
+class lineaInvestigacion(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    nombre = models.CharField(max_length=50)
+
+class entregableAdministrativo(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    nombre = models.CharField(max_length=50)
+    titulo = models.CharField(max_length=50)
+    calidad = models.CharField(max_length=50)
+    entregable = models.CharField(max_length=50)
+    pendiente = models.CharField(max_length=50)
+    clasificacion = models.CharField(max_length=50)
+
+class proyecto(models.Model):
+    codigo = models.CharField(max_length=50, primary_key=True)
+    fecha = models.DateField()
+    titulo = models.CharField(max_length=50)
+    investigador = models.ForeignKey(investigador,null=False,blank=False,on_delete=models.CASCADE)
+    unidadAcademica = models.ForeignKey(unidadAcademica,null=False,blank=False,on_delete=models.CASCADE)
+    producto = models.ForeignKey(producto,null=False,blank=False,on_delete=models.CASCADE)
+    coinvestigador = models.CharField(max_length=50)
+    programaCoinvestigador = models.CharField(max_length=50)
+    entidadInstitucion = models.CharField(max_length=50)
+    areaDisciplinares = models.CharField(max_length=50)
+    area = models.CharField(max_length=50)
+    porcentajeEjecucionCorte = models.IntegerField()
+    entidadPostulo = models.ForeignKey(entidadPostulo,null=False,blank=False,on_delete=models.CASCADE)
+    financiacion = models.ForeignKey(financiacion,null=False,blank=False,on_delete=models.CASCADE)
+    grupoInvestigacionPro = models.ForeignKey(grupoInvestigacionPro,null=False,blank=False,on_delete=models.CASCADE)
+    porcentajeEjecucionFinCorte = models.IntegerField()
+    porcentajeAvance = models.IntegerField()
+    soporte = models.CharField(max_length=50)
+    transacciones = models.ForeignKey(transacciones,null=False,blank=False,on_delete=models.CASCADE)
+    origen = models.ForeignKey(origen,null=False,blank=False,on_delete=models.CASCADE)
+    convocatoria = models.CharField(max_length=50)
+    ubicacionProyecto = models.ForeignKey(ubicacionProyecto,null=False,blank=False,on_delete=models.CASCADE)
+    estadoProyecto = models.ForeignKey(estadoProyecto,null=False,blank=False,on_delete=models.CASCADE)
+    modalidadProyecto = models.ForeignKey(modalidadProyecto,null=False,blank=False,on_delete=models.CASCADE)
+    nivelRiesgoEtico = models.CharField(max_length=50)
+    lineaInvestigacion = models.ForeignKey(lineaInvestigacion,null=False,blank=False,on_delete=models.CASCADE)
+    entregableAdministrativo = models.ForeignKey(entregableAdministrativo,null=False,blank=False,on_delete=models.CASCADE)
+
+
+
+
+
+
+
+
+
+
 
 
 
