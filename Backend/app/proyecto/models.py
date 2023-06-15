@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.db import models
 
 # Se crean las clases para los modelos 
@@ -24,7 +25,7 @@ class ubicacion(models.Model):
 
 class investigador(models.Model):
     numerodocumento = models.CharField(max_length=50, primary_key=True)
-    contrasena = models.CharField(max_length=50)
+    contrasena = models.CharField(max_length=128)  # se aumenta la longitud para almacenar la contraseña encriptada
     correo = models.CharField(max_length=50)
     nombre = models.CharField(max_length=50)
     apellidos = models.CharField(max_length=50)
@@ -56,6 +57,10 @@ class investigador(models.Model):
     lineainvestigacion = models.CharField(max_length=50)
     ies = models.CharField(max_length=50)
     ubicacion = models.ForeignKey(ubicacion,null=False,blank=False,on_delete=models.CASCADE)
+    def save(self, *args, **kwargs):
+        # Encriptar la contraseña antes de guardar el objeto Investigador
+        self.contrasena = make_password(self.contrasena)
+        super().save(*args, **kwargs)
 
 # ----------------------- Producto -----------------------
 class eventos(models.Model):
@@ -156,21 +161,23 @@ class maestria(models.Model):
 
 class listaProducto(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    articulos = models.ForeignKey(articulos,null=False,blank=False,on_delete=models.CASCADE)
-    capitulos = models.ForeignKey(capitulos,null=False,blank=False,on_delete=models.CASCADE)
-    software = models.ForeignKey(software,null=False,blank=False,on_delete=models.CASCADE)
-    libros = models.ForeignKey(libros,null=False,blank=False,on_delete=models.CASCADE)
-    prototipoIndustrial = models.ForeignKey(industrial,null=False,blank=False,on_delete=models.CASCADE)
-    eventos = models.ForeignKey(eventos,null=False,blank=False,on_delete=models.CASCADE)
-    reconocimientos = models.ForeignKey(reconocimientos,null=False,blank=False,on_delete=models.CASCADE)
-    consultoria = models.ForeignKey(consultoria,null=False,blank=False,on_delete=models.CASCADE)
-    contenido = models.ForeignKey(contenido,null=False,blank=False,on_delete=models.CASCADE)
-    pregFinalizadoyCurso = models.ForeignKey(pregFinalizadoyCurso,null=False,blank=False,on_delete=models.CASCADE)
-    apropiacion = models.ForeignKey(apropiacion,null=False,blank=False,on_delete=models.CASCADE)
-    maestria = models.ForeignKey(maestria,null=False,blank=False,on_delete=models.CASCADE)
-    proyectoCursoProducto = models.CharField(max_length=50)
-    proyectoFormuladoProducto = models.CharField(max_length=50)
-    proyectoRSUProducto = models.CharField(max_length=50)
+    articulo = models.ForeignKey(articulos, null=True, blank=True, on_delete=models.CASCADE)
+    capitulo = models.ForeignKey(capitulos, null=True, blank=True, on_delete=models.CASCADE)
+    software = models.ForeignKey(software, null=True, blank=True, on_delete=models.CASCADE)
+    libro = models.ForeignKey(libros, null=True, blank=True, on_delete=models.CASCADE)
+    prototipoIndustrial = models.ForeignKey(industrial, null=True, blank=True, on_delete=models.CASCADE)
+    evento = models.ForeignKey(eventos, null=True, blank=True, on_delete=models.CASCADE)
+    reconocimiento = models.ForeignKey(reconocimientos, null=True, blank=True, on_delete=models.CASCADE)
+    consultoria = models.ForeignKey(consultoria, null=True, blank=True, on_delete=models.CASCADE)
+    contenido = models.ForeignKey(contenido, null=True, blank=True, on_delete=models.CASCADE)
+    pregFinalizadoyCurso = models.ForeignKey(pregFinalizadoyCurso, null=True, blank=True, on_delete=models.CASCADE)
+    apropiacion = models.ForeignKey(apropiacion, null=True, blank=True, on_delete=models.CASCADE)
+    maestria = models.ForeignKey(maestria, null=True, blank=True, on_delete=models.CASCADE)
+    proyectoCursoProducto = models.CharField(max_length=50, blank=True, null=True)
+    proyectoFormuladoProducto = models.CharField(max_length=50, blank=True, null=True)
+    proyectoRSUProducto = models.CharField(max_length=50, blank=True, null=True)
+
+
 
 class rolProducto(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
