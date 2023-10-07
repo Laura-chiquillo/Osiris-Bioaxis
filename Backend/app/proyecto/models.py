@@ -1,7 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from django.db import models
 
-# Se crean las clases para los modelos 
+# Se crean las clases para los modelos
 # colocamos los atributos de la clase
 # ----------------------- INVESTIGADOR -----------------------
 
