@@ -1,3 +1,60 @@
-.example-spacer {
-    flex: 1 1 auto;
-  }
+.example-card {
+  max-width: 1000px;
+  max-height: 2000px;
+  margin: 0 auto; /* Esto centra la tarjeta horizontalmente */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Esto centra la tarjeta verticalmente */
+  align-items: center;
+  align-content: center; /* Esto ayuda a centrar verticalmente */
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  gap: 20px; /* Espacio entre los elementos */
+}
+.example-header-image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+}
+.body{
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  align-items: center;
+  background-color: rgb(227, 224, 230);
+}
+.login{
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  flex: 1;  /*Distribuye el espacio disponible en partes iguales */
+  padding: 10px; /* Añade espacio entre los divs si lo deseas */
+}
+.ancho{
+  width: 80%;
+}
+.button{
+  height: 50px;
+}
+.example-small-box, .example-large-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.example-small-box {
+  height: 100px;
+  width: 100px;
+}
+
+.example-large-box {
+  height: 300px;
+  width: 300px;
+}
+.mat-tab{
+  height: 500px;
+  width: 1000px;
+}
