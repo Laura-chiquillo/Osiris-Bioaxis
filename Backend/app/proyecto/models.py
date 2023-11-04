@@ -349,7 +349,7 @@ class proyecto(models.Model):
     grupoInvestigacionPro = models.ForeignKey(grupoInvestigacionPro,null=False,blank=False,on_delete=models.CASCADE)
     porcentajeEjecucionFinCorte = models.IntegerField()
     porcentajeAvance = models.IntegerField()
-    Soporte = models.FileField(upload_to ='uploadsProyecto/',max_length=1000)
+    Soporte = models.FileField(upload_to ='uploadsProducto/',max_length=1000, blank=True)
     transacciones = models.ForeignKey(transacciones,null=False,blank=False,on_delete=models.CASCADE)
     origen = models.ForeignKey(origen,null=False,blank=False,on_delete=models.CASCADE)
     convocatoria = models.CharField(max_length=50)
