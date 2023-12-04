@@ -21,7 +21,7 @@
   justify-content: center;
   height: 100%;
   align-items: center;
-  background-color: rgb(227, 224, 230);
+  background-color: #6AABA0;
 }
 .login{
   width: 100%;
@@ -44,12 +44,10 @@
   padding: 16px;
   border-radius: 8px;
 }
-
 .example-small-box {
   height: 100px;
   width: 100px;
 }
-
 .example-large-box {
   height: 300px;
   width: 300px;
