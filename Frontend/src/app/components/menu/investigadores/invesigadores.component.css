@@ -5,6 +5,11 @@
     width: 100vw;
     height: 100vh;
   }
+
+  .Buscar{
+    width: 200px;
+    height: 500px;
+  }
   
   .menu {
     border-right: 1px solid #ccc; /* Para separar del contenido */
