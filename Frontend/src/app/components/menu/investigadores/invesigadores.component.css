@@ -6,9 +6,10 @@
     height: 100vh;
   }
 
-  .Buscar{
-    width: 200px;
-    height: 500px;
+  .custom-mat-field {
+    width: 500px;
+    position: relative;
+    top: -220px; /* Ajusta este valor para mover el ícono hacia arriba o abajo según sea necesario */
   }
   
   .menu {
