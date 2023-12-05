@@ -1,0 +1,17 @@
+.tabs {
+    margin-top: 150px;
+    margin-left: 150px;
+    width: 70%;
+    height: 60%;
+}
+.mat-tab-group {
+    margin-bottom: 48px;
+}
+.example-container {
+  height: 400px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
