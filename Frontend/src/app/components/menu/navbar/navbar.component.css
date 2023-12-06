@@ -1,6 +1,6 @@
 .example-card {
   max-width: 1000px;
-  max-height: 2000px;
+  max-height: 3000px;
   margin: 0 auto; /* Esto centra la tarjeta horizontalmente */
   display: flex;
   flex-direction: column;
@@ -56,3 +56,29 @@
   height: 500px;
   width: 1000px;
 }
+.titulo {
+  display: flex;
+  justify-content: space-around; /* Distribuye los elementos a lo largo del contenedor */
+}
+
+.titulo p {
+  margin-bottom: 20px; /* Espacio debajo de cada párrafo */
+}
+
+/* O bien, para añadir espacio debajo del último párrafo */
+.titulo p:last-child {
+  margin-bottom: 20px; /* Espacio debajo del último párrafo */
+}
+/* styles.css o styles.scss */
+.mat-form-field.form-field-spacing {
+  margin-bottom: 16px; /* Margen entre los elementos */
+}
+
+/* Espacio adicional en el primer elemento */
+.mat-form-field.form-field-spacing:first-child {
+  margin-top: 16px; /* Puedes ajustar el valor según sea necesario */
+}
+.titulo{
+  margin-top: 60px;
+}
+

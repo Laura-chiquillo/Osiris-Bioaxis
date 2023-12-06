@@ -35,5 +35,60 @@
                   </mat-accordion>
                   
             </mat-tab>
+            <mat-tab label="Registro">
+              <div class="titulo">
+                <p>Nombres</p>
+                <p>Apellidos</p>
+                <p>Correo</p>
+              </div>
+              <div class="reg">
+                <mat-form-field class="form-field-spacing" appearance="fill">
+                  <mat-label>Nombre</mat-label>
+                  <input matInput autocomplete="off">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Apellidos</mat-label>
+                  <input type="text" matInput autocomplete="off">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Correo</mat-label>
+                  <input matInput autocomplete="off">
+                </mat-form-field>
+              </div>
+              <div class="titulo">
+                <p>Tipo de documento</p>
+                <p>Numero de documento</p>
+              </div>
+              <div>
+                <mat-form-field>
+                  <mat-label>Seleccione</mat-label>
+                  <mat-select>
+                    <mat-option value="one">CC</mat-option>
+                    <mat-option value="two">TI</mat-option>
+                    <mat-option value="three">CE</mat-option>
+                    <mat-option value="four">PA</mat-option>
+                    <mat-option value="five">RC</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Numero de documento</mat-label>
+                  <input matInput autocomplete="off">
+                </mat-form-field>
+              </div>
+              <div class="titulo">
+                <p>Contraseña</p>
+                <p>Confirmar contraseña</p>
+              </div>
+              <div>
+                <mat-form-field appearance="fill">
+                  <mat-label>Contraseña</mat-label>
+                  <input type="password" matInput autocomplete="off">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Contraseña</mat-label>
+                  <input type="password" matInput autocomplete="off">
+                </mat-form-field>
+              </div>
+          </mat-tab>
       </mat-tab-group>
 </mat-card>

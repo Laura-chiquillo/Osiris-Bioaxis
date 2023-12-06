@@ -6,10 +6,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from '../shared/shared.module';
 
+import { MatSelectModule } from '@angular/material/select';
 import { MenuRoutingModule } from './menu-routing.module';
 import { MenuComponent } from './menu.component';
 import { NavbarComponent } from './navbar/navbar.component';
-
 
 @NgModule({
   declarations: [
@@ -22,7 +22,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     SharedModule,
     MatCardModule,
     MatTabsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSelectModule
   ]
 })
 export class MenuModule {
