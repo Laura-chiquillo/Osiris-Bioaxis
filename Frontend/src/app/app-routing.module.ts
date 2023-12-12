@@ -4,8 +4,10 @@ import { AdministradorComponent } from './components/menu/administrador/administ
 import { ControlComponent } from './components/menu/administrador/control/control.component';
 import { EstadosComponent } from './components/menu/administrador/estados/estados.component';
 import { InvesigadoresComponent } from './components/menu/investigadores/invesigadores.component';
+import { ParticipacionComponent } from './components/menu/investigadores/participacion/participacion.component';
 import { PerfilInvestigadorComponent } from './components/menu/investigadores/perfil-investigador/perfil-investigador.component';
 import { ProyectosComponent } from './components/menu/investigadores/proyectos/proyectos.component';
+
 
 const routes: Routes = [
   {path:'', redirectTo: 'menu', pathMatch: 'full'},
@@ -15,7 +17,8 @@ const routes: Routes = [
   {path:'investigadores/proyectos',component:ProyectosComponent},
   {path:'administrador',component:AdministradorComponent},
   {path:'administrador/control',component:ControlComponent},
-  {path:'administrador/estados',component:EstadosComponent}
+  {path:'administrador/estados',component:EstadosComponent},
+  {path:'investigadores/participacion',component:ParticipacionComponent},
 ];
 
 @NgModule({
