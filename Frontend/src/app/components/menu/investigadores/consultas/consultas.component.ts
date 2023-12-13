@@ -1,17 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator'; // Asegúrate de importar MatPaginator desde '@angular/material/paginator'
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
-  selector: 'app-proyectos',
-  templateUrl: './proyectos.component.html',
-  styleUrls: ['./proyectos.component.css'],
+  selector: 'app-consultas',
+  templateUrl: './consultas.component.html',
+  styleUrls: ['./consultas.component.css'],
   standalone: true,
-  imports: [MatTabsModule, MatTableModule, MatPaginatorModule],
+  imports: [MatTabsModule, MatTableModule, MatPaginatorModule, MatExpansionModule, CommonModule],
 })
-
-export class ProyectosComponent {
+export class ConsultasComponent {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
@@ -19,6 +20,21 @@ export class ProyectosComponent {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  // segunda tabla
+  dataSource2: Element[] = [
+    { name: 'Persona 1', age: 25 },
+    { name: 'Persona 2', age: 30 },
+    // Agrega más datos si es necesario
+  ];
+
+  displayedColumns2: string[] = ['name', 'age', 'details']; // Actualiza las columnas a mostrar
+
+  expandedElement: Element | null = null;
+
+  toggleExpansion(element: Element): void {
+    this.expandedElement = this.expandedElement === element ? null : element;
   }
 }
 export interface PeriodicElement {
@@ -50,3 +66,9 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
   {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
 ];
+
+// segunda tabla
+export interface Element {
+  name: string;
+  age: number;
+}
