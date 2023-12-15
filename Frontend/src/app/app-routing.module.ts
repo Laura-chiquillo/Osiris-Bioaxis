@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdministradorComponent } from './components/menu/administrador/administrador.component';
+import { ConsultaComponent } from './components/menu/administrador/consulta/consulta.component';
 import { ControlComponent } from './components/menu/administrador/control/control.component';
 import { EstadosComponent } from './components/menu/administrador/estados/estados.component';
 import { PerfilAdministradorComponent } from './components/menu/administrador/perfil-administrador/perfil-administrador.component';
@@ -21,7 +22,8 @@ const routes: Routes = [
   {path:'administrador',component:AdministradorComponent},
   {path:'administrador/control',component:ControlComponent},
   {path:'administrador/estados',component:EstadosComponent},
-  {path:'administrador/perfil',component:PerfilAdministradorComponent}
+  {path:'administrador/perfil',component:PerfilAdministradorComponent},
+  {path:'administrador/consulta',component:ConsultaComponent}
 ];
 
 @NgModule({
