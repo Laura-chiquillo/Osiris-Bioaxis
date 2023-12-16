@@ -7,11 +7,15 @@ from django.db import models
 
 class posgrado(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    nombre = models.CharField(max_length=50)
+    titulo = models.CharField(max_length=50)
+    fecha = models.DateField(max_length=50)
+    institucion = models.CharField(max_length=50)
 
 class pregrado(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    nombre = models.CharField(max_length=50)
+    titulo = models.CharField(max_length=50)
+    fecha = models.DateField(max_length=50)
+    institucion = models.CharField(max_length=50)
 
 class grupoinvestigacion(models.Model):
     codigo = models.CharField(max_length=50, primary_key=True)
@@ -28,6 +32,7 @@ class investigador(models.Model):
     contrasena = models.CharField(max_length=128)  # se aumenta la longitud para almacenar la contraseña encriptada
     correo = models.CharField(max_length=50)
     nombre = models.CharField(max_length=50)
+    
     apellidos = models.CharField(max_length=50)
     tipodpcumento = [
         ('CC', 'Cédula de ciudadanía'),
@@ -40,7 +45,6 @@ class investigador(models.Model):
     tipPosgrado = models.ForeignKey(posgrado,null=False,blank=False,on_delete=models.CASCADE)
     tituloposgrado = models.CharField(max_length=50)
     tipPregrado = models.ForeignKey(pregrado,null=False,blank=False,on_delete=models.CASCADE)
-    titulopregrado = models.CharField(max_length=50)
     horasestricto = models.IntegerField()
     horasformacion = models.IntegerField()
     unidadAcademica = models.CharField(max_length=50)
