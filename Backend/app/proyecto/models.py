@@ -32,7 +32,6 @@ class investigador(models.Model):
     contrasena = models.CharField(max_length=128)  # se aumenta la longitud para almacenar la contraseña encriptada
     correo = models.CharField(max_length=50)
     nombre = models.CharField(max_length=50)
-    
     apellidos = models.CharField(max_length=50)
     tipodpcumento = [
         ('CC', 'Cédula de ciudadanía'),
@@ -43,7 +42,6 @@ class investigador(models.Model):
     ]
     tipodocumento = models.CharField(max_length=2, choices=tipodpcumento, default='CC')
     tipPosgrado = models.ForeignKey(posgrado,null=False,blank=False,on_delete=models.CASCADE)
-    tituloposgrado = models.CharField(max_length=50)
     tipPregrado = models.ForeignKey(pregrado,null=False,blank=False,on_delete=models.CASCADE)
     horasestricto = models.IntegerField()
     horasformacion = models.IntegerField()
