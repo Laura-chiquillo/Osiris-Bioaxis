@@ -1,17 +1,18 @@
 .example-card {
   max-width: 1000px;
-  max-height: 3000px;
-  margin: 0 auto; /* Esto centra la tarjeta horizontalmente */
+  height: 1500px; /* Cambia el valor según sea necesario */
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Esto centra la tarjeta verticalmente */
+  justify-content: center;
   align-items: center;
-  align-content: center; /* Esto ayuda a centrar verticalmente */
+  align-content: center;
   background-color: #fff;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  gap: 20px; /* Espacio entre los elementos */
+  gap: 20px;
 }
+
 .example-header-image {
   background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
   background-size: cover;
@@ -53,32 +54,47 @@
   width: 300px;
 }
 .mat-tab{
-  height: 500px;
   width: 1000px;
-}
-.titulo {
-  display: flex;
-  justify-content: space-around; /* Distribuye los elementos a lo largo del contenedor */
-}
-
-.titulo p {
-  margin-bottom: 20px; /* Espacio debajo de cada párrafo */
-}
-
-/* O bien, para añadir espacio debajo del último párrafo */
-.titulo p:last-child {
-  margin-bottom: 20px; /* Espacio debajo del último párrafo */
-}
-/* styles.css o styles.scss */
-.mat-form-field.form-field-spacing {
-  margin-bottom: 16px; /* Margen entre los elementos */
-}
-
-/* Espacio adicional en el primer elemento */
-.mat-form-field.form-field-spacing:first-child {
-  margin-top: 16px; /* Puedes ajustar el valor según sea necesario */
+  height: 5000px;
 }
 .titulo{
+  display: flex;
+  justify-content: space-evenly; /* Distribuye los elementos a lo largo del contenedor */
   margin-top: 60px;
 }
 
+.titulo2{
+  display: flex;
+  justify-content: space-evenly; /* Distribuye los elementos a lo largo del contenedor */
+  margin-top: 5px;
+}
+
+.mat-form-field input {
+  width: 250px; /* Ajusta este valor según el ancho deseado para los campos de entrada */
+}
+
+.reg {
+  display: flex;
+  justify-content: center;
+  margin-left: 70px;
+}
+.form-field-spacing {
+  display: inline-block; /* Mantiene los elementos en línea */
+  margin-right: 50px; /* Ajusta este valor según el espacio deseado entre los mat-form-field */
+  font-size: initial; /* Restaura el tamaño de fuente a su valor inicial */
+  width: 200px;
+}
+.reg2 {
+  display: flex;
+  justify-content: center;
+  margin-left: 180px;
+}
+.form-field-spacing2 {
+  display: inline-block; /* Mantiene los elementos en línea */
+  margin-right: 200px; /* Ajusta este valor según el espacio deseado entre los mat-form-field */
+  font-size: initial; /* Restaura el tamaño de fuente a su valor inicial */
+  width: 200px;
+}
+.anchoGuardar{
+  width: 150px;
+}
