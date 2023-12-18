@@ -1,0 +1,13 @@
+.tabs {
+    margin-top: 150px;
+    margin-left: 150px;
+    width: 70%;
+    height: 60%;
+}
+.mat-tab-group {
+    background-color: lightblue !important;
+    margin-bottom: 48px;
+}
+table {
+    width: 100%;
+}

@@ -1,24 +1,31 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import { MenuRoutingModule } from './menu-routing.module';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from '../shared/shared.module';
+
+import { MatSelectModule } from '@angular/material/select';
+import { MenuRoutingModule } from './menu-routing.module';
 import { MenuComponent } from './menu.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { InvesigadoresComponent } from './investigadores/invesigadores.component';
-import { InformacionGrupoComponent } from './informacion-grupo/informacion-grupo.component';
 
 @NgModule({
   declarations: [
     MenuComponent,
     NavbarComponent,
-    InvesigadoresComponent,
-    InformacionGrupoComponent
   ],
   imports: [
     CommonModule,
     MenuRoutingModule,
-    SharedModule
+    SharedModule,
+    MatCardModule,
+    MatTabsModule,
+    MatExpansionModule,
+    MatSelectModule
   ]
 })
-export class MenuModule { }
+export class MenuModule {
+  panelOpenState = false;
+}
