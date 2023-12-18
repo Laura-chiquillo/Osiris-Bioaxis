@@ -32,7 +32,9 @@ class investigador(models.Model):
     contrasena = models.CharField(max_length=128)  # se aumenta la longitud para almacenar la contraseña encriptada
     correo = models.CharField(max_length=50)
     nombre = models.CharField(max_length=50)
+    estado = models.BooleanField(default=False)
     apellidos = models.CharField(max_length=50)
+    imagen = models.BinaryField(null=True, blank=True)
     tipodpcumento = [
         ('CC', 'Cédula de ciudadanía'),
         ('TI', 'Tarjeta de identidad'),
