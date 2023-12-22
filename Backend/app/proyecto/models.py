@@ -49,7 +49,6 @@ class Imagen(models.Model):
     class Meta:
         db_table = 'proyecto_Imagen'
 
-
 class Investigador(models.Model):
     numerodocumento = models.CharField(max_length=50, primary_key=True)
     contrasena = models.CharField(max_length=128)  # se aumenta la longitud para almacenar la contraseña encriptada
@@ -80,7 +79,12 @@ class Investigador(models.Model):
     ]
     categoriaminciencias = models.CharField(max_length=10, choices=categoriaminciencias, default='Junior')
     escalofonodocente = models.CharField(max_length=50)
-    rolinvestigador = models.CharField(max_length=50)
+    rolinvestigador = [
+        ("Investigador", "Investigador"),
+        ("Administrador", "Administrador"),
+        ("Estudiante", "Estudiante"),
+    ]
+    rolinvestigador = models.CharField(max_length=50, choices=rolinvestigador, default='Investigador')
     lineainvestigacion = models.CharField(max_length=50)
     ies = models.CharField(max_length=50)
     ubicacion = models.ForeignKey(Ubicacion,null=False,blank=False,on_delete=models.CASCADE)
