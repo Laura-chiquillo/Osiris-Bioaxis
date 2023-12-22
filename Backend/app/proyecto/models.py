@@ -10,6 +10,13 @@ class posgrado(models.Model):
     titulo = models.CharField(max_length=50)
     fecha = models.DateField(max_length=50)
     institucion = models.CharField(max_length=50)
+    tipo = [
+        ('Especialización', 'Especialización'),
+        ('Maestría', 'Maestría'),
+        ('Doctorado', 'Doctorado'),
+        ('NA', 'No aplica')
+    ]
+    tipo = models.CharField(max_length=50, choices=tipo, default='NA')
 
 class pregrado(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
@@ -57,7 +64,12 @@ class investigador(models.Model):
     ]
     categoriaminciencias = models.CharField(max_length=10, choices=categoriaminciencias, default='Junior')
     escalofonodocente = models.CharField(max_length=50)
-    rolinvestigador = models.CharField(max_length=50)
+    rolinvestigador = [
+        ("Investigador", "Investigador"),
+        ("Administrador", "Administrador"),
+        ("Estudiante", "Estudiante")
+    ]
+    rolinvestigador = models.CharField(max_length=50, choices=rolinvestigador, default='Investigador')
     lineainvestigacion = models.CharField(max_length=50)
     ies = models.CharField(max_length=50)
     ubicacion = models.ForeignKey(ubicacion,null=False,blank=False,on_delete=models.CASCADE)
