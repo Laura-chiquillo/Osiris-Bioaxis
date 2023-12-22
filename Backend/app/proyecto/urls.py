@@ -1,5 +1,6 @@
 from django.urls import path
 
+from .autentication import CustomAuthToken
 from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
                        articuloRetrieveUpdateDestroy, articulosList,
                        avanceProyectoList, avanceProyectoRetrieveUpdateDestroy,
@@ -47,6 +48,7 @@ from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
                        unidadAcademicaRetrieveUpdateDestroy)
 
 urlpatterns = [
+    path('custom-token-auth/', CustomAuthToken.as_view(), name='custom_token_auth'),
     path('investigador', investigadorList.as_view(), name='create-investigador-list'),
     path('grupoinvestigacion', grupoInvestigacionList.as_view(), name='create-grupoinvestigacion-list'),
     path('posgrado', posgradoList.as_view(), name='create-posgrado-list'),
