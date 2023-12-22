@@ -1,16 +1,16 @@
 from rest_framework import generics
 
-from .models import (apropiacion, articulos, avanceProyecto, capitulos,
-                     categoriaMinciencias, consultoria, contenido, contrato,
-                     cuartilEsperado, entidadPostulo, entregableAdministrativo,
-                     estadoProducto, estadoProyecto, estudiantes, eventos,
-                     financiacion, grupoinvestigacion, grupoInvestigacionPro,
-                     industrial, investigador, libros, licencia,
-                     lineaInvestigacion, listaProducto, maestria,
-                     modalidadProyecto, origen, posgrado, pregFinalizadoyCurso,
-                     pregrado, producto, proyecto, reconocimientos,
-                     rolProducto, software, transacciones, ubicacion,
-                     ubicacionProyecto, unidadAcademica)
+from .models import (Apropiacion, Articulos, AvanceProyecto, Capitulos,
+                     CategoriaMinciencias, Consultoria, Contenido, Contrato,
+                     CuartilEsperado, EntidadPostulo, EntregableAdministrativo,
+                     EstadoProducto, EstadoProyecto, Estudiantes, Eventos,
+                     Financiacion, Grupoinvestigacion, GrupoInvestigacionPro,
+                     Industrial, Investigador, Libros, Licencia,
+                     LineaInvestigacion, ListaProducto, Maestria,
+                     ModalidadProyecto, Origen, Posgrado, PregFinalizadoyCurso,
+                     Pregrado, Producto, Proyecto, Reconocimientos,
+                     RolProducto, Software, Transacciones, Ubicacion,
+                     UbicacionProyecto, UnidadAcademica)
 from .serializer import (apropiacionSerializer, articulosSerializer,
                          avanceProyectoSerializer, capitulosSerializer,
                          categoriaMincienciasSerializer, consultoriaSerializer,
@@ -36,317 +36,317 @@ from .serializer import (apropiacionSerializer, articulosSerializer,
 #------------------------ investigador ------------------------
 
 class investigadorList(generics.ListCreateAPIView):
-    queryset = investigador.objects.all()
+    queryset = Investigador.objects.all()
     serializer_class = investigadorSerializer
 
 class grupoInvestigacionList(generics.ListCreateAPIView):
-    queryset = grupoinvestigacion.objects.all()
+    queryset = Grupoinvestigacion.objects.all()
     serializer_class = grupoinvestigacionSerializer
 
 class posgradoList(generics.ListCreateAPIView):
-    queryset = posgrado.objects.all()
+    queryset = Posgrado.objects.all()
     serializer_class = posgradoSerializer
 
 class pregradoList(generics.ListCreateAPIView):
-    queryset = pregrado.objects.all()
+    queryset = Pregrado.objects.all()
     serializer_class = pregradoSerializer
 
 class ubicacionList(generics.ListCreateAPIView):
-    queryset = ubicacion.objects.all()
+    queryset = Ubicacion.objects.all()
     serializer_class = ubicacionSerializer
 
 class investigadorRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = investigador.objects.all()
+    queryset = Investigador.objects.all()
     serializer_class = investigadorSerializer
 
 class grupoInvestigacionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = grupoinvestigacion.objects.all()
+    queryset = Grupoinvestigacion.objects.all()
     serializer_class = grupoinvestigacionSerializer
 
 class posgradoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = posgrado.objects.all()
+    queryset = Posgrado.objects.all()
     serializer_class = posgradoSerializer
 
 class pregradoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = pregrado.objects.all()
+    queryset = Pregrado.objects.all()
     serializer_class = pregradoSerializer
 
 class ubicacionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = ubicacion.objects.all()
+    queryset = Ubicacion.objects.all()
     serializer_class = ubicacionSerializer
 
 #---------------------------- PRODUCTOS ----------------------------
 
 class eventosList(generics.ListCreateAPIView):
-    queryset = eventos.objects.all()
+    queryset = Eventos.objects.all()
     serializer_class = eventosSerializer
 
 class articulosList(generics.ListCreateAPIView):
-    queryset = articulos.objects.all()
+    queryset = Articulos.objects.all()
     serializer_class = articulosSerializer
 
 class capitulosList(generics.ListCreateAPIView):
-    queryset = capitulos.objects.all()
+    queryset = Capitulos.objects.all()
     serializer_class = capitulosSerializer
 
 class librosList(generics.ListCreateAPIView):
-    queryset = libros.objects.all()
+    queryset = Libros.objects.all()
     serializer_class = librosSerializer
 
 class softwareList(generics.ListCreateAPIView):
-    queryset = software.objects.all()
+    queryset = Software.objects.all()
     serializer_class = softwareSerializer
 
 class industrialList(generics.ListCreateAPIView):
-    queryset = industrial.objects.all()
+    queryset = Industrial.objects.all()
     serializer_class = industrialSerializer
 
 class reconocimientosList(generics.ListCreateAPIView):
-    queryset = reconocimientos.objects.all()
+    queryset = Reconocimientos.objects.all()
     serializer_class = reconocimientosSerializer
 
 class licenciaList(generics.ListCreateAPIView):
-    queryset = licencia.objects.all()
+    queryset = Licencia.objects.all()
     serializer_class = licenciaSerializer
 
 class apropiacionList(generics.ListCreateAPIView):
-    queryset = apropiacion.objects.all()
+    queryset = Apropiacion.objects.all()
     serializer_class = apropiacionSerializer
 
 class contratoList(generics.ListCreateAPIView):
-    queryset = contrato.objects.all()
+    queryset = Contrato.objects.all()
     serializer_class = contratoSerializer
 
 class consultoriaList(generics.ListCreateAPIView):
-    queryset = consultoria.objects.all()
+    queryset = Consultoria.objects.all()
     serializer_class = consultoriaSerializer
 
 class contenidoList(generics.ListCreateAPIView):
-    queryset = contenido.objects.all()
+    queryset = Contenido.objects.all()
     serializer_class = contenidoSerializer
 
 class pregFinalizadoyCursoList(generics.ListCreateAPIView):
-    queryset = pregFinalizadoyCurso.objects.all()
+    queryset = PregFinalizadoyCurso.objects.all()
     serializer_class = pregFinalizadoyCursoSerializer
 
 class maeestriaList(generics.ListCreateAPIView):
-    queryset = maestria.objects.all()
+    queryset = Maestria.objects.all()
     serializer_class = maestriaSerializer
 
 class listaProductoList(generics.ListCreateAPIView):
-    queryset = listaProducto.objects.all()
+    queryset = ListaProducto.objects.all()
     serializer_class = listaProductoSerializer
 
 class rolProductoList(generics.ListCreateAPIView):
-    queryset = rolProducto.objects.all()
+    queryset = RolProducto.objects.all()
     serializer_class = rolProductoSerializer
 
 class cuartilEsperadoList(generics.ListCreateAPIView):
-    queryset = cuartilEsperado.objects.all()
+    queryset = CuartilEsperado.objects.all()
     serializer_class = cuartilEsperadoSerializer
 
 class categoriaMincienciasList(generics.ListCreateAPIView):
-    queryset = categoriaMinciencias.objects.all()
+    queryset = CategoriaMinciencias.objects.all()
     serializer_class = categoriaMincienciasSerializer
 
 class estudiantesList(generics.ListCreateAPIView):
-    queryset = estudiantes.objects.all()
+    queryset = Estudiantes.objects.all()
     serializer_class = estudiantesSerializer
 
 class estadoProductoList(generics.ListCreateAPIView):
-    queryset = estadoProducto.objects.all()
+    queryset = EstadoProducto.objects.all()
     serializer_class = estadoProductoSerializer
 
 class productoList(generics.ListCreateAPIView):
-    queryset = producto.objects.all()
+    queryset = Producto.objects.all()
     serializer_class = productoSerializer
 
 class eventoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = eventos.objects.all()
+    queryset = Eventos.objects.all()
     serializer_class = eventosSerializer
 
 class articuloRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = articulos.objects.all()
+    queryset = Articulos.objects.all()
     serializer_class = articulosSerializer
 
 class capituloRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = capitulos.objects.all()
+    queryset = Capitulos.objects.all()
     serializer_class = capitulosSerializer
 
 class libroRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = libros.objects.all()
+    queryset = Libros.objects.all()
     serializer_class = librosSerializer
 
 class softwareRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = software.objects.all()
+    queryset = Software.objects.all()
     serializer_class = softwareSerializer
 
 class industrialRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = industrial.objects.all()
+    queryset = Industrial.objects.all()
     serializer_class = industrialSerializer
 
 class reconocimientoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = reconocimientos.objects.all()
+    queryset = Reconocimientos.objects.all()
     serializer_class = reconocimientosSerializer
 
 class licenciaRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = licencia.objects.all()
+    queryset = Licencia.objects.all()
     serializer_class = licenciaSerializer
 
 class apropiacionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = apropiacion.objects.all()
+    queryset = Apropiacion.objects.all()
     serializer_class = apropiacionSerializer
 
 class contratoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = contrato.objects.all()
+    queryset = Contrato.objects.all()
     serializer_class = contratoSerializer
 
 class consultoriaRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = consultoria.objects.all()
+    queryset = Consultoria.objects.all()
     serializer_class = consultoriaSerializer
 
 class contenidoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = contenido.objects.all()
+    queryset = Contenido.objects.all()
     serializer_class = contenidoSerializer
 
 class pregFinalizadoyCursoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = pregFinalizadoyCurso.objects.all()
+    queryset = PregFinalizadoyCurso.objects.all()
     serializer_class = pregFinalizadoyCursoSerializer
 
 class maeestriaRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = maestria.objects.all()
+    queryset = Maestria.objects.all()
     serializer_class = maestriaSerializer
 
 class listaProductoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = listaProducto.objects.all()
+    queryset = ListaProducto.objects.all()
     serializer_class = listaProductoSerializer
 
 class rolProductoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = rolProducto.objects.all()
+    queryset = RolProducto.objects.all()
     serializer_class = rolProductoSerializer
 
 class cuartilEsperadoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = cuartilEsperado.objects.all()
+    queryset = CuartilEsperado.objects.all()
     serializer_class = cuartilEsperadoSerializer
 
 class categoriaMincienciasRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = categoriaMinciencias.objects.all()
+    queryset = CategoriaMinciencias.objects.all()
     serializer_class = categoriaMincienciasSerializer
 
 class estudiantesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = estudiantes.objects.all()
+    queryset = Estudiantes.objects.all()
     serializer_class = estudiantesSerializer
 
 class estadoProductoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = estadoProducto.objects.all()
+    queryset = EstadoProducto.objects.all()
     serializer_class = estadoProductoSerializer
 
 class productoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = producto.objects.all()
+    queryset = Producto.objects.all()
     serializer_class = productoSerializer
 
 #---------------------------- PROYECTOS ----------------------------
 
 class unidadAcademicaList(generics.ListCreateAPIView):
-    queryset = unidadAcademica.objects.all()
+    queryset = UnidadAcademica.objects.all()
     serializer_class = unidadAcademicaSerializer
 
 class entidadPostuloList(generics.ListCreateAPIView):
-    queryset = entidadPostulo.objects.all()
+    queryset = EntidadPostulo.objects.all()
     serializer_class = entidadPostuloSerializer
 
 class financiacionList(generics.ListCreateAPIView):
-    queryset = financiacion.objects.all()
+    queryset = Financiacion.objects.all()
     serializer_class = financiacionSerializer
 
 class grupoInvestigacionCoList(generics.ListCreateAPIView):
-    queryset = grupoInvestigacionPro.objects.all()
+    queryset = GrupoInvestigacionPro.objects.all()
     serializer_class = grupoInvestigacionCoSerializer
 
 class transaccionesList(generics.ListCreateAPIView):
-    queryset = transacciones.objects.all()
+    queryset = Transacciones.objects.all()
     serializer_class = transaccionesSerializer
 
 class origenList(generics.ListCreateAPIView):
-    queryset = origen.objects.all()
+    queryset = Origen.objects.all()
     serializer_class = origenSerializer
 
 class ubicacionProyectoList(generics.ListCreateAPIView):
-    queryset = ubicacionProyecto.objects.all()
+    queryset = UbicacionProyecto.objects.all()
     serializer_class = ubicacionProyectoSerializer
 
 class estadoProyectoList(generics.ListCreateAPIView):
-    queryset = estadoProyecto.objects.all()
+    queryset = EstadoProyecto.objects.all()
     serializer_class = estadoProyectoSerializer
 
 class modalidadProyectoList(generics.ListCreateAPIView):
-    queryset = modalidadProyecto.objects.all()
+    queryset = ModalidadProyecto.objects.all()
     serializer_class = modalidadProyectoSerializer
 
 class avanceProyectoList(generics.ListCreateAPIView):
-    queryset = avanceProyecto.objects.all()
+    queryset = AvanceProyecto.objects.all()
     serializer_class = avanceProyectoSerializer
 
 class lineaInvestigacionList(generics.ListCreateAPIView):
-    queryset = lineaInvestigacion.objects.all()
+    queryset = LineaInvestigacion.objects.all()
     serializer_class = lineaInvestigacionSerializer
 
 class entregableAdministrativoList(generics.ListCreateAPIView):
-    queryset = entregableAdministrativo.objects.all()
+    queryset = EntregableAdministrativo.objects.all()
     serializer_class = entregableAdministrativoSerializer
 
 class proyectoList(generics.ListCreateAPIView):
-    queryset = proyecto.objects.all()
+    queryset = Proyecto.objects.all()
     serializer_class = proyectoSerializer
 
 class unidadAcademicaRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = unidadAcademica.objects.all()
+    queryset = UnidadAcademica.objects.all()
     serializer_class = unidadAcademicaSerializer
 
 class entidadPostuloRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = entidadPostulo.objects.all()
+    queryset = EntidadPostulo.objects.all()
     serializer_class = entidadPostuloSerializer
 
 class financiacionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = financiacion.objects.all()
+    queryset = Financiacion.objects.all()
     serializer_class = financiacionSerializer
 
 class grupoInvestigacionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = grupoInvestigacionPro.objects.all()
+    queryset = GrupoInvestigacionPro.objects.all()
     serializer_class = grupoInvestigacionCoSerializer
 
 class transaccionesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = transacciones.objects.all()
+    queryset = Transacciones.objects.all()
     serializer_class = transaccionesSerializer
 
 class origenRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = origen.objects.all()
+    queryset = Origen.objects.all()
     serializer_class = origenSerializer
 
 class ubicacionProyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = ubicacionProyecto.objects.all()
+    queryset = UbicacionProyecto.objects.all()
     serializer_class = ubicacionProyectoSerializer
 
 class estadoProyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = estadoProyecto.objects.all()
+    queryset = EstadoProyecto.objects.all()
     serializer_class = estadoProyectoSerializer
 
 class modalidadProyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = modalidadProyecto.objects.all()
+    queryset = ModalidadProyecto.objects.all()
     serializer_class = modalidadProyectoSerializer
 
 class avanceProyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = avanceProyecto.objects.all()
+    queryset = AvanceProyecto.objects.all()
     serializer_class = avanceProyectoSerializer
 
 class lineaInvestigacionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = lineaInvestigacion.objects.all()
+    queryset = LineaInvestigacion.objects.all()
     serializer_class = lineaInvestigacionSerializer
 
 class entregableAdministrativoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = entregableAdministrativo.objects.all()
+    queryset = EntregableAdministrativo.objects.all()
     serializer_class = entregableAdministrativoSerializer
 
 class proyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = proyecto.objects.all()
+    queryset = Proyecto.objects.all()
     serializer_class = proyectoSerializer

@@ -1,215 +1,215 @@
 from rest_framework import serializers
 
-from .models import (apropiacion, articulos, avanceProyecto, capitulos,
-                     categoriaMinciencias, consultoria, contenido, contrato,
-                     cuartilEsperado, entidadPostulo, entregableAdministrativo,
-                     estadoProducto, estadoProyecto, estudiantes, eventos,
-                     financiacion, grupoinvestigacion, grupoInvestigacionPro,
-                     industrial, investigador, libros, licencia,
-                     lineaInvestigacion, listaProducto, maestria,
-                     modalidadProyecto, origen, posgrado, pregFinalizadoyCurso,
-                     pregrado, producto, proyecto, reconocimientos,
-                     rolProducto, software, transacciones, ubicacion,
-                     ubicacionProyecto, unidadAcademica)
+from .models import (Apropiacion, Articulos, AvanceProyecto, Capitulos,
+                     CategoriaMinciencias, Consultoria, Contenido, Contrato,
+                     CuartilEsperado, EntidadPostulo, EntregableAdministrativo,
+                     EstadoProducto, EstadoProyecto, Estudiantes, Eventos,
+                     Financiacion, Grupoinvestigacion, GrupoInvestigacionPro,
+                     Industrial, Investigador, Libros, Licencia,
+                     LineaInvestigacion, ListaProducto, Maestria,
+                     ModalidadProyecto, Origen, Posgrado, PregFinalizadoyCurso,
+                     Pregrado, Producto, Proyecto, Reconocimientos,
+                     RolProducto, Software, Transacciones, Ubicacion,
+                     UbicacionProyecto, UnidadAcademica)
 
 #------------------------ investigador ------------------------
 
 class investigadorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = investigador
+        model = Investigador
         fields = '__all__'
 
 class ubicacionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ubicacion
+        model = Ubicacion
         fields = '__all__'
 
 class grupoinvestigacionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = grupoinvestigacion
+        model = Grupoinvestigacion
         fields = '__all__'
 
 class pregradoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = pregrado
+        model = Pregrado
         fields = '__all__'
 
 class posgradoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = posgrado
+        model = Posgrado
         fields = '__all__'
 
 #------------------------ PRODUCTOS ------------------------
 class eventosSerializer(serializers.ModelSerializer):
     class Meta:
-        model = eventos
+        model = Eventos
         fields = '__all__'
 
 class articulosSerializer(serializers.ModelSerializer):
     class Meta:
-        model = articulos
+        model = Articulos
         fields = '__all__'
 
 class capitulosSerializer(serializers.ModelSerializer):
     class Meta:
-        model = capitulos
+        model = Capitulos
         fields = '__all__'
 
 class librosSerializer(serializers.ModelSerializer):
     class Meta:
-        model = libros
+        model = Libros
         fields = '__all__'
 
 class softwareSerializer(serializers.ModelSerializer):
     class Meta:
-        model = software
+        model = Software
         fields = '__all__'
 
 class industrialSerializer(serializers.ModelSerializer):
     class Meta:
-        model = industrial
+        model = Industrial
         fields = '__all__'
 
 class reconocimientosSerializer(serializers.ModelSerializer):
     class Meta:
-        model = reconocimientos
+        model = Reconocimientos
         fields = '__all__'
 
 class licenciaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = licencia
+        model = Licencia
         fields = '__all__'
 
 class apropiacionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = apropiacion
+        model = Apropiacion
         fields = '__all__'
 
 class contratoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = contrato
+        model = Contrato
         fields = '__all__'
 
 class consultoriaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = consultoria
+        model = Consultoria
         fields = '__all__'
 
 class contenidoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = contenido
+        model = Contenido
         fields = '__all__'
 
 class pregFinalizadoyCursoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = pregFinalizadoyCurso
+        model = PregFinalizadoyCurso
         fields = '__all__'
 
 class maestriaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = maestria
+        model = Maestria
         fields = '__all__'
 
 class listaProductoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = listaProducto
+        model = ListaProducto
         fields = '__all__'
 
 class rolProductoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = rolProducto
+        model = RolProducto
         fields = '__all__'
 
 class cuartilEsperadoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = cuartilEsperado
+        model = CuartilEsperado
         fields = '__all__'
 
 class categoriaMincienciasSerializer(serializers.ModelSerializer):
     class Meta:
-        model = categoriaMinciencias
+        model = CategoriaMinciencias
         fields = '__all__'
 
 class estudiantesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = estudiantes
+        model = Estudiantes
         fields = '__all__'
 
 class estadoProductoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = estadoProducto
+        model = EstadoProducto
         fields = '__all__'
 
 class productoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = producto
+        model = Producto
         fields = '__all__'
 
 #------------------------ PROYECTOS ------------------------
 
 class unidadAcademicaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = unidadAcademica
+        model = UnidadAcademica
         fields = '__all__'
 
 class entidadPostuloSerializer(serializers.ModelSerializer):
     class Meta:
-        model = entidadPostulo
+        model = EntidadPostulo
         fields = '__all__'
 
 class financiacionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = financiacion
+        model = Financiacion
         fields = '__all__'
 
 class grupoInvestigacionCoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = grupoInvestigacionPro
+        model = GrupoInvestigacionPro
         fields = '__all__'
 
 class transaccionesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = transacciones
+        model = Transacciones
         fields = '__all__'
 
 class origenSerializer(serializers.ModelSerializer):
     class Meta:
-        model = origen
+        model = Origen
         fields = '__all__'
 
 class ubicacionProyectoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ubicacionProyecto
+        model = UbicacionProyecto
         fields = '__all__'
 
 class estadoProyectoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = estadoProyecto
+        model = EstadoProyecto
         fields = '__all__'
 
 class modalidadProyectoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = modalidadProyecto
+        model = ModalidadProyecto
         fields = '__all__'
 
 class avanceProyectoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = avanceProyecto
+        model = AvanceProyecto
         fields = '__all__'
 
 class lineaInvestigacionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = lineaInvestigacion
+        model = LineaInvestigacion
         fields = '__all__'
 
 class entregableAdministrativoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = entregableAdministrativo
+        model = EntregableAdministrativo
         fields = '__all__'
 
 class proyectoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = proyecto
+        model = Proyecto
         fields = '__all__'
 
 
