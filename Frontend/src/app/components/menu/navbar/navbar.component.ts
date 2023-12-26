@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Investigador } from '../modelo/investigador';
+import { AutenticacionService } from '../services/autenticacion';
 import { InvestigadorService } from '../services/registroInvestigador'; // Ajusta la ruta según tu estructura de archivos
-
 
 @Component({
   selector: 'app-navbar',
@@ -11,13 +11,8 @@ import { InvestigadorService } from '../services/registroInvestigador'; // Ajust
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  hide = true;
-
-  public registroForm: FormGroup;
-  private emailPattern: any = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  typedocument: string[] = ['CC', 'TI', 'CE', 'RC', 'PA'];
-
-  constructor(private router: Router, private InvestigadorService: InvestigadorService, private formBuilder: FormBuilder) {
+  constructor(private router: Router, private InvestigadorService: InvestigadorService, private formBuilder: FormBuilder,
+    private autenticacionService: AutenticacionService) {
     this.registroForm = this.formBuilder.group({
       nombre: ['', [Validators.required]],
       apellidos: ['', [Validators.required]],
@@ -27,7 +22,90 @@ export class NavbarComponent {
       contrasena: ['', [Validators.required, Validators.minLength(8)]],
       confirmarContrasena: ['', [Validators.required]],
     });
+    this.loginForm = this.formBuilder.group({
+      correo: ['', [Validators.required, Validators.email]],
+      contrasena: ['', [Validators.required, Validators.minLength(8)]]
+    });
   }
+
+  // login
+  loginForm: FormGroup;
+
+  login(): void {
+    if (this.loginForm.valid) {
+      const correo = this.loginForm.get('correo')?.value;
+      const contrasena = this.loginForm.get('contrasena')?.value;
+  
+      this.autenticacionService.login(correo, contrasena).subscribe(
+        (response) => {
+          console.log('Respuesta del servidor:', response);
+  
+          // Obtener el token y los datos del investigador del objeto de respuesta
+          const token = response.token.numerodocumento;
+          const rolInvestigador = response.token.rolinvestigador;
+          const estado = response.token.estado;
+  
+          localStorage.setItem('token', token);
+  
+          // Verificar el rol del investigador y su estado
+          if (rolInvestigador === 'Investigador') {
+            if (estado) {
+              // Si el investigador está activo, redirigir a la URL del perfil del investigador
+              window.location.href = 'http://localhost:4200/investigadores/perfil';
+            } else {
+              // Si el investigador está inactivo
+              console.log('El investigador no está activo');
+              // Aquí podrías mostrar un mensaje al usuario o tomar otra acción
+            }
+          } else if (rolInvestigador === 'Administrador') {
+            // Si es un administrador, redirigir a la URL del perfil del administrador
+            window.location.href = 'http://localhost:4200/administrador/perfil';
+          } else {
+            // Manejar otros roles si es necesario
+            console.log("Rol estudiante")
+          }
+        },
+        (error) => {
+          console.error('Error al iniciar sesión:', error);
+          // Manejar el error de inicio de sesión, por ejemplo, mostrar un mensaje al usuario
+        }
+      );
+    }
+  }
+  
+  
+  // Método para decodificar el token (ejemplo, utilizando la función base64UrlDecode)
+  decodeToken(token: string): any {
+    console.log("esta resiviendo lo sigueinte: "+token)
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join('')
+    );
+  
+    try {
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
+      return null;
+    }
+  }
+  
+  
+
+  // registro
+  hide = true;
+
+  public registroForm: FormGroup;
+  
+  private emailPattern: any = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  typedocument: string[] = ['CC', 'TI', 'CE', 'RC', 'PA'];
+
   
 
   get nombre() {
