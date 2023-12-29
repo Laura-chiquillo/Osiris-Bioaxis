@@ -11,6 +11,12 @@ export class InvestigadorService {
 
   constructor(private http: HttpClient) { }
 
+  // mostrar la informacion de todos los investigadores
+  getUsuarios(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}`);
+  }
+
+  //registro
   registrarInvestigador(nuevoInvestigador: Investigador): Observable<Investigador> {
     const httpOptions = {
       headers: {

@@ -23,21 +23,24 @@
             </div>
           </mat-tab>
           <mat-tab label="Investigadores">
-              <mat-accordion>
-                  <mat-expansion-panel hideToggle>
-                    <mat-expansion-panel-header>
-                      <mat-panel-title>
-                        
-                      </mat-panel-title>
-                      <mat-panel-description>
-                       Laura chiquillo 
-                      </mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <p>I'm visible because I am open</p>
-                  </mat-expansion-panel>
-                </mat-accordion>
-                
+            <mat-accordion>
+              <mat-expansion-panel *ngFor="let user of users" hideToggle>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ user.nombre }} {{ user.apellidos }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+          
+                <div>
+                  <img [src]="user.imagen_url" alt="Imagen del investigador">
+                </div>
+          
+                <p>{{ user.correo }}</p>
+                <p>{{ user.grupoinvestigacion }}</p>
+              </mat-expansion-panel>
+            </mat-accordion>
           </mat-tab>
+          
           <!-- REGISTRO-->
           <mat-tab label="Registro">
             <form [formGroup]="registroForm">

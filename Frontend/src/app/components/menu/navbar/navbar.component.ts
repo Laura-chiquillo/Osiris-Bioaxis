@@ -96,7 +96,23 @@ export class NavbarComponent {
     }
   }
   
-  
+  // mostrar informacion de todos los investigadores
+  users: any[] = [];
+  ngOnInit(): void {
+    this.getUsuarios();
+  }
+
+  getUsuarios(): void {
+    this.InvestigadorService.getUsuarios().subscribe(
+      (usuarios: any[]) => {
+        this.users = usuarios;
+      },
+      (error) => {
+        // Manejo de errores
+        console.error(error);
+      }
+    );
+  }
 
   // registro
   hide = true;
