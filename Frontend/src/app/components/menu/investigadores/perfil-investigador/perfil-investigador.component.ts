@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-
+import { AutenticacionService } from '../../services/autenticacion';
 @Component({
   selector: 'app-perfil-investigador',
   templateUrl: './perfil-investigador.component.html',
@@ -11,8 +11,15 @@ import { MatInputModule } from '@angular/material/input';
   standalone: true,
   imports: [FormsModule, MatFormFieldModule, MatInputModule, CommonModule],
 })
-export class PerfilInvestigadorComponent {
-  
+export class PerfilInvestigadorComponent implements OnInit {
+  userData: any;
+
+  constructor(private autenticacionService: AutenticacionService) { }
+
+  ngOnInit(): void {
+    this.userData = this.autenticacionService.obtenerDatosUsuario();
+  }
+
   // imagen
   imagenURL: string = 'https://i.pinimg.com/originals/67/32/52/673252bd4db4eff03c2a07e5c4d60692.jpg'; // URL de tu imagen
   

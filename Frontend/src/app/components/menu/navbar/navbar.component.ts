@@ -45,7 +45,11 @@ export class NavbarComponent {
           const rolInvestigador = response.token.rolinvestigador;
           const estado = response.token.estado;
   
+          const userData = response.user_data; // Datos del perfil del usuario
+
           localStorage.setItem('token', token);
+          this.autenticacionService.guardarDatosUsuario(userData); // Guardar los datos del usuario en el LocalStorage
+
   
           // Verificar el rol del investigador y su estado
           if (rolInvestigador === 'Investigador') {

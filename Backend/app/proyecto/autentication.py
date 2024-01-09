@@ -1,9 +1,7 @@
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.hashers import check_password
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-# Tu vista CustomAuthToken
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Investigador
@@ -25,11 +23,7 @@ class CustomAuthToken(APIView):
             print("Contraseña incorrecta")
             return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        # Verificar el rol del investigador
-        if investigador.rolinvestigador != "Administrador" and investigador.rolinvestigador != "Investigador":
-            print("Rol inválido")
-            return Response({'error': 'Rol inválido'}, status=status.HTTP_401_UNAUTHORIZED)
-        
+        # Generar tokens
         refresh = RefreshToken.for_user(investigador)
         access_token = {
             'refresh': str(refresh),
@@ -39,6 +33,21 @@ class CustomAuthToken(APIView):
             'estado': investigador.estado
         }
 
-        return Response({'token': access_token}, status=status.HTTP_200_OK)
+        # Obtener y devolver datos del usuario
+        user_data = {
+            'nombre': investigador.nombre,
+            'apellidos': investigador.apellidos,
+            'correo': investigador.correo,
+            'tipodocumento': investigador.tipodocumento,
+            'numerodocumento': investigador.numerodocumento,
+            'lineainvestigacion': investigador.lineainvestigacion,
+            'escalofonodocente': investigador.escalofonodocente,
+            'unidadacademica': investigador.unidadAcademica,
+            'horariosformacion': investigador.horasformacion,
+            'horariosestrictos': investigador.horasestricto,
+            #'tipPosgrado': investigador.tipPosgrado,
+            #'tipPregrado': investigador.tipPregrado
+        }
 
-    
+        return Response({'token': access_token, 'user_data': user_data}, status=status.HTTP_200_OK)
+
