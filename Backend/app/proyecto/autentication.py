@@ -2,6 +2,9 @@ from django.contrib.auth.hashers import check_password, make_password
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+# Tu vista CustomAuthToken
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Investigador
 
@@ -10,9 +13,6 @@ class CustomAuthToken(APIView):
     def post(self, request, *args, **kwargs):
         email = request.data.get('correo')
         password = request.data.get('contrasena')
-
-        print(f"Correo recibido: {email}")
-        print(f"Contraseña recibida: {password}")
 
         try:
             investigador = Investigador.objects.get(correo=email)
@@ -29,23 +29,16 @@ class CustomAuthToken(APIView):
         if investigador.rolinvestigador != "Administrador" and investigador.rolinvestigador != "Investigador":
             print("Rol inválido")
             return Response({'error': 'Rol inválido'}, status=status.HTTP_401_UNAUTHORIZED)
-
-        # Generar un token personalizado para el investigador
-        token = self.generate_token(investigador)
-        return Response({'token': token}, status=status.HTTP_200_OK)
-
-    def generate_token(self, investigador):
-        # Verificar si el investigador está activo
-        if not investigador.estado:
-            print("El investigador no está activo")
-            return {
-                'rolinvestigador': investigador.rolinvestigador,
-                'estado': investigador.estado,
-                'numerodocumento': investigador.numerodocumento
-            }
         
-        return {
+        refresh = RefreshToken.for_user(investigador)
+        access_token = {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'numerodocumento': investigador.numerodocumento,
             'rolinvestigador': investigador.rolinvestigador,
-            'estado': investigador.estado,
-            'numerodocumento': investigador.numerodocumento  # Ejemplo: retornar el número de documento
+            'estado': investigador.estado
         }
+
+        return Response({'token': access_token}, status=status.HTTP_200_OK)
+
+    

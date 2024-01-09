@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -136,3 +137,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',  # Agrega aquí el origen de tu frontend Angular
     # Otros orígenes permitidos si es necesario...
 ]
+
+SIMPLE_JWT = {
+    'USER_ID_FIELD': 'numerodocumento',
+    # Otras configuraciones JWT si es necesario
+}
