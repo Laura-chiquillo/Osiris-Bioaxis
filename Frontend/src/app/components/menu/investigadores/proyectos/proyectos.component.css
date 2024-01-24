@@ -11,3 +11,35 @@
 table {
     width: 100%;
 }
+
+.titulo{
+    display: flex;
+    justify-content: space-evenly; /* Distribuye los elementos a lo largo del contenedor */
+    margin-top: 60px;
+  }
+  
+  .titulo2{
+    display: flex;
+    justify-content: space-evenly; /* Distribuye los elementos a lo largo del contenedor */
+    margin-top: 5px;
+  }
+  .mat-stepper-horizontal {
+    margin-top: 8px;
+  }
+  
+  .mat-mdc-form-field {
+    margin-top: 16px;
+  }
+  .reg {
+    display: flex;
+    justify-content: center;
+    margin-left: 70px;
+  }
+  
+  .form-field-spacing {
+    margin-right: 30px; /* Ajusta este valor según el espacio deseado entre los mat-form-field */
+  }
+  .example-chip-list {
+    width: 100%;
+  }
+  

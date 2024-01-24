@@ -45,11 +45,186 @@
         <!-- nuevo -->
         <mat-tab label="Nuevo">
             <mat-tab-group class="nuevo vertical-tabs" mat-stretch-tabs="false" mat-align-tabs="end">
-                <mat-tab label="First">Content 1</mat-tab>
-                <mat-tab label="Second">Content 2</mat-tab>
-                <mat-tab label="Third">Content 3</mat-tab>
+              <!---------------------------PROYECTOS-->
+                <mat-tab label="Proyecto">
+                  <div> 
+                    <mat-stepper linear #stepper>
+                      <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+                        <form [formGroup]="firstFormGroup">
+                          <!-------------DATOS PROYECTOS-->
+                          <ng-template matStepLabel>Ingresar datos proyecto</ng-template>
+                          <div>
+                            <div class="titulo">
+                              <p>Codigo del proyecto
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Titulo
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Fecha
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                            </div>
+                            <div class="titulo2">
+                              <p>Investigador</p>
+                              <p>Coinvestigadores</p>
+                              <p>Unidad academica</p>
+                            </div>
+                            <div class="reg">
+                              <mat-form-field class="form-field-spacing">
+                                <input matInput formControlName="firstCtrl" placeholder="" required>
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing">
+                                <input matInput formControlName="firstCtrl" placeholder="" required>
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing">
+                                <input matInput formControlName="firstCtrl" placeholder="" required>
+                              </mat-form-field>
+                            </div>
+                            
+                            <div class="titulo2">
+                              <p>Unidad Academica
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Area
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Entidad a la cual se postulo
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                            </div>
+                            <div class="titulo2">
+                              <p>Ubicación
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Estado
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Modalidad
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                            </div>
+                            <div class="titulo2">
+                              <p>Origen</p>
+                              <p>Nivel de riesgo
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Linea de investigación
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Grupo de investigación
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                            </div>
+                            <div class="titulo2">
+                              <p>Porcentaje de ejecucion en el corte</p>
+                              <p>Porcentaje financiera al corte</p>
+                              <p>porcentaje general del proyecto</p>
+                            </div>
+
+                            <!-- PORCENTAJE 1 -->
+                            <div class="example-label-container">
+                              <label id="example-name-label" class="example-name-label">Valor</label>
+                              <label class="example-value-label">{{slider.value}}</label>
+                            </div>
+                            <mat-slider
+                              class="example-margin"
+                              [disabled]="disabled"
+                              [max]="max"
+                              [min]="min"
+                              [step]="step"
+                              [discrete]="thumbLabel"
+                              [showTickMarks]="showTicks"
+                            >
+                              <input matSliderThumb [(ngModel)]="value" #slider>
+                            </mat-slider>
+                            <div class="titulo2">
+                              <p>Financiación</p>
+                              <mat-form-field>
+                                <input matInput formControlName="firstCtrl" placeholder="" required>
+                              </mat-form-field>
+                              <p>Transacción</p>
+                              <mat-form-field>
+                                <input matInput formControlName="firstCtrl" placeholder="" required>
+                              </mat-form-field>
+                            </div>
+                            <div class="titulo2">
+                              <p>Soporte</p>
+                              <p>Entregable administrativo</p>
+                            </div>
+                          </div>
+                          <div>
+                            <button mat-button matStepperNext>Next</button>
+                          </div>
+                        </form>
+                      </mat-step>
+                      <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+                        <form [formGroup]="secondFormGroup">
+                          <!----------------DATOS DE PRODUCTO-->
+                          <ng-template matStepLabel>Ingresar datos producto</ng-template>
+                          <mat-form-field>
+                            <mat-label>Address</mat-label>
+                            <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
+                          </mat-form-field>
+                          <div>
+                            <button mat-button matStepperPrevious>Back</button>
+                            <button mat-button matStepperNext>Next</button>
+                          </div>
+                        </form>
+                      </mat-step>
+                      <mat-step>
+                        <!----------------FINALIZAR REGISTRO-->
+                        <ng-template matStepLabel>Registrar proyecto</ng-template>
+                        <p>You are now done.</p>
+                        <div>
+                          <button mat-button matStepperPrevious>Back</button>
+                          <button mat-button (click)="stepper.reset()">Reset</button>
+                        </div>
+                      </mat-step>
+                    </mat-stepper>
+                  </div>
+                </mat-tab>
+                <!----------------------------- PRODUCTOS-->
+                <mat-tab label="Producto">
+                  <mat-tab-group class="nuevo vertical-tabs" mat-stretch-tabs="false" mat-align-tabs="end">
+                    <mat-tab label="Capitulos">Content 1</mat-tab>
+                    <mat-tab label="articulo">Content 2</mat-tab>
+                    <mat-tab label="Libros">Content 2</mat-tab>
+                    <mat-tab label="Software">Content 2</mat-tab>
+                    <mat-tab label="Eventos">Content 2</mat-tab>
+                    <mat-tab label="Reconocimiento">Content 2</mat-tab>
+                    <mat-tab label="Apropiación">Content 2</mat-tab>
+                    <mat-tab label="Consultorias">Content 2</mat-tab>
+                    <mat-tab label="Contenido">Content 2</mat-tab>
+                    <mat-tab label="Pregrado Finalizado o en Curso">Content 2</mat-tab>
+                    <mat-tab label="Maestria">Content 2</mat-tab>
+                  </mat-tab-group>
+                </mat-tab>
             </mat-tab-group>
         </mat-tab>
     </mat-tab-group>
 </div>
-

@@ -3,15 +3,88 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator'; 
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatStepperModule } from '@angular/material/stepper';
+
+import { AsyncPipe } from '@angular/common';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSliderModule } from '@angular/material/slider';
+
+import { ChangeDetectorRef } from '@angular/core';
+
 @Component({
   selector: 'app-proyectos',
   templateUrl: './proyectos.component.html',
   styleUrls: ['./proyectos.component.css'],
   standalone: true,
-  imports: [MatTabsModule, MatTableModule, MatPaginatorModule],
+  imports: [MatTabsModule, MatTableModule, MatPaginatorModule, MatButtonModule,
+    MatStepperModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,FormsModule,
+    MatFormFieldModule,
+    MatChipsModule,
+    MatIconModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule,
+    AsyncPipe,MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatCheckboxModule,
+    MatSliderModule,],
 })
 
 export class ProyectosComponent {
+
+
+  //CREAR PROYECTO
+  firstFormGroup = this._formBuilder.group({
+    firstCtrl: ['', Validators.required],
+  });
+  secondFormGroup = this._formBuilder.group({
+    secondCtrl: ['', Validators.required],
+  });
+  isEditable = false;
+
+  constructor(private _formBuilder: FormBuilder,private cdr: ChangeDetectorRef) {
+
+  }
+
+  //BARRAS DE PORCENTAJE
+  disabled = false;
+  max = 100;
+  min = 0;
+  showTicks = false;
+  step = 1;
+  thumbLabel = false;
+  value = 0;
+
+  disabled2 = false;
+  max2 = 100;
+  min2 = 0;
+  showTicks2 = false;
+  step2 = 1;
+  thumbLabel2 = false;
+  value2 = 0;
+
+  disabled3 = false;
+  max3 = 100;
+  min3 = 0;
+  showTicks3 = false;
+  step3 = 1;
+  thumbLabel3 = false;
+  value3 = 0;
+  // TABLA
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
