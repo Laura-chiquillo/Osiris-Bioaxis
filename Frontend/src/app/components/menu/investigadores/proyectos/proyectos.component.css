@@ -23,6 +23,8 @@ table {
     justify-content: space-evenly; /* Distribuye los elementos a lo largo del contenedor */
     margin-top: 5px;
   }
+    
+  
   .mat-stepper-horizontal {
     margin-top: 8px;
   }
@@ -42,4 +44,28 @@ table {
   .example-chip-list {
     width: 100%;
   }
+  .titulo3 {
+    display: flex;
+    margin-top: 5px;
+    margin-left: 200px; /* Ajusta este valor según sea necesario */
+  }
+  .resumenArt {
+    display: flex;
+    flex-direction: column; /* Asegúrate de que el contenido fluya verticalmente */
+    margin-top: 5px;
+    margin-left: 200px; /* Ajusta este valor según sea necesario */
+  }
+  
+  .resumenArt mat-form-field {
+    max-width: 600px; /* Agrega esta línea para establecer el ancho máximo */
+  }
+  
+  .resumenArt mat-form-field input {
+    height: 100px; /* Ajusta la altura según sea necesario */
+    white-space: pre-wrap;
+    overflow-wrap: break-word; /* Utiliza overflow-wrap en lugar de word-wrap */
+    overflow-y: auto; /* Permite desplazamiento vertical cuando sea necesario */
+  }
+  
+  
   
