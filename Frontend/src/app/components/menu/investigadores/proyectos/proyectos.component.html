@@ -1,6 +1,6 @@
 <div class="tabs">
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-        <mat-tab label="Proyectos y Prodyctos">  
+        <mat-tab label="Proyectos y Productos">  
             <!-- tabla -->
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
@@ -72,22 +72,43 @@
                               </p>
                             </div>
                             <div class="titulo2">
-                              <p>Investigador</p>
-                              <p>Coinvestigadores</p>
-                              <p>Unidad academica</p>
+                              <p>Investigador
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              
+                              <p>Coinventigador
+                                <mat-form-field class="example-chip-list">
+                                  <mat-chip-grid #chipGrid aria-label="Fruit selection">
+                                    <mat-chip-row *ngFor="let fruit of fruits; let i = index; trackBy: trackByFn" (removed)="remove(i)">
+                                      {{fruit}}
+                                      <button matChipRemove [attr.aria-label]="'remove ' + fruit">
+                                        <mat-icon>cancel</mat-icon>
+                                      </button>
+                                    </mat-chip-row>
+                                  </mat-chip-grid>
+                                  <input placeholder="New Fruit..." #fruitInput [formControl]="fruitCtrl"
+                                    [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    (matChipInputTokenEnd)="add($event)"/>
+                                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                    <mat-option *ngFor="let fruit of filteredFruits | async; trackBy: trackByFn" [value]="fruit">
+                                      {{fruit}}
+                                    </mat-option>
+                                  </mat-autocomplete>
+                                </mat-form-field>
+                                
+                                
+                                </p>
+                          
+        
+                              <p>Unidad academica
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
                             </div>
-                            <div class="reg">
-                              <mat-form-field class="form-field-spacing">
-                                <input matInput formControlName="firstCtrl" placeholder="" required>
-                              </mat-form-field>
-                              <mat-form-field class="form-field-spacing">
-                                <input matInput formControlName="firstCtrl" placeholder="" required>
-                              </mat-form-field>
-                              <mat-form-field class="form-field-spacing">
-                                <input matInput formControlName="firstCtrl" placeholder="" required>
-                              </mat-form-field>
-                            </div>
-                            
                             <div class="titulo2">
                               <p>Unidad Academica
                                 <mat-form-field>
@@ -140,28 +161,71 @@
                                 </mat-form-field>
                               </p>
                             </div>
-                            <div class="titulo2">
+                             <!----Porcentajes-->
+                             
+                             <div class="titulo2">
+                              <div class="percentage-container">
                               <p>Porcentaje de ejecucion en el corte</p>
+                              <div class="example-label-container">
+                                <label id="example-name-label" class="example-name-label">Valor:    </label>
+                                <label class="example-value-label">{{slider.value}}</label>
+                              </div>
+                              <mat-slider
+                                class="example-margin"
+                                [disabled]="disabled"
+                                [max]="max"
+                                [min]="min"
+                                [step]="step"
+                                [discrete]="thumbLabel"
+                                [showTickMarks]="showTicks"
+                               
+                              >
+                                <input matSliderThumb  [(ngModel)]="value" #slider>
+                              </mat-slider>
+                             </div>
+                             <div class="percentage-container">
                               <p>Porcentaje financiera al corte</p>
-                              <p>porcentaje general del proyecto</p>
-                            </div>
-
-                            <!-- PORCENTAJE 1 -->
-                            <div class="example-label-container">
-                              <label id="example-name-label" class="example-name-label">Valor</label>
-                              <label class="example-value-label">{{slider.value}}</label>
-                            </div>
-                            <mat-slider
-                              class="example-margin"
-                              [disabled]="disabled"
-                              [max]="max"
-                              [min]="min"
-                              [step]="step"
-                              [discrete]="thumbLabel"
-                              [showTickMarks]="showTicks"
-                            >
-                              <input matSliderThumb [(ngModel)]="value" #slider>
-                            </mat-slider>
+                              <div class="example-label-container">
+                                <label id="example-name-label" class="example-name-label">Valor:     </label>
+                                <label class="example-value-label">{{value2}}</label>
+                              </div>
+                              <mat-slider
+                                class="example-margin"
+                                [disabled]="disabled2"
+                                [max]="max2"
+                                [min]="min2"
+                                [step]="step2"
+                                [discrete]="thumbLabel2"
+                                [showTickMarks]="showTicks2"
+                                [(ngModel)]="value2" #slider2="ngModel"
+                              >
+                                
+                              </mat-slider>
+                             </div>
+                             <div class="percentage-container">
+                              <p>Porcentaje general del proyecto</p>
+                              <div class="example-label-container">
+                                <label id="example-name-label" class="example-name-label">Valor:     </label>
+                                <label class="example-value-label">{{value3}}</label>
+                              </div>
+                              <mat-slider
+                                class="example-margin"
+                                [disabled]="disabled3"
+                                [max]="max3"
+                                [min]="min3"
+                                [step]="step3"
+                                [discrete]="thumbLabel3"
+                                [showTickMarks]="showTicks3"
+                               
+                              >
+                                <input matSliderThumb  [(ngModel)]="value3" #slider3="ngModel">
+                              </mat-slider>
+                             </div>
+                          </div>
+                          
+                       
+                          
+                          
                             <div class="titulo2">
                               <p>Financiación</p>
                               <mat-form-field>
@@ -227,4 +291,5 @@
             </mat-tab-group>
         </mat-tab>
     </mat-tab-group>
-</div>
+   </div>
+
