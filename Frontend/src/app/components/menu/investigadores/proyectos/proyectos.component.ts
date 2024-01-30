@@ -19,10 +19,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
+import { MatRadioModule } from '@angular/material/radio';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-
 @Component({
   selector: 'app-proyectos',
   templateUrl: './proyectos.component.html',
@@ -44,11 +45,29 @@ import { map, startWith } from 'rxjs/operators';
     MatInputModule,
     FormsModule,
     MatCheckboxModule,
-    MatSliderModule,],
-})
+    MatSliderModule, MatRadioModule, CommonModule],
+  })
+  
+  export class ProyectosComponent {
+    
+    constructor(private _formBuilder: FormBuilder,private cdr: ChangeDetectorRef) {
+      this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
+        startWith(null),
+        map((fruit: string | null) => (fruit ? this._filter(fruit) : this.allFruits.slice())),
+      );
+      
+    }
 
-export class ProyectosComponent {
 
+  //mostrar productos en nuevo proyecto
+  mostrarInputs: boolean = false;
+
+  onSelectionChange(event: any) {
+    this.mostrarInputs = event.value === '1';
+  }
+
+
+  //mostrar los coinvestigadores que hay 
   separatorKeysCodes: number[] = [13, 188];
   fruitCtrl = new FormControl('');
   filteredFruits: Observable<string[]>;
@@ -59,14 +78,11 @@ export class ProyectosComponent {
   fruitInput!: ElementRef<HTMLInputElement>;
 
   announcer = inject(LiveAnnouncer);
-
-
-  constructor(private _formBuilder: FormBuilder,private cdr: ChangeDetectorRef) {
-    this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
-      startWith(null),
-      map((fruit: string | null) => (fruit ? this._filter(fruit) : this.allFruits.slice())),
-    );
+  trackByFn(index: number, item: string): number {
+    return index; // Puedes usar el índice como identificador único si los elementos de la lista no cambian de posición.
   }
+  
+
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
@@ -84,13 +100,14 @@ export class ProyectosComponent {
 
   remove(fruit: string): void {
     const index = this.fruits.indexOf(fruit);
-
+  
     if (index >= 0) {
       this.fruits.splice(index, 1);
-
+  
       this.announcer.announce(`Removed ${fruit}`);
     }
   }
+  
 
   selected(event: MatAutocompleteSelectedEvent): void {
     this.fruits.push(event.option.viewValue);

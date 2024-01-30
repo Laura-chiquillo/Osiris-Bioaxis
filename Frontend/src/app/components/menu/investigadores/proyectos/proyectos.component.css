@@ -67,5 +67,9 @@ table {
     overflow-y: auto; /* Permite desplazamiento vertical cuando sea necesario */
   }
   
-  
-  
+  .anchoGuardar{
+    width: 150px;
+  }
+  .mat-mdc-radio-button ~ .mat-mdc-radio-button {
+    margin-left: 16px;
+  }
