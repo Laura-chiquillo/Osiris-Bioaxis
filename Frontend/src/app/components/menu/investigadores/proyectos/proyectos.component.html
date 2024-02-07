@@ -238,7 +238,42 @@
                             </div>
                             <div class="titulo2">
                               <p>Soporte</p>
+                              <input type="file" (change)="onFileSelected($event)" />
+                            </div>
+                            <div class="titulo2">
                               <p>Entregable administrativo</p>
+                            </div>
+                            <div class="titulo2">
+                              <p>Titulo</p>
+                              <p>Nombre</p>
+                              <p>Calidad</p>
+                            </div>
+                            <div class="reg">
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="text" matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="text" matInput autocomplete="off">
+                              </mat-form-field>
+                            </div>
+                            <div class="titulo2">
+                              <p>Entregable</p>
+                              <p>Pendiente</p>
+                              <p>Clacificación</p>
+                            </div>
+                            <div class="reg">
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="text" matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="text" matInput autocomplete="off">
+                              </mat-form-field>
                             </div>
                           </div>
                           <div>
@@ -246,7 +281,7 @@
                           </div>
                         </form>
                       </mat-step>
-                      <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+                      <mat-step [stepControl]="secondFormGroup">
                         <form [formGroup]="secondFormGroup">
                          
                           <!----------------DATOS DE PRODUCTO-->
@@ -666,10 +701,10 @@
                       <mat-step>
                         <!----------------FINALIZAR REGISTRO-->
                         <ng-template matStepLabel>Registrar proyecto</ng-template>
-                        <p>You are now done.</p>
+                        <p>SE MUESTRAN TODOS LOS DATOS GUARDADOS</p>
                         <div>
                           <button mat-button matStepperPrevious>Back</button>
-                          <button mat-button (click)="stepper.reset()">Reset</button>
+                          <button mat-button >Guardar</button>
                         </div>
                       </mat-step>
                     </mat-stepper>

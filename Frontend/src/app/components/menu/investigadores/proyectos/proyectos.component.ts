@@ -20,10 +20,12 @@ import { MatSliderModule } from '@angular/material/slider';
 
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { CommonModule } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ChangeDetectorRef } from '@angular/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+
 @Component({
   selector: 'app-proyectos',
   templateUrl: './proyectos.component.html',
@@ -45,12 +47,12 @@ import { map, startWith } from 'rxjs/operators';
     MatInputModule,
     FormsModule,
     MatCheckboxModule,
-    MatSliderModule, MatRadioModule, CommonModule],
+    MatSliderModule, MatRadioModule, CommonModule, HttpClientModule],
   })
   
   export class ProyectosComponent {
     
-    constructor(private _formBuilder: FormBuilder,private cdr: ChangeDetectorRef) {
+    constructor(private http: HttpClient,private _formBuilder: FormBuilder,private cdr: ChangeDetectorRef) {
       this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
         startWith(null),
         map((fruit: string | null) => (fruit ? this._filter(fruit) : this.allFruits.slice())),
@@ -58,6 +60,33 @@ import { map, startWith } from 'rxjs/operators';
       
     }
 
+  //subir archivo proyecto
+  selectedFile: File | null = null;
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0] as File;
+  }
+
+  uploadFile() {
+    if (!this.selectedFile) {
+      console.error('No se ha seleccionado ningún archivo.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+
+    this.http.post('URL_DEL_BACKEND_PARA_SUBIR_ARCHIVO', formData)
+      .subscribe(
+        (response) => {
+          console.log('Archivo subido con éxito!', response);
+          // Puedes hacer lo que desees con la respuesta del servidor aquí
+        },
+        (error) => {
+          console.error('Error al subir el archivo:', error);
+        }
+      );
+  }
 
   //mostrar productos en nuevo proyecto
   mostrarInputs: boolean = false;
@@ -126,9 +155,9 @@ import { map, startWith } from 'rxjs/operators';
     firstCtrl: ['', Validators.required],
   });
   secondFormGroup = this._formBuilder.group({
-    secondCtrl: ['', Validators.required],
+    secondCtrl: [''],
   });
-  isEditable = false;
+  isEditable = true;
 
 
   //BARRAS DE PORCENTAJE
