@@ -1,19 +1,20 @@
 from rest_framework import generics
 
 from .models import (Apropiacion, Articulos, AvanceProyecto, Capitulos,
-                     CategoriaMinciencias, Consultoria, Contenido, Contrato,
-                     CuartilEsperado, EntidadPostulo, EntregableAdministrativo,
-                     EstadoProducto, EstadoProyecto, Estudiantes, Eventos,
-                     Financiacion, Grupoinvestigacion, GrupoInvestigacionPro,
-                     Industrial, Investigador, Libros, Licencia,
-                     LineaInvestigacion, ListaProducto, Maestria,
-                     ModalidadProyecto, Origen, Posgrado, PregFinalizadoyCurso,
-                     Pregrado, Producto, Proyecto, Reconocimientos,
-                     RolProducto, Software, Transacciones, Ubicacion,
-                     UbicacionProyecto, UnidadAcademica)
+                     CategoriaMinciencias, Coinvestigador, Consultoria,
+                     Contenido, Contrato, CuartilEsperado, EntidadPostulo,
+                     EntregableAdministrativo, EstadoProducto, EstadoProyecto,
+                     Estudiantes, Eventos, Financiacion, Grupoinvestigacion,
+                     GrupoInvestigacionPro, Imagen, Industrial, Investigador,
+                     Libros, Licencia, LineaInvestigacion, ListaProducto,
+                     Maestria, ModalidadProyecto, Origen, Posgrado,
+                     PregFinalizadoyCurso, Pregrado, Producto, Proyecto,
+                     Reconocimientos, RolProducto, Software, Transacciones,
+                     Ubicacion, UbicacionProyecto, UnidadAcademica)
 from .serializer import (apropiacionSerializer, articulosSerializer,
                          avanceProyectoSerializer, capitulosSerializer,
-                         categoriaMincienciasSerializer, consultoriaSerializer,
+                         categoriaMincienciasSerializer,
+                         coinvestigadorSerializer, consultoriaSerializer,
                          contenidoSerializer, contratoSerializer,
                          cuartilEsperadoSerializer, entidadPostuloSerializer,
                          entregableAdministrativoSerializer,
@@ -21,23 +22,28 @@ from .serializer import (apropiacionSerializer, articulosSerializer,
                          estudiantesSerializer, eventosSerializer,
                          financiacionSerializer,
                          grupoInvestigacionCoSerializer,
-                         grupoinvestigacionSerializer, industrialSerializer,
-                         investigadorSerializer, librosSerializer,
-                         licenciaSerializer, lineaInvestigacionSerializer,
-                         listaProductoSerializer, maestriaSerializer,
-                         modalidadProyectoSerializer, origenSerializer,
-                         posgradoSerializer, pregFinalizadoyCursoSerializer,
-                         pregradoSerializer, productoSerializer,
-                         proyectoSerializer, reconocimientosSerializer,
-                         rolProductoSerializer, softwareSerializer,
-                         transaccionesSerializer, ubicacionProyectoSerializer,
-                         ubicacionSerializer, unidadAcademicaSerializer)
+                         grupoinvestigacionSerializer, imagenSerializer,
+                         industrialSerializer, investigadorSerializer,
+                         librosSerializer, licenciaSerializer,
+                         lineaInvestigacionSerializer, listaProductoSerializer,
+                         maestriaSerializer, modalidadProyectoSerializer,
+                         origenSerializer, posgradoSerializer,
+                         pregFinalizadoyCursoSerializer, pregradoSerializer,
+                         productoSerializer, proyectoSerializer,
+                         reconocimientosSerializer, rolProductoSerializer,
+                         softwareSerializer, transaccionesSerializer,
+                         ubicacionProyectoSerializer, ubicacionSerializer,
+                         unidadAcademicaSerializer)
 
 #------------------------ investigador ------------------------
 
 class investigadorList(generics.ListCreateAPIView):
     queryset = Investigador.objects.all()
     serializer_class = investigadorSerializer
+
+class imagenList(generics.ListCreateAPIView):
+    queryset = Imagen.objects.all()
+    serializer_class = imagenSerializer
 
 class grupoInvestigacionList(generics.ListCreateAPIView):
     queryset = Grupoinvestigacion.objects.all()
@@ -59,6 +65,10 @@ class investigadorRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Investigador.objects.all()
     serializer_class = investigadorSerializer
 
+class imagenRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Imagen.objects.all()
+    serializer_class = imagenSerializer
+
 class grupoInvestigacionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Grupoinvestigacion.objects.all()
     serializer_class = grupoinvestigacionSerializer
@@ -74,6 +84,7 @@ class pregradoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 class ubicacionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Ubicacion.objects.all()
     serializer_class = ubicacionSerializer
+
 
 #---------------------------- PRODUCTOS ----------------------------
 
@@ -251,6 +262,10 @@ class unidadAcademicaList(generics.ListCreateAPIView):
     queryset = UnidadAcademica.objects.all()
     serializer_class = unidadAcademicaSerializer
 
+class coinvestigadorList(generics.ListCreateAPIView):
+    queryset = Coinvestigador.objects.all()
+    serializer_class = coinvestigadorSerializer
+
 class entidadPostuloList(generics.ListCreateAPIView):
     queryset = EntidadPostulo.objects.all()
     serializer_class = entidadPostuloSerializer
@@ -346,6 +361,10 @@ class lineaInvestigacionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIV
 class entregableAdministrativoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = EntregableAdministrativo.objects.all()
     serializer_class = entregableAdministrativoSerializer
+
+class coinvestigadorRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Coinvestigador.objects.all()
+    serializer_class = coinvestigadorSerializer
 
 class proyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Proyecto.objects.all()
