@@ -11,3 +11,65 @@
 table {
     width: 100%;
 }
+
+.titulo{
+    display: flex;
+    justify-content: space-evenly; /* Distribuye los elementos a lo largo del contenedor */
+    margin-top: 60px;
+  }
+  
+  .titulo2{
+    display: flex;
+    justify-content: space-evenly; /* Distribuye los elementos a lo largo del contenedor */
+    margin-top: 5px;
+  }
+    
+  
+  .mat-stepper-horizontal {
+    margin-top: 8px;
+  }
+  
+  .mat-mdc-form-field {
+    margin-top: 16px;
+  }
+  .reg {
+    display: flex;
+    justify-content: center;
+    margin-left: 70px;
+  }
+  
+  .form-field-spacing {
+    margin-right: 30px; /* Ajusta este valor según el espacio deseado entre los mat-form-field */
+  }
+  .example-chip-list {
+    width: 100%;
+  }
+  .titulo3 {
+    display: flex;
+    margin-top: 5px;
+    margin-left: 200px; /* Ajusta este valor según sea necesario */
+  }
+  .resumenArt {
+    display: flex;
+    flex-direction: column; /* Asegúrate de que el contenido fluya verticalmente */
+    margin-top: 5px;
+    margin-left: 200px; /* Ajusta este valor según sea necesario */
+  }
+  
+  .resumenArt mat-form-field {
+    max-width: 600px; /* Agrega esta línea para establecer el ancho máximo */
+  }
+  
+  .resumenArt mat-form-field input {
+    height: 100px; /* Ajusta la altura según sea necesario */
+    white-space: pre-wrap;
+    overflow-wrap: break-word; /* Utiliza overflow-wrap en lugar de word-wrap */
+    overflow-y: auto; /* Permite desplazamiento vertical cuando sea necesario */
+  }
+  
+  .anchoGuardar{
+    width: 150px;
+  }
+  .mat-mdc-radio-button ~ .mat-mdc-radio-button {
+    margin-left: 16px;
+  }

@@ -1,6 +1,6 @@
 <div class="tabs">
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-        <mat-tab label="Proyectos y Prodyctos">  
+        <mat-tab label="Proyectos y Productos">  
             <!-- tabla -->
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
@@ -45,11 +45,1071 @@
         <!-- nuevo -->
         <mat-tab label="Nuevo">
             <mat-tab-group class="nuevo vertical-tabs" mat-stretch-tabs="false" mat-align-tabs="end">
-                <mat-tab label="First">Content 1</mat-tab>
-                <mat-tab label="Second">Content 2</mat-tab>
-                <mat-tab label="Third">Content 3</mat-tab>
+              <!---------------------------PROYECTOS-->
+                <mat-tab label="Proyecto">
+                  <div> 
+                    <mat-stepper linear #stepper>
+                      <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+                        <form [formGroup]="firstFormGroup">
+                          <!-------------DATOS PROYECTOS-->
+                          <ng-template matStepLabel>Ingresar datos proyecto</ng-template>
+                          <div>
+                            <div class="titulo">
+                              <p>Codigo del proyecto
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Titulo
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Fecha
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                            </div>
+                            <div class="titulo2">
+                              <p>Investigador
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              
+                              <p>Coinventigador
+                                <mat-form-field class="example-chip-list">
+                                  <mat-chip-grid #chipGrid aria-label="Fruit selection">
+                                    <mat-chip-row *ngFor="let fruit of fruits; let i = index; trackBy: trackByFn" (removed)="remove(fruit)">
+                                      {{fruit}}
+                                      <button matChipRemove [attr.aria-label]="'remove ' + fruit">
+                                        <mat-icon>cancel</mat-icon>
+                                      </button>
+                                    </mat-chip-row>
+                                  </mat-chip-grid>
+                                  <input placeholder="New Fruit..." #fruitInput [formControl]="fruitCtrl"
+                                    [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    (matChipInputTokenEnd)="add($event)"/>
+                                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                    <mat-option *ngFor="let fruit of filteredFruits | async; trackBy: trackByFn" [value]="fruit">
+                                      {{fruit}}
+                                    </mat-option>
+                                  </mat-autocomplete>
+                                </mat-form-field>
+                                
+                                
+                                </p>
+                          
+        
+                              <p>Unidad academica
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                            </div>
+                            <div class="titulo2">
+                              <p>Unidad Academica
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Area
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Entidad a la cual se postulo
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                            </div>
+                            <div class="titulo2">
+                              <p>Ubicación
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Estado
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Modalidad
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                            </div>
+                            <div class="titulo2">
+                              <p>Origen</p>
+                              <p>Nivel de riesgo
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Linea de investigación
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                              <p>Grupo de investigación
+                                <mat-form-field>
+                                  <input matInput formControlName="firstCtrl" placeholder="" required>
+                                </mat-form-field>
+                              </p>
+                            </div>
+                             <!----Porcentajes-->
+                             
+                             <div class="titulo2">
+                              <div class="percentage-container">
+                              <p>Porcentaje de ejecucion en el corte</p>
+                              <div class="example-label-container">
+                                <label id="example-name-label" class="example-name-label">Valor:    </label>
+                                <label class="example-value-label">{{slider.value}}</label>
+                              </div>
+                              <mat-slider
+                                class="example-margin"
+                                [disabled]="disabled"
+                                [max]="max"
+                                [min]="min"
+                                [step]="step"
+                                [discrete]="thumbLabel"
+                                [showTickMarks]="showTicks"
+                               
+                              >
+                                <input matSliderThumb  [(ngModel)]="value" #slider>
+                              </mat-slider>
+                             </div>
+                             <div class="percentage-container">
+                              <p>Porcentaje financiera al corte</p>
+                              <div class="example-label-container">
+                                <label id="example-name-label" class="example-name-label">Valor:     </label>
+                                <label class="example-value-label">{{value2}}</label>
+                              </div>
+                              <mat-slider
+                                class="example-margin"
+                                [disabled]="disabled2"
+                                [max]="max2"
+                                [min]="min2"
+                                [step]="step2"
+                                [discrete]="thumbLabel2"
+                                [showTickMarks]="showTicks2"
+                                [(ngModel)]="value2" #slider2="ngModel"
+                              >
+                                
+                              </mat-slider>
+                             </div>
+                             <div class="percentage-container">
+                              <p>Porcentaje general del proyecto</p>
+                              <div class="example-label-container">
+                                <label id="example-name-label" class="example-name-label">Valor:     </label>
+                                <label class="example-value-label">{{value3}}</label>
+                              </div>
+                              <mat-slider
+                                class="example-margin"
+                                [disabled]="disabled3"
+                                [max]="max3"
+                                [min]="min3"
+                                [step]="step3"
+                                [discrete]="thumbLabel3"
+                                [showTickMarks]="showTicks3"
+                               
+                              >
+                                <input matSliderThumb  [(ngModel)]="value3" #slider3="ngModel">
+                              </mat-slider>
+                             </div>
+                          </div>
+                          
+                       
+                          
+                          
+                            <div class="titulo2">
+                              <p>Financiación</p>
+                              <mat-form-field>
+                                <input matInput formControlName="firstCtrl" placeholder="" required>
+                              </mat-form-field>
+                              <p>Transacción</p>
+                              <mat-form-field>
+                                <input matInput formControlName="firstCtrl" placeholder="" required>
+                              </mat-form-field>
+                            </div>
+                            <div class="titulo2">
+                              <p>Soporte</p>
+                              <input type="file" (change)="onFileSelected($event)" />
+                            </div>
+                            <div class="titulo2">
+                              <p>Entregable administrativo</p>
+                            </div>
+                            <div class="titulo2">
+                              <p>Titulo</p>
+                              <p>Nombre</p>
+                              <p>Calidad</p>
+                            </div>
+                            <div class="reg">
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="text" matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="text" matInput autocomplete="off">
+                              </mat-form-field>
+                            </div>
+                            <div class="titulo2">
+                              <p>Entregable</p>
+                              <p>Pendiente</p>
+                              <p>Clacificación</p>
+                            </div>
+                            <div class="reg">
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="text" matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="text" matInput autocomplete="off">
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div>
+                            <button mat-button matStepperNext>Next</button>
+                          </div>
+                        </form>
+                      </mat-step>
+                      <mat-step [stepControl]="secondFormGroup">
+                        <form [formGroup]="secondFormGroup">
+                         
+                          <!----------------DATOS DE PRODUCTO-->
+                          <ng-template matStepLabel>Ingresar datos producto</ng-template>
+                          <p>¿Va a ingresar un producto?</p>
+                          <mat-radio-group aria-label="" (change)="onSelectionChange($event)">
+                            <mat-radio-button value="1">Sí</mat-radio-button>
+                            <mat-radio-button value="2">No</mat-radio-button>
+                          </mat-radio-group>
+
+                          <div *ngIf="mostrarInputs">
+                            <div class="titulo">
+                              <p>Codigo proyecto</p>
+                              <p>Codigo producto</p>
+                              <p>Titulo</p>
+                              <p>Rol de producto</p>
+                            </div>
+                            <div class="reg">
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="text" matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="email" matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="email" matInput autocomplete="off">
+                              </mat-form-field>
+                            </div>
+                            <div class="titulo">
+                              <p>Investigador</p>
+                              <p>Cuartil esperado</p>
+                              <p>Categoria minciencia</p>
+                              <p>Tipologia del producto</p>
+                            </div>
+                            <div class="reg">
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="text" matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="email" matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="email" matInput autocomplete="off">
+                              </mat-form-field>
+                            </div>
+                            <div class="titulo">
+                              <p>publicación</p>
+                              <p>Nombre estudiantes</p>
+                              <p>Estado inicio semestre</p>
+                              <p>porcentaje avance fin de semestre</p>
+                            </div>
+                            <div class="reg">
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="text" matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="email" matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="email" matInput autocomplete="off">
+                              </mat-form-field>
+                            </div>
+                            <div class="titulo">
+                              <p>Observaciones</p>
+                              <p>Estado</p>
+                              <p>Porcentaje avance comprometido</p>
+                              <p>porcentaje avance real mensual</p>
+                            </div>
+                            <div class="reg">
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="email" matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="text" matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="email" matInput autocomplete="off">
+                              </mat-form-field>
+                            </div>
+                            <div class="titulo">
+                              <p>Fecha</p>
+                              <p>Origen</p>
+                              <p>Soporte</p>
+                            </div>
+                            <div class="reg">
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="text" matInput autocomplete="off">
+                              </mat-form-field>
+                              <mat-form-field class="form-field-spacing" appearance="fill">
+                                <input type="email" matInput autocomplete="off">
+                              </mat-form-field>
+                            </div>
+                            <mat-tab-group class="nuevo vertical-tabs" mat-stretch-tabs="false" mat-align-tabs="end">
+                              <mat-tab label="Capitulos">
+                                <div class="titulo">
+                                  <p>Nombre de la publicación</p>
+                                  <p>Autores</p>
+                                  <p>ISBN</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="email" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                                <div class="titulo">
+                                  <p>Fecha</p>
+                                  <p>Resumen</p>
+                                  <p>Editorial</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="email" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                              </mat-tab>
+                              <mat-tab label="articulo">
+                                <div class="titulo">
+                                  <p>Autores</p>
+                                  <p>Autor de correspondenvia</p>
+                                  <p>Funente</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="email" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                                <div class="titulo3">
+                                  <p>Resumen</p>
+                                </div>
+                                <div class="resumenArt">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="email" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                              </mat-tab>
+                              <mat-tab label="Libros">
+                                <div class="titulo">
+                                  <p>Autores</p>
+                                  <p>ISBN</p>
+                                  <p>Fecha</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="email" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                                <div class="titulo3">
+                                  <p>Resumen</p>
+                                </div>
+                                <div class="resumenArt">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="email" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                                <div class="titulo">
+                                  <p>Lugar de la publicación</p>
+                                  <p>Editorial</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                              </mat-tab>
+                              <mat-tab label="Software">
+                                <div class="titulo">
+                                  <p>Tipo de registro</p>
+                                  <p>Numero</p>
+                                  <p>Año</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                                <div class="titulo">
+                                  <p>Titular</p>
+                                  <p>Fecha</p>
+                                  <p>País</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                              </mat-tab>
+                              <mat-tab label="Industrial">
+                                <div class="titulo">
+                                  <p>Institución financiera</p>
+                                  <p>Fecha</p>
+                                  <p>País</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                              </mat-tab>
+                              <mat-tab label="Eventos">
+                                <div class="titulo">
+                                  <p>Fecha inico</p>
+                                  <p>Fecha fin</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                                <div class="titulo">
+                                  <p>Numero de participantes internos</p>
+                                  <p>Numero de participantes externos</p>
+                                  <p>Tipo evento</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                              </mat-tab>
+                              <mat-tab label="Reconocimiento">
+                                <div class="titulo">
+                                  <p>Nombre de la entidad que otorga</p>
+                                  <p>Fecha fin</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                              </mat-tab>
+                              <mat-tab label="Apropiación">
+                                <div class="titulo">
+                                  <p>Fecha inico</p>
+                                  <p>Fecha fin</p>
+                                  <p>Licencia</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                                <div class="titulo">
+                                  <p>Nombre de la entidad</p>
+                                  <p>Formato</p>
+                                  <p>Medio</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                              </mat-tab>
+                              <mat-tab label="Consultorias">
+                                <div class="titulo">
+                                  <p>Nombre de la entidad</p>
+                                  <p>Año</p>
+                                  <p>Contrato</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                              </mat-tab>
+                              <mat-tab label="Contenido">
+                                <div class="titulo">
+                                  <p>Nombre de la entidad</p>
+                                  <p>Año</p>
+                                  <p>Pagina web</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                              </mat-tab>
+                              <mat-tab label="Pregrado Finalizado o en Curso">
+                                <div class="titulo">
+                                  <p>Fecha inicio</p>
+                                  <p>Reconocimiento</p>
+                                  <p>Numero de paginas</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                              </mat-tab>
+                              <mat-tab label="Maestria">
+                                <div class="titulo">
+                                  <p>Fecha inicio</p>
+                                  <p>Institución</p>
+                                </div>
+                                <div class="reg">
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input matInput autocomplete="off">
+                                  </mat-form-field>
+                                  <mat-form-field class="form-field-spacing" appearance="fill">
+                                    <input type="text" matInput autocomplete="off">
+                                  </mat-form-field>
+                                </div>
+                              </mat-tab>
+                            </mat-tab-group>
+                          </div>
+
+                          
+                          
+                          
+                          <div>
+                            <button mat-button matStepperPrevious>Back</button>
+                            <button mat-button matStepperNext>Next</button>
+                          </div>
+                        </form>
+                      </mat-step>
+                      <mat-step>
+                        <!----------------FINALIZAR REGISTRO-->
+                        <ng-template matStepLabel>Registrar proyecto</ng-template>
+                        <p>SE MUESTRAN TODOS LOS DATOS GUARDADOS</p>
+                        <div>
+                          <button mat-button matStepperPrevious>Back</button>
+                          <button mat-button >Guardar</button>
+                        </div>
+                      </mat-step>
+                    </mat-stepper>
+                  </div>
+                </mat-tab>
+                <!----------------------------- PRODUCTOS-->
+                <mat-tab label="Producto">
+                  <div class="titulo">
+                    <p>Codigo proyecto</p>
+                    <p>Codigo producto</p>
+                    <p>Titulo</p>
+                    <p>Rol de producto</p>
+                  </div>
+                  <div class="reg">
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input matInput autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input type="text" matInput autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input type="email" matInput autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input type="email" matInput autocomplete="off">
+                    </mat-form-field>
+                  </div>
+                  <div class="titulo">
+                    <p>Investigador</p>
+                    <p>Cuartil esperado</p>
+                    <p>Categoria minciencia</p>
+                    <p>Tipologia del producto</p>
+                  </div>
+                  <div class="reg">
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input matInput autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input type="text" matInput autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input type="email" matInput autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input type="email" matInput autocomplete="off">
+                    </mat-form-field>
+                  </div>
+                  <div class="titulo">
+                    <p>publicación</p>
+                    <p>Nombre estudiantes</p>
+                    <p>Estado inicio semestre</p>
+                    <p>porcentaje avance fin de semestre</p>
+                  </div>
+                  <div class="reg">
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input matInput autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input type="text" matInput autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input type="email" matInput autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input type="email" matInput autocomplete="off">
+                    </mat-form-field>
+                  </div>
+                  <div class="titulo">
+                    <p>Observaciones</p>
+                    <p>Estado</p>
+                    <p>Porcentaje avance comprometido</p>
+                    <p>porcentaje avance real mensual</p>
+                  </div>
+                  <div class="reg">
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input type="email" matInput autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input matInput autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input type="text" matInput autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input type="email" matInput autocomplete="off">
+                    </mat-form-field>
+                  </div>
+                  <div class="titulo">
+                    <p>Fecha</p>
+                    <p>Origen</p>
+                    <p>Soporte</p>
+                  </div>
+                  <div class="reg">
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input matInput autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input type="text" matInput autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field class="form-field-spacing" appearance="fill">
+                      <input type="email" matInput autocomplete="off">
+                    </mat-form-field>
+                  </div>
+                  <mat-tab-group class="nuevo vertical-tabs" mat-stretch-tabs="false" mat-align-tabs="end">
+                    <mat-tab label="Capitulos">
+                      <div class="titulo">
+                        <p>Nombre de la publicación</p>
+                        <p>Autores</p>
+                        <p>ISBN</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="email" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                      <div class="titulo">
+                        <p>Fecha</p>
+                        <p>Resumen</p>
+                        <p>Editorial</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="email" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="articulo">
+                      <div class="titulo">
+                        <p>Autores</p>
+                        <p>Autor de correspondenvia</p>
+                        <p>Funente</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="email" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                      <div class="titulo3">
+                        <p>Resumen</p>
+                      </div>
+                      <div class="resumenArt">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="email" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Libros">
+                      <div class="titulo">
+                        <p>Autores</p>
+                        <p>ISBN</p>
+                        <p>Fecha</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="email" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                      <div class="titulo3">
+                        <p>Resumen</p>
+                      </div>
+                      <div class="resumenArt">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="email" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                      <div class="titulo">
+                        <p>Lugar de la publicación</p>
+                        <p>Editorial</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Software">
+                      <div class="titulo">
+                        <p>Tipo de registro</p>
+                        <p>Numero</p>
+                        <p>Año</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                      <div class="titulo">
+                        <p>Titular</p>
+                        <p>Fecha</p>
+                        <p>País</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Industrial">
+                      <div class="titulo">
+                        <p>Institución financiera</p>
+                        <p>Fecha</p>
+                        <p>País</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Eventos">
+                      <div class="titulo">
+                        <p>Fecha inico</p>
+                        <p>Fecha fin</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                      <div class="titulo">
+                        <p>Numero de participantes internos</p>
+                        <p>Numero de participantes externos</p>
+                        <p>Tipo evento</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Reconocimiento">
+                      <div class="titulo">
+                        <p>Nombre de la entidad que otorga</p>
+                        <p>Fecha fin</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Apropiación">
+                      <div class="titulo">
+                        <p>Fecha inico</p>
+                        <p>Fecha fin</p>
+                        <p>Licencia</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                      <div class="titulo">
+                        <p>Nombre de la entidad</p>
+                        <p>Formato</p>
+                        <p>Medio</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Consultorias">
+                      <div class="titulo">
+                        <p>Nombre de la entidad</p>
+                        <p>Año</p>
+                        <p>Contrato</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Contenido">
+                      <div class="titulo">
+                        <p>Nombre de la entidad</p>
+                        <p>Año</p>
+                        <p>Pagina web</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Pregrado Finalizado o en Curso">
+                      <div class="titulo">
+                        <p>Fecha inicio</p>
+                        <p>Reconocimiento</p>
+                        <p>Numero de paginas</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Maestria">
+                      <div class="titulo">
+                        <p>Fecha inicio</p>
+                        <p>Institución</p>
+                      </div>
+                      <div class="reg">
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input matInput autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="form-field-spacing" appearance="fill">
+                          <input type="text" matInput autocomplete="off">
+                        </mat-form-field>
+                      </div>
+                    </mat-tab>
+                  </mat-tab-group>
+                  <button class="anchoGuardar" mat-raised-button style="background-color: #6AABA0;">Guardar</button>
+                </mat-tab>
             </mat-tab-group>
         </mat-tab>
     </mat-tab-group>
-</div>
+   </div>
 
