@@ -214,7 +214,7 @@ class PregFinalizadoyCurso(models.Model):
     reconocimientos = models.CharField(max_length=50)
     numeroPaginas = models.IntegerField()
     class Meta:
-        db_table = 'proyecto_PregFinalizadoyCurso'
+        db_table = 'proyecto_Pregfinalizadoycurso'
 
 class Maestria(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
@@ -241,13 +241,13 @@ class ListaProducto(models.Model):
     proyectoFormuladoProducto = models.CharField(max_length=50, blank=True, null=True)
     proyectoRSUProducto = models.CharField(max_length=50, blank=True, null=True)
     class Meta:
-        db_table = 'proyecto_ListaProducto'
+        db_table = 'proyecto_Listaproducto'
 
 class RolProducto(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     rol = models.CharField(max_length=50)
     class Meta:
-        db_table = 'proyecto_RolProducto'
+        db_table = 'proyecto_Rolproducto'
 
 class CuartilEsperado(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
@@ -261,7 +261,7 @@ class CuartilEsperado(models.Model):
     ]
     cuartil = models.CharField(max_length=50, choices=cuartil, default='A')
     class Meta:
-        db_table = 'proyecto_CuartilEsperado'
+        db_table = 'proyecto_Cuartilesperado'
 
 class CategoriaMinciencias(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
@@ -273,7 +273,7 @@ class CategoriaMinciencias(models.Model):
     ]
     categoria = models.CharField(max_length=50, choices=categoria, default='Junior')
     class Meta:
-        db_table = 'proyecto_CategoriaMinciencias'
+        db_table = 'proyecto_Categoriaminciencias'
 
 class Estudiantes(models.Model):
     nombres = models.CharField(max_length=50)
@@ -302,7 +302,7 @@ class EstadoProducto(models.Model):
     ]
     estado = models.CharField(max_length=50, choices=estado, default='En proceso')
     class Meta:
-        db_table = 'proyecto_EstadoProducto'
+        db_table = 'proyecto_Estadoproducto'
 
 class Producto(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
@@ -312,7 +312,14 @@ class Producto(models.Model):
     listaProducto = models.ForeignKey(ListaProducto,null=False,blank=False,on_delete=models.CASCADE)
     cuartilEsperado = models.ForeignKey(CuartilEsperado,null=False,blank=False,on_delete=models.CASCADE)
     categoriaMinciencias = models.ForeignKey(CategoriaMinciencias,null=False,blank=False,on_delete=models.CASCADE)
-    tipologiaProducto = models.CharField(max_length=50)
+    tipologiaProducto = [
+        ("A","A"),
+        ("A1","A1"),
+        ("A2","A2"),
+        ("B","B"),
+        ("Productos tipo TOP","Productos tipo TOP"),
+    ]
+    tipologiaProducto= models.CharField(max_length=50, choices=tipologiaProducto, default='En proceso')
     publicacion = models.CharField(max_length=50)
     estudiantes = models.ForeignKey(Estudiantes,null=False,blank=False,on_delete=models.CASCADE)
     estadoProdIniSemestre = models.CharField(max_length=50)
@@ -333,14 +340,14 @@ class UnidadAcademica(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     nombre = models.CharField(max_length=50)
     class Meta:
-        db_table = 'proyecto_UnidadAcademica'
+        db_table = 'proyecto_Unidadacademica'
 
 class EntidadPostulo(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     nombreInstitucion = models.CharField(max_length=50)
     nombreGrupo = models.CharField(max_length=50)
     class Meta:
-        db_table = 'proyecto_EntidadPostulo'
+        db_table = 'proyecto_Entidadpostulo'
 
 class Financiacion(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
@@ -353,7 +360,7 @@ class GrupoInvestigacionPro(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     nombre = models.CharField(max_length=50)
     class Meta:
-        db_table = 'proyecto_GrupoInvestigacionPro'
+        db_table = 'proyecto_Grupoinvestigacionpro'
 
 class Transacciones(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
@@ -380,7 +387,7 @@ class UbicacionProyecto(models.Model):
     pais = models.CharField(max_length=50)
     departamento = models.CharField(max_length=50)
     class Meta:
-        db_table = 'proyecto_UbicacionProyecto'
+        db_table = 'proyecto_Ubicacionproyecto'
 
 class EstadoProyecto(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
@@ -393,7 +400,7 @@ class EstadoProyecto(models.Model):
     ]
     estado = models.CharField(max_length=50, choices=estado, default='En proceso')
     class Meta:
-        db_table = 'proyecto_EstadoProyecto'
+        db_table = 'proyecto_Estadoproyecto'
 
 class ModalidadProyecto(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
@@ -404,7 +411,7 @@ class ModalidadProyecto(models.Model):
     ]
     modalidad = models.CharField(max_length=50, choices=modalidad, default='Convocatoria')
     class Meta:
-        db_table = 'proyecto_ModalidadProyecto'
+        db_table = 'proyecto_Modalidadproyecto'
 
 class AvanceProyecto(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
@@ -412,13 +419,13 @@ class AvanceProyecto(models.Model):
     entregablesComprometidos = models.CharField(max_length=50)
     entregablesReal = models.CharField(max_length=50)
     class Meta:
-        db_table = 'proyecto_AvanceProyecto'
+        db_table = 'proyecto_Avanceproyecto'
 
 class LineaInvestigacion(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     nombre = models.CharField(max_length=50)
     class Meta:
-        db_table = 'proyecto_LineaInvestigacion'
+        db_table = 'proyecto_Lineainvestigacion'
 
 class EntregableAdministrativo(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
@@ -429,19 +436,22 @@ class EntregableAdministrativo(models.Model):
     pendiente = models.CharField(max_length=50)
     clasificacion = models.CharField(max_length=50)
     class Meta:
-        db_table = 'proyecto_EntregableAdministrativo'
+        db_table = 'proyecto_Entregableadministrativo'
+
+class Coinvestigador(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    coinvestigador= models.ForeignKey(Investigador,null=False,blank=False,on_delete=models.CASCADE)
+    class Meta:
+        db_table = 'proyecto_Coinvestigador'
 
 class Proyecto(models.Model):
     codigo = models.CharField(max_length=50, primary_key=True)
     fecha = models.DateField()
     titulo = models.CharField(max_length=50)
-    investigadores = models.ForeignKey(Investigador,null=False,blank=False,on_delete=models.CASCADE)
+    investigadores = models.CharField(max_length=50)
     unidadAcademica = models.ForeignKey(UnidadAcademica,null=False,blank=False,on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto,null=False,blank=False,on_delete=models.CASCADE)
-    coinvestigadores = models.CharField(max_length=50)
-    programaCoinvestigador = models.CharField(max_length=50)
-    entidadInstitucion = models.CharField(max_length=50)
-    areaDisciplinares = models.CharField(max_length=50)
+    coinvestigadores = models.ForeignKey(Coinvestigador,null=False,blank=False,on_delete=models.CASCADE)
     area = models.CharField(max_length=50)
     porcentajeEjecucionCorte = models.IntegerField()
     entidadPostulo = models.ForeignKey(EntidadPostulo,null=False,blank=False,on_delete=models.CASCADE)

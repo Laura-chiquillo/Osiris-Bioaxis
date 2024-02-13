@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Investigador
+from .serializer import investigadorSerializer
 
 
 class CustomAuthToken(APIView):
@@ -45,9 +46,33 @@ class CustomAuthToken(APIView):
             'unidadacademica': investigador.unidadAcademica,
             'horariosformacion': investigador.horasformacion,
             'horariosestrictos': investigador.horasestricto,
-            #'tipPosgrado': investigador.tipPosgrado,
-            #'tipPregrado': investigador.tipPregrado
+            'tipPosgrado': {
+                'id': investigador.tipPosgrado.id,
+                'titulo': investigador.tipPosgrado.titulo,
+                'fecha': investigador.tipPosgrado.fecha,
+                'institucion': investigador.tipPosgrado.institucion,
+                'tipo': investigador.tipPosgrado.tipo,
+            },
+            'tipPregrado': {
+                'id': investigador.tipPregrado.id,
+                'titulo': investigador.tipPregrado.titulo,
+                'fecha': investigador.tipPregrado.fecha,
+                'institucion': investigador.tipPregrado.institucion,
+            },
         }
-
         return Response({'token': access_token, 'user_data': user_data}, status=status.HTTP_200_OK)
 
+class ActualizarDatosUsuario(APIView):
+    def put(self, request, *args, **kwargs):
+        try:
+            usuario = Investigador.objects.get(numerodocumento=request.data.get('numerodocumento'))
+        except Investigador.DoesNotExist:
+            return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = investigadorSerializer(usuario, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,16 +1,16 @@
 from rest_framework import serializers
 
 from .models import (Apropiacion, Articulos, AvanceProyecto, Capitulos,
-                     CategoriaMinciencias, Consultoria, Contenido, Contrato,
-                     CuartilEsperado, EntidadPostulo, EntregableAdministrativo,
-                     EstadoProducto, EstadoProyecto, Estudiantes, Eventos,
-                     Financiacion, Grupoinvestigacion, GrupoInvestigacionPro,
-                     Industrial, Investigador, Libros, Licencia,
-                     LineaInvestigacion, ListaProducto, Maestria,
-                     ModalidadProyecto, Origen, Posgrado, PregFinalizadoyCurso,
-                     Pregrado, Producto, Proyecto, Reconocimientos,
-                     RolProducto, Software, Transacciones, Ubicacion,
-                     UbicacionProyecto, UnidadAcademica)
+                     CategoriaMinciencias, Coinvestigador, Consultoria,
+                     Contenido, Contrato, CuartilEsperado, EntidadPostulo,
+                     EntregableAdministrativo, EstadoProducto, EstadoProyecto,
+                     Estudiantes, Eventos, Financiacion, Grupoinvestigacion,
+                     GrupoInvestigacionPro, Imagen, Industrial, Investigador,
+                     Libros, Licencia, LineaInvestigacion, ListaProducto,
+                     Maestria, ModalidadProyecto, Origen, Posgrado,
+                     PregFinalizadoyCurso, Pregrado, Producto, Proyecto,
+                     Reconocimientos, RolProducto, Software, Transacciones,
+                     Ubicacion, UbicacionProyecto, UnidadAcademica)
 
 #------------------------ investigador ------------------------
 
@@ -19,6 +19,11 @@ class investigadorSerializer(serializers.ModelSerializer):
         model = Investigador
         fields = '__all__'
 
+class imagenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Imagen
+        fields = '__all__'
+        
 class ubicacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ubicacion
@@ -207,25 +212,12 @@ class entregableAdministrativoSerializer(serializers.ModelSerializer):
         model = EntregableAdministrativo
         fields = '__all__'
 
+class coinvestigadorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Coinvestigador
+        fields = '__all__'
+
 class proyectoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Proyecto
         fields = '__all__'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

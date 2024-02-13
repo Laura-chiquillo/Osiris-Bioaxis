@@ -1,12 +1,13 @@
 from django.urls import path
 
-from .autentication import CustomAuthToken
+from .autentication import ActualizarDatosUsuario, CustomAuthToken
 from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
                        articuloRetrieveUpdateDestroy, articulosList,
                        avanceProyectoList, avanceProyectoRetrieveUpdateDestroy,
                        capituloRetrieveUpdateDestroy, capitulosList,
                        categoriaMincienciasList,
                        categoriaMincienciasRetrieveUpdateDestroy,
+                       coinvestigadorList, coinvestigadorRetrieveUpdateDestroy,
                        consultoriaList, consultoriaRetrieveUpdateDestroy,
                        contenidoList, contenidoRetrieveUpdateDestroy,
                        contratoList, contratoRetrieveUpdateDestroy,
@@ -21,7 +22,8 @@ from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
                        eventoRetrieveUpdateDestroy, eventosList,
                        financiacionList, financiacionRetrieveUpdateDestroy,
                        grupoInvestigacionCoList, grupoInvestigacionList,
-                       grupoInvestigacionRetrieveUpdateDestroy, industrialList,
+                       grupoInvestigacionRetrieveUpdateDestroy, imagenList,
+                       imagenRetrieveUpdateDestroy, industrialList,
                        industrialRetrieveUpdateDestroy, investigadorList,
                        investigadorRetrieveUpdateDestroy,
                        libroRetrieveUpdateDestroy, librosList, licenciaList,
@@ -49,12 +51,15 @@ from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
 
 urlpatterns = [
     path('custom-token-auth/', CustomAuthToken.as_view(), name='custom_token_auth'),
+    path('ActualizarInvestigador',ActualizarDatosUsuario.as_view(), name='actualizar-investigador'),
     path('investigador', investigadorList.as_view(), name='create-investigador-list'),
     path('grupoinvestigacion', grupoInvestigacionList.as_view(), name='create-grupoinvestigacion-list'),
     path('posgrado', posgradoList.as_view(), name='create-posgrado-list'),
     path('pregrado', pregradoList.as_view(), name='create-pregrado-list'),
-    path('ubicacion', ubicacionList.as_view(), name='create-ubicacion-list'), 
-    path('investigador/<str:pk>', investigadorRetrieveUpdateDestroy.as_view(), name='investigador-detail'),
+    path('ubicacion', ubicacionList.as_view(), name='create-ubicacion-list'),
+    path("coinvestigador", coinvestigadorList.as_view(), name="coinvestigador-list"),
+    path('investigador/<int:pk>', investigadorRetrieveUpdateDestroy.as_view(), name='investigador-detail'),
+    path('coinvestigador/<int:pk>', coinvestigadorRetrieveUpdateDestroy.as_view(), name='coinvestigador-detail'),
     path('grupoinvestigacion/<int:pk>', grupoInvestigacionRetrieveUpdateDestroy.as_view(), name='grupoinvestigacion-detail'),
     path('posgrado/<int:pk>', posgradoRetrieveUpdateDestroy.as_view(), name='posgrado-detail'),
     path('pregrado/<int:pk>', pregradoRetrieveUpdateDestroy.as_view(), name='pregrado-detail'),
@@ -127,8 +132,6 @@ urlpatterns = [
     path('lineaInvestigacion/<int:pk>', lineaInvestigacionRetrieveUpdateDestroy.as_view(), name='lineaInvestigacion-detail'),
     path('entregableAdministrativo/<int:pk>', entregableAdministrativoRetrieveUpdateDestroy.as_view(), name='entregableAdministrativo-detail'),
     path('proyecto/<int:pk>', proyectoRetrieveUpdateDestroy.as_view(), name='proyecto-detail'),
+    path('imagen', imagenList.as_view(), name='create-imagen-list'),
+    path('imagen/<int:pk>', imagenRetrieveUpdateDestroy.as_view(), name='imagen-detail'),
 ]
-
-
-
-
