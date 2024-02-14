@@ -41,7 +41,6 @@
                 </mat-paginator>
               </div>
         </mat-tab>
-
         <!-- nuevo -->
         <mat-tab label="Nuevo">
             <mat-tab-group class="nuevo vertical-tabs" mat-stretch-tabs="false" mat-align-tabs="end">
@@ -80,28 +79,27 @@
                               
                               <p>Coinventigador
                                 <mat-form-field class="example-chip-list">
-                                  <mat-chip-grid #chipGrid aria-label="Fruit selection">
-                                    <mat-chip-row *ngFor="let fruit of fruits; let i = index; trackBy: trackByFn" (removed)="remove(fruit)">
-                                      {{fruit}}
-                                      <button matChipRemove [attr.aria-label]="'remove ' + fruit">
+                                  <mat-chip-grid #chipGrid aria-label="Active Investigators">
+                                    <mat-chip-row *ngFor="let investigator of activeInvestigators; let i = index; trackBy: trackByFn" (removed)="remove(investigator)">
+                                      {{investigator.nombre}} {{investigator.apellido}} <!-- Mostrar nombre y apellido -->
+                                      <button matChipRemove [attr.aria-label]="'remove ' + investigator.nombre + ' ' + investigator.apellido">
                                         <mat-icon>cancel</mat-icon>
                                       </button>
                                     </mat-chip-row>
                                   </mat-chip-grid>
-                                  <input placeholder="New Fruit..." #fruitInput [formControl]="fruitCtrl"
+                                  <input placeholder="New Investigator..." #investigatorInput [formControl]="investigatorCtrl"
                                     [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
-                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                    (matChipInputTokenEnd)="add($event)"/>
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)"/>
+                              
                                   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                                    <mat-option *ngFor="let fruit of filteredFruits | async; trackBy: trackByFn" [value]="fruit">
-                                      {{fruit}}
+                                    <mat-option *ngFor="let investigator of filteredInvestigators | async; trackBy: trackByFn" [value]="investigator">
+                                      {{investigator.nombre}} {{investigator.apellido}} <!-- Mostrar nombre y apellido -->
                                     </mat-option>
                                   </mat-autocomplete>
                                 </mat-form-field>
-                                
-                                
-                                </p>
-                          
+                              </p>
+                              
+                              
         
                               <p>Unidad academica
                                 <mat-form-field>

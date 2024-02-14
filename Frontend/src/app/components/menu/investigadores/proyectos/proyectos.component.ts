@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator'; // Asegúrate de importar MatPaginator desde '@angular/material/paginator'
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -25,6 +25,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { InvestigadorService } from '../../services/registroInvestigador';
 
 @Component({
   selector: 'app-proyectos',
@@ -50,15 +51,83 @@ import { map, startWith } from 'rxjs/operators';
     MatSliderModule, MatRadioModule, CommonModule, HttpClientModule],
   })
   
-  export class ProyectosComponent {
-    
-    constructor(private http: HttpClient,private _formBuilder: FormBuilder,private cdr: ChangeDetectorRef) {
-      this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
-        startWith(null),
-        map((fruit: string | null) => (fruit ? this._filter(fruit) : this.allFruits.slice())),
-      );
+  export class ProyectosComponent implements OnInit{
       
+  //mostrar los coinvestigadores que hay
+  separatorKeysCodes: number[] = [13, 188];
+  investigatorCtrl = new FormControl('');
+  filteredInvestigators!: Observable<{ nombre: string; apellido: string; }[]>;
+  activeInvestigators: { nombre: string, apellido: string }[] = [];
+
+  @ViewChild('investigatorInput') investigatorInput!: ElementRef<HTMLInputElement>;
+
+  constructor( private announcer: LiveAnnouncer,private http: HttpClient,private _formBuilder: FormBuilder,private cdr: ChangeDetectorRef, private investigatorService: InvestigadorService) {
+      
+  }
+
+  ngOnInit(): void {
+    this.investigatorService.getUsuarios().subscribe(data => {
+      // Aquí, en lugar de sobrescribir activeInvestigators, debes mapear los datos a un objeto con nombre y apellido
+      this.activeInvestigators = data.map(investigador => ({
+        nombre: investigador.nombre,
+        apellido: investigador.apellido
+      }));
+      this.filteredInvestigators = this.investigatorCtrl.valueChanges.pipe(
+        startWith(''),
+        map((value: string | null) => value ? this._filter(value) : this.activeInvestigators.slice())
+      );
+    });
+  }
+
+  private _filter(value: string): { nombre: string, apellido: string }[] {
+    const filterValue = value.toLowerCase();
+
+    if (!filterValue) {
+      return this.activeInvestigators.slice(); // Devuelve una copia de todos los investigadores activos si no hay entrada de usuario
     }
+
+    return this.activeInvestigators.filter(investigador =>
+      `${investigador.nombre.toLowerCase()} ${investigador.apellido.toLowerCase()}`.includes(filterValue)
+    );
+  }
+
+  trackByFn(index: number, item: { nombre: string, apellido: string }): number {
+    return index;
+  }
+
+  add(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    if (value) {
+      const [nombre, apellido] = value.split(' ');
+      this.activeInvestigators.push({ nombre, apellido });
+    }
+
+    event.chipInput!.clear();
+    this.investigatorCtrl.setValue(null);
+  }
+
+  remove(investigador: { nombre: string, apellido: string }): void {
+    const index = this.activeInvestigators.indexOf(investigador);
+
+    if (index >= 0) {
+      this.activeInvestigators.splice(index, 1);
+
+      // this.announcer.announce(`Removed ${investigador.nombre} ${investigador.apellido}`); // Utiliza el anunciador aquí si es necesario
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    const [nombre, apellido] = event.option.viewValue.split(' ');
+    this.activeInvestigators.push({ nombre, apellido });
+    this.investigatorInput.nativeElement.value = '';
+    this.investigatorCtrl.setValue(null);
+  }
+  displayInvestigator(investigator: any): string {
+    return investigator && investigator.nombre && investigator.apellido ? `${investigator.nombre} ${investigator.apellido}` : '';
+  }
+  
+  // crear nuevo proyecto
 
   //subir archivo proyecto
   selectedFile: File | null = null;
@@ -96,59 +165,7 @@ import { map, startWith } from 'rxjs/operators';
   }
 
 
-  //mostrar los coinvestigadores que hay 
-  separatorKeysCodes: number[] = [13, 188];
-  fruitCtrl = new FormControl('');
-  filteredFruits: Observable<string[]>;
-  fruits: string[] = ['Lemon'];
-  allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
-
-  @ViewChild('fruitInput')
-  fruitInput!: ElementRef<HTMLInputElement>;
-
-  announcer = inject(LiveAnnouncer);
-  trackByFn(index: number, item: string): number {
-    return index; // Puedes usar el índice como identificador único si los elementos de la lista no cambian de posición.
-  }
   
-
-
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-
-    // Add our fruit
-    if (value) {
-      this.fruits.push(value);
-    }
-
-    // Clear the input value
-    event.chipInput!.clear();
-
-    this.fruitCtrl.setValue(null);
-  }
-
-  remove(fruit: string): void {
-    const index = this.fruits.indexOf(fruit);
-  
-    if (index >= 0) {
-      this.fruits.splice(index, 1);
-  
-      this.announcer.announce(`Removed ${fruit}`);
-    }
-  }
-  
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.fruits.push(event.option.viewValue);
-    this.fruitInput.nativeElement.value = '';
-    this.fruitCtrl.setValue(null);
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allFruits.filter(fruit => fruit.toLowerCase().includes(filterValue));
-  }
   
   //CREAR PROYECTO
   firstFormGroup = this._formBuilder.group({

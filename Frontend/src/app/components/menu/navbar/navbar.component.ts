@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { Investigador } from '../modelo/investigador';
 import { AutenticacionService } from '../services/autenticacion';
-import { InvestigadorService } from '../services/registroInvestigador'; // Ajusta la ruta según tu estructura de archivos
+import { InvestigadorService } from '../services/registroInvestigador';
 
 @Component({
   selector: 'app-navbar',
