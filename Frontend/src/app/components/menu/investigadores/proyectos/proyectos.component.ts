@@ -56,8 +56,9 @@ import { InvestigadorService } from '../../services/registroInvestigador';
   //mostrar los coinvestigadores que hay
   separatorKeysCodes: number[] = [13, 188];
   investigatorCtrl = new FormControl('');
-  filteredInvestigators!: Observable<{ nombre: string; apellido: string; }[]>;
-  activeInvestigators: { nombre: string, apellido: string }[] = [];
+  filteredInvestigators!: Observable<{ nombre: string; apellidos: string; }[]>;
+  activeInvestigators: { nombre: string, apellidos: string }[] = [];
+  selectedInvestigators: string[] = [];
 
   @ViewChild('investigatorInput') investigatorInput!: ElementRef<HTMLInputElement>;
 
@@ -66,11 +67,13 @@ import { InvestigadorService } from '../../services/registroInvestigador';
   }
 
   ngOnInit(): void {
+    this.selectedInvestigators = []; // Asegúrate de que selectedInvestigators esté vacío al principio
+    this.activeInvestigators = []; // Inicializa activeInvestigators como un array vacío
+    
     this.investigatorService.getUsuarios().subscribe(data => {
-      // Aquí, en lugar de sobrescribir activeInvestigators, debes mapear los datos a un objeto con nombre y apellido
       this.activeInvestigators = data.map(investigador => ({
         nombre: investigador.nombre,
-        apellido: investigador.apellido
+        apellidos: investigador.apellidos
       }));
       this.filteredInvestigators = this.investigatorCtrl.valueChanges.pipe(
         startWith(''),
@@ -78,53 +81,72 @@ import { InvestigadorService } from '../../services/registroInvestigador';
       );
     });
   }
+  
 
-  private _filter(value: string): { nombre: string, apellido: string }[] {
+  private _filter(value: string): { nombre: string, apellidos: string }[] {
     const filterValue = value.toLowerCase();
-
+  
     if (!filterValue) {
       return this.activeInvestigators.slice(); // Devuelve una copia de todos los investigadores activos si no hay entrada de usuario
     }
-
-    return this.activeInvestigators.filter(investigador =>
-      `${investigador.nombre.toLowerCase()} ${investigador.apellido.toLowerCase()}`.includes(filterValue)
+  
+    // Filtrar investigadores activos que no estén en la lista de investigadores seleccionados
+    const filteredActiveInvestigators = this.activeInvestigators.filter(investigador =>
+      `${investigador.nombre.toLowerCase()} ${investigador.apellidos.toLowerCase()}`.includes(filterValue)
+    );
+  
+    // Filtrar investigadores seleccionables que no estén ya seleccionados
+    return filteredActiveInvestigators.filter(investigador =>
+      !this.selectedInvestigators.includes(`${investigador.nombre} ${investigador.apellidos}`)
     );
   }
+  
 
-  trackByFn(index: number, item: { nombre: string, apellido: string }): number {
+  trackByFn(index: number, item: { nombre: string, apellidos: string }): number {
     return index;
+  }
+
+  remove(investigador: { nombre: string, apellidos: string }): void {
+    const index = this.activeInvestigators.indexOf(investigador);
+  
+    if (index >= 0) {
+      this.activeInvestigators.splice(index, 1);
+    }
   }
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-
+  
     if (value) {
-      const [nombre, apellido] = value.split(' ');
-      this.activeInvestigators.push({ nombre, apellido });
+      const [nombre, apellidos] = value.split(' ');
+      this.activeInvestigators.push({ nombre, apellidos });
     }
-
+  
     event.chipInput!.clear();
     this.investigatorCtrl.setValue(null);
   }
-
-  remove(investigador: { nombre: string, apellido: string }): void {
-    const index = this.activeInvestigators.indexOf(investigador);
-
-    if (index >= 0) {
-      this.activeInvestigators.splice(index, 1);
-
-      // this.announcer.announce(`Removed ${investigador.nombre} ${investigador.apellido}`); // Utiliza el anunciador aquí si es necesario
-    }
-  }
-
+  
   selected(event: MatAutocompleteSelectedEvent): void {
-    const [nombre, apellido] = event.option.viewValue.split(' ');
-    this.activeInvestigators.push({ nombre, apellido });
+    const [nombre, apellidos] = event.option.viewValue.split(' ');
+  
+    // Verificar si el investigador ya está en activeInvestigators
+    const investigadorExistente = this.activeInvestigators.find(investigador =>
+      investigador.nombre === nombre && investigador.apellidos === apellidos
+    );
+  
+    if (!investigadorExistente) {
+      // Agregar el investigador seleccionado solo si no está en la lista
+      this.activeInvestigators.push({ nombre, apellidos });
+      this.selectedInvestigators.push(`${nombre} ${apellidos}`);
+    }
+  
     this.investigatorInput.nativeElement.value = '';
     this.investigatorCtrl.setValue(null);
   }
+  
+  
   displayInvestigator(investigator: any): string {
-    return investigator && investigator.nombre && investigator.apellido ? `${investigator.nombre} ${investigator.apellido}` : '';
+    return investigator && investigator.nombre && investigator.apellidos ? `${investigator.nombre} ${investigator.apellidos}` : '';
   }
   
   // crear nuevo proyecto
@@ -178,13 +200,33 @@ import { InvestigadorService } from '../../services/registroInvestigador';
 
 
   //BARRAS DE PORCENTAJE
+  value: number = 0;
+  value2: number = 0;
+  value3: number = 0;
+
+  onValueChange(event: any) {
+    console.log("Nuevo valor para value:", event.target.value);
+    this.value = event.target.value;
+  }
+  
+  onValue2Change(event: any) {
+    console.log("Nuevo valor para value2:", event.target.value);
+    this.value2 = event.target.value;
+  }
+  
+  onValue3Change(event: any) {
+    console.log("Nuevo valor para value3:", event.target.value);
+    this.value3 = event.target.value;
+  }
+  
+  
+
   disabled = false;
   max = 100;
   min = 0;
   showTicks = false;
   step = 1;
   thumbLabel = false;
-  value = 0;
 
   disabled2 = false;
   max2 = 100;
@@ -192,7 +234,6 @@ import { InvestigadorService } from '../../services/registroInvestigador';
   showTicks2 = false;
   step2 = 1;
   thumbLabel2 = false;
-  value2 = 0;
 
   disabled3 = false;
   max3 = 100;
@@ -200,7 +241,6 @@ import { InvestigadorService } from '../../services/registroInvestigador';
   showTicks3 = false;
   step3 = 1;
   thumbLabel3 = false;
-  value3 = 0;
 
 
   // TABLA
