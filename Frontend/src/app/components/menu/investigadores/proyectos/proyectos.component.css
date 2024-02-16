@@ -46,8 +46,8 @@ table {
   }
   .titulo3 {
     display: flex;
-    margin-top: 5px;
-    margin-left: 200px; /* Ajusta este valor según sea necesario */
+    justify-content: space-evenly;
+    
   }
   .resumenArt {
     display: flex;
@@ -73,3 +73,7 @@ table {
   .mat-mdc-radio-button ~ .mat-mdc-radio-button {
     margin-left: 16px;
   }
+  
+.example-chip-list {
+  width: 250px; /* Establece la anchura deseada */
+}

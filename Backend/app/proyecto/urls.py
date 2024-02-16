@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .autentication import ActualizarDatosUsuario, CustomAuthToken
+from .autentication import (ActualizarDatosUsuario, CrearProyecto,
+                            CustomAuthToken)
 from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
                        articuloRetrieveUpdateDestroy, articulosList,
                        avanceProyectoList, avanceProyectoRetrieveUpdateDestroy,
@@ -51,6 +52,7 @@ from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
 
 urlpatterns = [
     path('custom-token-auth/', CustomAuthToken.as_view(), name='custom_token_auth'),
+    path("CrearProyecto", CrearProyecto.as_view(), name="Crear-Proyecto"),
     path('ActualizarInvestigador',ActualizarDatosUsuario.as_view(), name='actualizar-investigador'),
     path('investigador', investigadorList.as_view(), name='create-investigador-list'),
     path('grupoinvestigacion', grupoInvestigacionList.as_view(), name='create-grupoinvestigacion-list'),

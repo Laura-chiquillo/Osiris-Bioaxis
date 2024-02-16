@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator'; // Asegúrate de importar MatPaginator desde '@angular/material/paginator'
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -25,6 +25,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { InvestigadorService } from '../../services/registroInvestigador';
 
 @Component({
   selector: 'app-proyectos',
@@ -50,15 +51,105 @@ import { map, startWith } from 'rxjs/operators';
     MatSliderModule, MatRadioModule, CommonModule, HttpClientModule],
   })
   
-  export class ProyectosComponent {
-    
-    constructor(private http: HttpClient,private _formBuilder: FormBuilder,private cdr: ChangeDetectorRef) {
-      this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
-        startWith(null),
-        map((fruit: string | null) => (fruit ? this._filter(fruit) : this.allFruits.slice())),
-      );
+  export class ProyectosComponent implements OnInit{
       
+  //mostrar los coinvestigadores que hay
+  separatorKeysCodes: number[] = [13, 188];
+  investigatorCtrl = new FormControl('');
+  filteredInvestigators!: Observable<{ nombre: string; apellidos: string; }[]>;
+  activeInvestigators: { nombre: string, apellidos: string }[] = [];
+  selectedInvestigators: string[] = [];
+
+  @ViewChild('investigatorInput') investigatorInput!: ElementRef<HTMLInputElement>;
+
+  constructor( private announcer: LiveAnnouncer,private http: HttpClient,private _formBuilder: FormBuilder,private cdr: ChangeDetectorRef, private investigatorService: InvestigadorService) {
+      
+  }
+
+  ngOnInit(): void {
+    this.selectedInvestigators = []; // Asegúrate de que selectedInvestigators esté vacío al principio
+    this.activeInvestigators = []; // Inicializa activeInvestigators como un array vacío
+    
+    this.investigatorService.getUsuarios().subscribe(data => {
+      this.activeInvestigators = data.map(investigador => ({
+        nombre: investigador.nombre,
+        apellidos: investigador.apellidos
+      }));
+      this.filteredInvestigators = this.investigatorCtrl.valueChanges.pipe(
+        startWith(''),
+        map((value: string | null) => value ? this._filter(value) : this.activeInvestigators.slice())
+      );
+    });
+  }
+  
+
+  private _filter(value: string): { nombre: string, apellidos: string }[] {
+    const filterValue = value.toLowerCase();
+  
+    if (!filterValue) {
+      return this.activeInvestigators.slice(); // Devuelve una copia de todos los investigadores activos si no hay entrada de usuario
     }
+  
+    // Filtrar investigadores activos que no estén en la lista de investigadores seleccionados
+    const filteredActiveInvestigators = this.activeInvestigators.filter(investigador =>
+      `${investigador.nombre.toLowerCase()} ${investigador.apellidos.toLowerCase()}`.includes(filterValue)
+    );
+  
+    // Filtrar investigadores seleccionables que no estén ya seleccionados
+    return filteredActiveInvestigators.filter(investigador =>
+      !this.selectedInvestigators.includes(`${investigador.nombre} ${investigador.apellidos}`)
+    );
+  }
+  
+
+  trackByFn(index: number, item: { nombre: string, apellidos: string }): number {
+    return index;
+  }
+
+  remove(investigador: { nombre: string, apellidos: string }): void {
+    const index = this.activeInvestigators.indexOf(investigador);
+  
+    if (index >= 0) {
+      this.activeInvestigators.splice(index, 1);
+    }
+  }
+
+  add(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+  
+    if (value) {
+      const [nombre, apellidos] = value.split(' ');
+      this.activeInvestigators.push({ nombre, apellidos });
+    }
+  
+    event.chipInput!.clear();
+    this.investigatorCtrl.setValue(null);
+  }
+  
+  selected(event: MatAutocompleteSelectedEvent): void {
+    const [nombre, apellidos] = event.option.viewValue.split(' ');
+  
+    // Verificar si el investigador ya está en activeInvestigators
+    const investigadorExistente = this.activeInvestigators.find(investigador =>
+      investigador.nombre === nombre && investigador.apellidos === apellidos
+    );
+  
+    if (!investigadorExistente) {
+      // Agregar el investigador seleccionado solo si no está en la lista
+      this.activeInvestigators.push({ nombre, apellidos });
+      this.selectedInvestigators.push(`${nombre} ${apellidos}`);
+    }
+  
+    this.investigatorInput.nativeElement.value = '';
+    this.investigatorCtrl.setValue(null);
+  }
+  
+  
+  displayInvestigator(investigator: any): string {
+    return investigator && investigator.nombre && investigator.apellidos ? `${investigator.nombre} ${investigator.apellidos}` : '';
+  }
+  
+  // crear nuevo proyecto
 
   //subir archivo proyecto
   selectedFile: File | null = null;
@@ -96,59 +187,7 @@ import { map, startWith } from 'rxjs/operators';
   }
 
 
-  //mostrar los coinvestigadores que hay 
-  separatorKeysCodes: number[] = [13, 188];
-  fruitCtrl = new FormControl('');
-  filteredFruits: Observable<string[]>;
-  fruits: string[] = ['Lemon'];
-  allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
-
-  @ViewChild('fruitInput')
-  fruitInput!: ElementRef<HTMLInputElement>;
-
-  announcer = inject(LiveAnnouncer);
-  trackByFn(index: number, item: string): number {
-    return index; // Puedes usar el índice como identificador único si los elementos de la lista no cambian de posición.
-  }
   
-
-
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-
-    // Add our fruit
-    if (value) {
-      this.fruits.push(value);
-    }
-
-    // Clear the input value
-    event.chipInput!.clear();
-
-    this.fruitCtrl.setValue(null);
-  }
-
-  remove(fruit: string): void {
-    const index = this.fruits.indexOf(fruit);
-  
-    if (index >= 0) {
-      this.fruits.splice(index, 1);
-  
-      this.announcer.announce(`Removed ${fruit}`);
-    }
-  }
-  
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.fruits.push(event.option.viewValue);
-    this.fruitInput.nativeElement.value = '';
-    this.fruitCtrl.setValue(null);
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allFruits.filter(fruit => fruit.toLowerCase().includes(filterValue));
-  }
   
   //CREAR PROYECTO
   firstFormGroup = this._formBuilder.group({
@@ -161,13 +200,33 @@ import { map, startWith } from 'rxjs/operators';
 
 
   //BARRAS DE PORCENTAJE
+  value: number = 0;
+  value2: number = 0;
+  value3: number = 0;
+
+  onValueChange(event: any) {
+    console.log("Nuevo valor para value:", event.target.value);
+    this.value = event.target.value;
+  }
+  
+  onValue2Change(event: any) {
+    console.log("Nuevo valor para value2:", event.target.value);
+    this.value2 = event.target.value;
+  }
+  
+  onValue3Change(event: any) {
+    console.log("Nuevo valor para value3:", event.target.value);
+    this.value3 = event.target.value;
+  }
+  
+  
+
   disabled = false;
   max = 100;
   min = 0;
   showTicks = false;
   step = 1;
   thumbLabel = false;
-  value = 0;
 
   disabled2 = false;
   max2 = 100;
@@ -175,7 +234,6 @@ import { map, startWith } from 'rxjs/operators';
   showTicks2 = false;
   step2 = 1;
   thumbLabel2 = false;
-  value2 = 0;
 
   disabled3 = false;
   max3 = 100;
@@ -183,7 +241,6 @@ import { map, startWith } from 'rxjs/operators';
   showTicks3 = false;
   step3 = 1;
   thumbLabel3 = false;
-  value3 = 0;
 
 
   // TABLA
