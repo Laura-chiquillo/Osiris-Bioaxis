@@ -14,5 +14,10 @@ import { MatInputModule } from '@angular/material/input';
   imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatInputModule, MatFormFieldModule],
 })
 export class AdministradorComponent {
+  mostrarPerfil: boolean = false;
 
+   togglePerfil() {
+    this.mostrarPerfil = !this.mostrarPerfil;
+  }
 }
+
