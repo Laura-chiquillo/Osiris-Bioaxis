@@ -7,27 +7,25 @@
     
     <div class="menu">
         <ul>
-            <li><a href="#" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
-                <mat-icon>person</mat-icon>
-            </a></li>
-            <li><a href="#" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+            <li><a href="administrador/perfil" mat-icon-button color="primary"  aria-label="Perfil" class="tooltip">
+                    <mat-icon>person</mat-icon>
+            </a></li>           
+            <li><a href="administrador/control" mat-icon-button color="primary"  aria-label="Permisos" class="tooltip">
                 <mat-icon>check</mat-icon>
             </a></li>
-            <li><a href="#" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+            <li><a href="administrador/consulta" mat-icon-button color="primary"  aria-label="Participacion" class="tooltip">
                 <mat-icon>group</mat-icon>
             </a></li>
-            <li><a href="#" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
-                <mat-icon>description</mat-icon>
+            <li><a href="administrador/estados" mat-icon-button color="primary"  aria-label="Estado" class="tooltip">
+                <mat-icon>grading</mat-icon>
             </a></li>
-            <li><a href="#" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
-                <mat-icon>folder</mat-icon>
-            </a></li>
-            <li><a href="#" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+            <li><a href="#" mat-icon-button color="primary" aria-label="Notificaciones" class="tooltip">
                 <mat-icon>notifications_outline</mat-icon>
             </a></li>
-            <li><a href="#" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+            <li><a href="#" mat-icon-button color="primary" aria-label="Cerrar Sesion" class="tooltip">
                 <mat-icon>exit_to_app</mat-icon>
             </a></li>
         </ul>
     </div>
+    <router-outlet></router-outlet>
 </div>

@@ -1,7 +1,7 @@
+
 <div class="circular-image">
     <img [src]="urlDeLaImagen" alt="Imagen" class="rounded-image" />
 </div>
-
 
 <form class="example-form">
     <mat-form-field class="example-full-width">
@@ -10,7 +10,7 @@
     </mat-form-field>
     
     <mat-form-field class="">
-        <mat-label>Tipo de docuemnto</mat-label>
+        <mat-label>Tipo de documento</mat-label>
         <input matInput disabled value="C.C" [disabled]="inputDeshabilitado">
     </mat-form-field>
     
@@ -60,6 +60,8 @@
     </mat-form-field>
 
     <div class="activarInput">
-        <button (click)="activarInput()">Activar Input</button>
-        <button (click)="desactivarInput()">Desactivar Input</button>
-    </div>
+        <button class="boton-estilizado" (click)="activarInput()">Activar Input</button>
+        <button class="boton-estilizado" (click)="desactivarInput()">Desactivar Input</button>
+      </div>
+       
+  </form>
