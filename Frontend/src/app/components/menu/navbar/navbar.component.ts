@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Investigador } from '../modelo/investigador';
 import { AutenticacionService } from '../services/autenticacion';
 import { InvestigadorService } from '../services/registroInvestigador';
-
+ 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',

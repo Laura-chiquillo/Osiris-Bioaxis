@@ -3,7 +3,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator'; 
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -18,13 +18,16 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ChangeDetectorRef } from '@angular/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+
+import { Investigador } from '../../modelo/investigador';
+import { Coinvestigador, Proyecto } from '../../modelo/proyectos';
+import { ProyectoyproductoService } from '../../services/proyectoyproducto';
 import { InvestigadorService } from '../../services/registroInvestigador';
 
 @Component({
@@ -59,12 +62,84 @@ import { InvestigadorService } from '../../services/registroInvestigador';
   filteredInvestigators!: Observable<{ nombre: string; apellidos: string; }[]>;
   activeInvestigators: { nombre: string, apellidos: string }[] = [];
   selectedInvestigators: string[] = [];
+  proyecto: Proyecto = {};
 
   @ViewChild('investigatorInput') investigatorInput!: ElementRef<HTMLInputElement>;
+    
 
-  constructor( private announcer: LiveAnnouncer,private http: HttpClient,private _formBuilder: FormBuilder,private cdr: ChangeDetectorRef, private investigatorService: InvestigadorService) {
-      
+    listaProductos: { [key: string]: string[] } = {
+      evento: ['fechainicio', 'fechafin', 'numparticinerno', 'numparticexterno','tipoevento'],
+      articulo: ['fuente'],
+      capitulo: ['nombrepublicacion', 'isbn', 'fecha', 'editorial'],
+      libro: ['luegarpublicacion', 'autores', 'isbn', 'fecha', 'editorial'],
+      software: ['tiporegistro', 'numero', 'fecha', 'pais'],
+      industrial: ['insitutofinanciador', 'fecha', 'pais'],
+      reconocimiento: ['nombentidadotorgada', 'fecha'],
+      apropiacion: ['fechainicio', 'fechaFin', 'licencia', 'formato', 'medio','nombreEntidad'],
+      consultoria: ['nombreEntidad', 'contrato', 'isbn', 'fecha', 'editorial'],
+      contenido: ['paginaWeb', 'nombreEntidad'],
+      PregFinalizadoyCurso: ['fechaInicio', 'reconocimientos', 'numeroPaginas'],
+      Maestria: ['fechaInicio', 'institucion'],
+    };
+    
+    
+  constructor(private ProyectoyproductoService:ProyectoyproductoService,private formBuilder: FormBuilder,private http: HttpClient,private cdr: ChangeDetectorRef, private investigatorService: InvestigadorService) {
+    this.registroProyecto = this.formBuilder.group({
+      codigo: [''],
+      fecha: [null, Validators.required],
+      titulo: [''],
+      investigador: [''],
+      unidadAcademica: [''],
+      producto: this.formBuilder.group({
+        id:[''],
+        tituloProducto: [''],
+        rolProducto: [''],
+        investigador: [''],
+        listaProducto: [''],
+        cuartilEsperado: [''],
+        categoriaMinciencias: [''],
+        tipologiaProducto: [''],
+        publicacion: [''],
+        estudiantes: [''],
+        estadoProdIniSemestre: [''],
+        porcentanjeAvanFinSemestre: [''],
+        observaciones: [''],
+        estadoProducto: [''],
+        porcentajeComSemestral: [''],
+        porcentajeRealMensual: [''],
+        fecha: [''],
+        origen: [''],
+        Soporte: [''],
+      }),
+      coinvestigadores: [''],
+      area: [''],
+      porcentajeEjecucionCorte: [''],
+      entidadPostulo: [''],
+      financiacion: [''],
+      grupoInvestigacionPro: [''],
+      porcentajeEjecucionFinCorte: [''],
+      porcentajeAvance: [''],
+      soporte: [''],
+      transacciones: [''],
+      origen: [''],
+      convocatoria: [''],
+      ubicacionProyecto: [''],
+      estadoProyecto: [''],
+      modalidadProyecto: [''],
+      nivelRiesgoEtico: [''],
+      lineaInvestigacion: [''],
+      entregableAdministrativo: this.formBuilder.group({
+        titulo: [''],
+        nombre: [''],
+        calidad: [''],
+        entregable: [''],
+        pendiente: [''],
+        clasificacion: [''],
+      }),
+    });
   }
+
+
 
   ngOnInit(): void {
     this.selectedInvestigators = []; // Asegúrate de que selectedInvestigators esté vacío al principio
@@ -73,15 +148,37 @@ import { InvestigadorService } from '../../services/registroInvestigador';
     this.investigatorService.getUsuarios().subscribe(data => {
       this.activeInvestigators = data.map(investigador => ({
         nombre: investigador.nombre,
-        apellidos: investigador.apellidos
+        apellidos: investigador.apellidos,
+        numerodocumento: investigador.numerodocumento  // Asegúrate de incluir el número de documento aquí
       }));
+
+      // Agrega un console.log para verificar los datos de los investigadores
+      console.log('Datos de los investigadores:', this.activeInvestigators);
+
       this.filteredInvestigators = this.investigatorCtrl.valueChanges.pipe(
         startWith(''),
         map((value: string | null) => value ? this._filter(value) : this.activeInvestigators.slice())
       );
     });
+}
+addCoinvestigador(investigador: { nombre: string, apellidos: string, numerodocumento: string }) {
+  const newCoinvestigador: Coinvestigador = {
+    id: investigador.numerodocumento,
+    coinvestigador: `${investigador.nombre}`
+  };
+  if (!this.proyecto.coinvestigadores) {
+    this.proyecto.coinvestigadores = [newCoinvestigador];
+  } else {
+    this.proyecto.coinvestigadores.push(newCoinvestigador);
   }
-  
+}
+
+removeCoinvestigador(investigador: { nombre: string; apellidos: string }) {
+  if (this.proyecto.coinvestigadores) {
+    this.proyecto.coinvestigadores = this.proyecto.coinvestigadores.filter(c => c.coinvestigador !== `${investigador.nombre} ${investigador.apellidos}`);
+  }
+}
+
 
   private _filter(value: string): { nombre: string, apellidos: string }[] {
     const filterValue = value.toLowerCase();
@@ -145,38 +242,28 @@ import { InvestigadorService } from '../../services/registroInvestigador';
   }
   
   
-  displayInvestigator(investigator: any): string {
-    return investigator && investigator.nombre && investigator.apellidos ? `${investigator.nombre} ${investigator.apellidos}` : '';
+  displayInvestigator(investigator: Investigador): string {
+    if (investigator && investigator.nombre && investigator.apellidos && investigator.numerodocumento) {
+      return `${investigator.nombre} ${investigator.apellidos} - ${investigator.numerodocumento}`;
+    } else {
+      return '';
+    }
   }
   
-  // crear nuevo proyecto
 
+  
   //subir archivo proyecto
-  selectedFile: File | null = null;
+  selectedFileProyecto: File = null!;
 
   onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0] as File;
+    this.selectedFileProyecto = event.target.files[0] as File;
   }
 
-  uploadFile() {
-    if (!this.selectedFile) {
-      console.error('No se ha seleccionado ningún archivo.');
-      return;
-    }
+//subir archivo producto
+  selectedFileProducto: File= null!;
 
-    const formData = new FormData();
-    formData.append('file', this.selectedFile);
-
-    this.http.post('URL_DEL_BACKEND_PARA_SUBIR_ARCHIVO', formData)
-      .subscribe(
-        (response) => {
-          console.log('Archivo subido con éxito!', response);
-          // Puedes hacer lo que desees con la respuesta del servidor aquí
-        },
-        (error) => {
-          console.error('Error al subir el archivo:', error);
-        }
-      );
+  onFileSelected1(event: any) {
+    this.selectedFileProyecto = event.target.files[0] as File;
   }
 
   //mostrar productos en nuevo proyecto
@@ -187,14 +274,91 @@ import { InvestigadorService } from '../../services/registroInvestigador';
   }
 
 
+  //seleccionar un tipo de producto de listaproducto
+  onSelectionChangeLista(event: any) {
+    const tipoProductoSeleccionado = event.value;
+    const camposProducto = this.listaProductos[tipoProductoSeleccionado] || [];
+  
+    // Obtener el FormGroup del producto
+    const productoFormGroup = this.registroProyecto.get('producto') as FormGroup;
+  
+    // Obtener los nombres de los controles actuales
+    const controlNames = Object.keys(productoFormGroup.controls);
+  
+    // Iterar sobre todos los campos posibles del producto
+    Object.keys(this.listaProductos).forEach(campo => {
+      // Verificar si el campo actual está presente en los campos del producto seleccionado
+      if (camposProducto.includes(campo)) {
+        // Si está presente, asegúrate de que su control exista y sea válido
+        if (!productoFormGroup.get(campo)) {
+          productoFormGroup.addControl(campo, new FormControl(''));
+        }
+      } else {
+        // Si el campo no está presente, establecer su valor en "NA" o algún otro valor predeterminado
+        productoFormGroup.get(campo)?.setValue('NA');
+      }
+    });
+  }
+  
+  
+  
   
   
   //CREAR PROYECTO
-  firstFormGroup = this._formBuilder.group({
-    firstCtrl: ['', Validators.required],
+  firstFormGroup = this.formBuilder.group({
+    codigo: [''],
+      fecha: [null, Validators.required],
+      titulo: [''],
+      investigador: [''],
+      unidadAcademica: [''],
+      coinvestigadores: [''],
+      area: [''],
+      porcentajeEjecucionCorte: [''],
+      entidadPostulo: [''],
+      financiacion: [''],
+      grupoInvestigacionPro: [''],
+      porcentajeEjecucionFinCorte: [''],
+      porcentajeAvance: [''],
+      soporte: [''],
+      transacciones: [''],
+      origen: [''],
+      convocatoria: [''],
+      ubicacionProyecto: [''],
+      estadoProyecto: [''],
+      modalidadProyecto: [''],
+      nivelRiesgoEtico: [''],
+      lineaInvestigacion: [''],
+      entregableAdministrativo: this.formBuilder.group({
+        titulo: [''],
+        nombre: [''],
+        calidad: [''],
+        entregable: [''],
+        pendiente: [''],
+        clasificacion: [''],
+      }),
   });
-  secondFormGroup = this._formBuilder.group({
-    secondCtrl: [''],
+  secondFormGroup = this.formBuilder.group({
+    producto: this.formBuilder.group({
+      id:[''],
+      tituloProducto: [''],
+      rolProducto: [''],
+      investigador: [''],
+      listaProducto: [''],
+      cuartilEsperado: [''],
+      categoriaMinciencias: [''],
+      tipologiaProducto: [''],
+      publicacion: [''],
+      estudiantes: [''],
+      estadoProdIniSemestre: [''],
+      porcentanjeAvanFinSemestre: [''],
+      observaciones: [''],
+      estadoProducto: [''],
+      porcentajeComSemestral: [''],
+      porcentajeRealMensual: [''],
+      fecha: [''],
+      origen: [''],
+      Soporte: [''],
+    }),
   });
   isEditable = true;
 
@@ -203,22 +367,30 @@ import { InvestigadorService } from '../../services/registroInvestigador';
   value: number = 0;
   value2: number = 0;
   value3: number = 0;
-
+  
   onValueChange(event: any) {
     console.log("Nuevo valor para value:", event.target.value);
     this.value = event.target.value;
+    if (this.porcentajeEjecucionCorte) { // Verificar si porcentajeEjecucionCorte no es null
+      this.porcentajeEjecucionCorte.setValue(this.value); // Actualizar el valor del campo porcentajeEjecucionCorte en el formulario
+    }
   }
   
   onValue2Change(event: any) {
     console.log("Nuevo valor para value2:", event.target.value);
     this.value2 = event.target.value;
+    if (this.porcentajeEjecucionFinCorte) { // Verificar si porcentajeEjecucionFinCorte no es null
+      this.porcentajeEjecucionFinCorte.setValue(this.value2); // Actualizar el valor del campo porcentajeEjecucionFinCorte en el formulario
+    }
   }
   
   onValue3Change(event: any) {
     console.log("Nuevo valor para value3:", event.target.value);
     this.value3 = event.target.value;
+    if (this.porcentajeAvance) { // Verificar si porcentajeAvance no es null
+      this.porcentajeAvance.setValue(this.value3); // Actualizar el valor del campo porcentajeAvance en el formulario
+    }
   }
-  
   
 
   disabled = false;
@@ -241,6 +413,185 @@ import { InvestigadorService } from '../../services/registroInvestigador';
   showTicks3 = false;
   step3 = 1;
   thumbLabel3 = false;
+
+   //--------------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------------
+  //------------------------------------------Guardar proyecto -----------------------------------
+  //--------------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------------
+  public registroProyecto!: FormGroup;
+
+  get codigo() {
+    return this.registroProyecto.get('codigo');
+  }
+  get fecha() {
+    return this.registroProyecto.get('fecha');
+  }
+  get titulo() {
+    return this.registroProyecto.get('titulo');
+  }
+  get investigador() {
+    return this.registroProyecto.get('investigador');
+  }
+  get unidadAcademica() {
+    return this.registroProyecto.get('unidadAcademica');
+  }
+  get producto() {
+    return this.registroProyecto.get('producto') as FormGroup;
+  }  
+  get coinvestigadores() {
+    return this.registroProyecto.get('coinvestigadores');
+  }
+  get area() {
+    return this.registroProyecto.get('area');
+  }
+  get porcentajeEjecucionCorte() {
+    return this.registroProyecto.get('porcentajeEjecucionCorte');
+  }
+  get entidadPostulo() {
+    return this.registroProyecto.get('entidadPostulo');
+  }
+  get financiacion() {
+    return this.registroProyecto.get('financiacion');
+  }
+  get grupoInvestigacionPro() {
+    return this.registroProyecto.get('grupoInvestigacionPro');
+  }
+  get porcentajeEjecucionFinCorte() {
+    return this.registroProyecto.get('porcentajeEjecucionFinCorte');
+  }
+  get porcentajeAvance() {
+    return this.registroProyecto.get('porcentajeAvance');
+  }
+  get Soporte() {
+    return this.registroProyecto.get('Soporte');
+  }
+  get transacciones() {
+    return this.registroProyecto.get('transacciones');
+  }
+  get origen() {
+    return this.registroProyecto.get('origen');
+  }
+  get convocatoria() {
+    return this.registroProyecto.get('convocatoria');
+  }
+  get ubicacionProyecto() {
+    return this.registroProyecto.get('ubicacionProyecto');
+  }
+  get estadoProyecto() {
+    return this.registroProyecto.get('estadoProyecto');
+  }
+  get modalidadProyecto() {
+    return this.registroProyecto.get('modalidadProyecto');
+  }
+  get nivelRiesgoEtico() {
+    return this.registroProyecto.get('nivelRiesgoEtico');
+  }
+  get lineaInvestigacion() {
+    return this.registroProyecto.get('lineaInvestigacion');
+  }
+  get entregableAdministrativo() {
+    return this.registroProyecto.get('entregableAdministrativo');
+  }
+
+
+  guardarProyecto() {
+      // Obtener el valor del producto seleccionado
+      const productoSeleccionado: string = this.registroProyecto.get('producto.listaProducto')!.value;
+      const camposProducto = this.listaProductos[productoSeleccionado] || [];
+
+
+    // Obtener una copia del FormGroup actual
+    const productoFormGroup = this.registroProyecto.get('producto') as FormGroup;
+
+    // Eliminar todos los controles existentes
+    Object.keys(productoFormGroup.controls).forEach(controlName => {
+      productoFormGroup.removeControl(controlName);
+    });
+
+    // Agregar los controles correspondientes al producto seleccionado
+    camposProducto.forEach(controlName => {
+      productoFormGroup.addControl(controlName, new FormControl(''));
+    });
+
+
+    //producto
+    const id= this.registroProyecto.get('produto.id')?.value;
+    const tituloProducto= this.registroProyecto.get('produto.tituloProducto')?.value;
+    const rolProducto= this.registroProyecto.get('produto.rolProducto')?.value;
+    const investigador= this.registroProyecto.get('produto.investigador')?.value;
+    const cuartilEsperado= this.registroProyecto.get('produto.cuartilEsperado')?.value;
+    const categoriaMinciencias= this.registroProyecto.get('produto.categoriaMinciencias')?.value;
+    const tipologiaProducto= this.registroProyecto.get('produto.tipologiaProducto')?.value;
+    const publicacion= this.registroProyecto.get('produto.publicacion')?.value;
+    const estudiantes= this.registroProyecto.get('produto.estudiantes')?.value;
+    const estadoProdIniSemestre= this.registroProyecto.get('produto.estadoProdIniSemestre')?.value;
+    const porcentanjeAvanFinSemestre= this.registroProyecto.get('produto.porcentanjeAvanFinSemestre')?.value;
+    const observaciones= this.registroProyecto.get('produto.observaciones')?.value;
+    const estadoProducto= this.registroProyecto.get('produto.estadoProducto')?.value;
+    const porcentajeComSemestral= this.registroProyecto.get('produto.porcentajeComSemestral')?.value;
+    const porcentajeRealMensual= this.registroProyecto.get('produto.porcentajeRealMensual')?.value;
+    const fecha= this.registroProyecto.get('produto.fecha')?.value;
+    const origen= this.registroProyecto.get('produto.origen')?.value;
+    const Soporte= this.registroProyecto.get('produto.Soporte')?.value;
+    // Obtener los valores ingresados por el usuario en los campos del entregable administrativo
+    const titulo = this.registroProyecto.get('entregableAdministrativo.titulo')?.value;
+    const nombre = this.registroProyecto.get('entregableAdministrativo.nombre')?.value;
+    const calidad = this.registroProyecto.get('entregableAdministrativo.calidad')?.value;
+    const entregable = this.registroProyecto.get('entregableAdministrativo.entregable')?.value;
+    const pendiente = this.registroProyecto.get('entregableAdministrativo.pendiente')?.value;
+    const clasificacion = this.registroProyecto.get('entregableAdministrativo.clasificacion')?.value;
+  
+    // Crear objeto proyecto
+    const proyecto = {
+      producto:{
+        id,
+        tituloProducto,
+        rolProducto,
+        investigador,
+        cuartilEsperado,
+        categoriaMinciencias,
+        tipologiaProducto,
+        publicacion,
+        estudiantes,
+        estadoProdIniSemestre,
+        porcentanjeAvanFinSemestre,
+        observaciones,
+        estadoProducto,
+        porcentajeComSemestral,
+        porcentajeRealMensual,
+        fecha,
+        origen,
+        Soporte,
+      },
+      entregableAdministrativo: {
+        titulo,
+        nombre,
+        calidad,
+        entregable,
+        pendiente,
+        clasificacion
+      }
+    };
+  
+    // Llamar a la función crearProyecto para guardar el proyecto en el servidor
+    this.ProyectoyproductoService.crearProyecto(proyecto, this.selectedFileProyecto, this.selectedFileProducto).subscribe(
+      (resp: any) => {
+        console.log('Se ha registrado el proyecto exitosamente:', resp);
+        alert('Se ha registrado el proyecto exitosamente.');
+        this.registroProyecto.reset();
+      },
+      (error: any) => {
+        console.error('Error al registrar el proyecto:', error);
+        alert('Error al registrar el proyecto. Por favor, inténtalo de nuevo.');
+      }
+    );
+  }
+  
+  
+  
+  
+  
 
 
   // TABLA

@@ -7,7 +7,8 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Investigador, Proyecto
-from .serializer import investigadorSerializer, proyectoSerializer
+from .serializer import (investigadorSerializer, productoSerializer,
+                         proyectoSerializer)
 
 
 class CustomAuthToken(APIView):
@@ -80,6 +81,7 @@ class ActualizarDatosUsuario(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
+
 class CrearProyecto(APIView):
     def post(self, request, *args, **kwargs):
         # Obtener el nombre del investigador autenticado desde los datos del usuario en la solicitud
@@ -101,3 +103,11 @@ class CrearProyecto(APIView):
         proyectos = Proyecto.objects.all()
         data = [{'codigo': proyecto.codigo, 'titulo': proyecto.titulo} for proyecto in proyectos]
         return Response(data)
+
+class CrearNuevoProducto(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = productoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
