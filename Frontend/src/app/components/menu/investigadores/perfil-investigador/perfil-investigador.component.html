@@ -138,8 +138,8 @@
     </div>
     
     <div class="activarInput">
-        <button *ngIf="inputDeshabilitado" (click)="activarInput()">Editar</button>
-        <button *ngIf="!inputDeshabilitado" (click)="desactivarInput()">Guardar</button>
-        <button *ngIf="!inputDeshabilitado" (click)="cancelarInput()">Cancelar</button>
+        <button class="boton-estilizado" *ngIf="inputDeshabilitado" (click)="activarInput()">Editar</button>
+        <button class="boton-estilizado" *ngIf="!inputDeshabilitado" (click)="desactivarInput()">Guardar</button>
+        <button class="boton-estilizado" *ngIf="!inputDeshabilitado" (click)="cancelarInput()">Cancelar</button>
     </div>
 </form>

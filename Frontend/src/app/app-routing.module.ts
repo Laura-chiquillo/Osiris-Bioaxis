@@ -12,18 +12,30 @@ import { PerfilInvestigadorComponent } from './components/menu/investigadores/pe
 import { ProyectosComponent } from './components/menu/investigadores/proyectos/proyectos.component';
 
 const routes: Routes = [
-  {path:'', redirectTo: 'menu', pathMatch: 'full'},
-  {path:'menu', loadChildren: () => import('./components/menu/menu.module').then(x => x.MenuModule)} ,
-  {path:'investigadores',component:InvesigadoresComponent },
-  {path:'investigadores/perfil',component:PerfilInvestigadorComponent},
-  {path:'investigadores/proyectos',component:ProyectosComponent},
-  {path:'investigadores/participacion',component:ParticipacionComponent},
-  {path:'investigadores/consultas',component:ConsultasComponent},
-  {path:'administrador',component:AdministradorComponent},
-  {path:'administrador/control',component:ControlComponent},
-  {path:'administrador/estados',component:EstadosComponent},
-  {path:'administrador/perfil',component:PerfilAdministradorComponent},
-  {path:'administrador/consulta',component:ConsultaComponent}
+  { path: '', redirectTo: 'menu', pathMatch: 'full' },
+  { path: 'menu', loadChildren: () => import('./components/menu/menu.module').then(x => x.MenuModule) },
+  {
+    path: 'investigadores',
+    component: InvesigadoresComponent,
+    children: [
+      { path: '', redirectTo: 'perfil', pathMatch: 'full' },
+      { path: 'perfil', component: PerfilInvestigadorComponent },
+      { path: 'proyectos', component: ProyectosComponent },
+      { path: 'participacion', component: ParticipacionComponent },
+      { path: 'consultas', component: ConsultasComponent }
+    ]
+  },
+  {
+    path: 'administrador',
+    component: AdministradorComponent,
+    children: [
+      { path: '', redirectTo: 'perfil', pathMatch: 'full' },
+      { path: 'control', component: ControlComponent },
+      { path: 'estados', component: EstadosComponent },
+      { path: 'perfil', component: PerfilAdministradorComponent },
+      { path: 'consulta', component: ConsultaComponent }
+    ]
+  }
 ];
 
 @NgModule({

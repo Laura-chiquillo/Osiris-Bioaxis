@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+;
 @Component({
   selector: 'app-perfil-administrador',
   templateUrl: './perfil-administrador.component.html',
@@ -21,7 +22,7 @@ export class PerfilAdministradorComponent {
   // activar y inactivar input
   
   inputDeshabilitado: boolean = true;
-  mostrarPerfil: boolean = false;
+
 
   activarInput() {
     this.inputDeshabilitado = false; // Activar el input
@@ -30,8 +31,5 @@ export class PerfilAdministradorComponent {
   desactivarInput() {
     this.inputDeshabilitado = true; // Desactivar el input
   }
-  // mostrar en el munu
-  togglePerfil() {
-    this.mostrarPerfil = !this.mostrarPerfil;
-  }
+
 }
