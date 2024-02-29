@@ -98,7 +98,11 @@ class Investigador(models.Model):
         return token.key 
     class Meta:
         db_table = 'proyecto_Investigador'
-# ----------------------- Producto -----------------------
+
+#---------------------------------------------------------------------------------------
+# ----------------------------------------------------- Producto -----------------------
+#---------------------------------------------------------------------------------------
+        
 class Eventos(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     fechainicio = models.CharField(max_length=50)
@@ -334,7 +338,9 @@ class Producto(models.Model):
     class Meta:
         db_table = 'proyecto_Producto'
 
-# ----------------------- Proyecto -----------------------
+#---------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------- Proyecto -----------------------
+#---------------------------------------------------------------------------------------------------
 
 class UnidadAcademica(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
@@ -451,7 +457,7 @@ class Proyecto(models.Model):
     investigadores = models.CharField(max_length=50)
     unidadAcademica = models.ForeignKey(UnidadAcademica,null=False,blank=False,on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto,null=False,blank=False,on_delete=models.CASCADE)
-    coinvestigadores = models.ForeignKey(Coinvestigador,null=False,blank=False,on_delete=models.CASCADE)
+    coinvestigadores = models.ManyToManyField(Coinvestigador)
     area = models.CharField(max_length=50)
     porcentajeEjecucionCorte = models.IntegerField()
     entidadPostulo = models.ForeignKey(EntidadPostulo,null=False,blank=False,on_delete=models.CASCADE)
