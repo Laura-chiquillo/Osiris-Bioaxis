@@ -3,7 +3,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-participacion',
@@ -18,6 +18,15 @@ export class ParticipacionComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  constructor(private searchService: SearchService) {}
+
+  ngOnInit() {
+    
+    this.dataSource.paginator = this.paginator;
+    this.searchService.getSearchQuery().subscribe(query => {
+    this.dataSource.filter = query.trim().toLowerCase();
+    });
+  }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
@@ -28,6 +37,7 @@ export class ParticipacionComponent {
     // Puedes acceder a las propiedades del elemento para realizar acciones específicas
     // Por ejemplo: element.symbol, element.name, etc.
   }
+
 }
 
 

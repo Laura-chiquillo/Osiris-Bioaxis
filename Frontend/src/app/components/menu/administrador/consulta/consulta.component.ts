@@ -4,7 +4,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator'; // Asegúrate de importar MatPaginator desde '@angular/material/paginator'
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
-
+import { SearchService } from '../../services/search.service';
 @Component({
   selector: 'app-consulta',
   templateUrl: './consulta.component.html',
@@ -15,19 +15,32 @@ import { MatTabsModule } from '@angular/material/tabs';
 export class ConsultaComponent {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+ 
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;  
+  @ViewChild(MatPaginator) paginator2!: MatPaginator;
+  constructor(private searchService: SearchService) {}
 
+  ngOnInit() {
+    this.dataSource.paginator = this.paginator;
+    this.searchService.getSearchQuery().subscribe(query => {
+      this.dataSource.filter = query.trim().toLowerCase();
+    });
+    this.searchService.getSearchQuery().subscribe(query => {
+      this.dataSource2.filter = query.trim().toLowerCase(); 
+    }); 
+  }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-
+ 
   // segunda tabla
-  dataSource2: Element[] = [
+  ELEMENT_DATA_2: Element[] = [
     { name: 'Persona 1', age: 25 },
     { name: 'Persona 2', age: 30 },
     // Agrega más datos si es necesario
   ];
+  dataSource2 = new MatTableDataSource<Element>(this.ELEMENT_DATA_2);
 
   displayedColumns2: string[] = ['name', 'age', 'details']; // Actualiza las columnas a mostrar
 

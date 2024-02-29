@@ -36,12 +36,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatRadioModule } from '@angular/material/radio';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-
 import { Investigador } from '../../modelo/investigador';
 import { Coinvestigador, Proyecto } from '../../modelo/proyectos';
 import { ProyectoyproductoService } from '../../services/proyectoyproducto';
 import { InvestigadorService } from '../../services/registroInvestigador';
-
+import { SearchService } from '../../services/search.service';
 @Component({
   selector: 'app-proyectos',
   templateUrl: './proyectos.component.html',
@@ -84,7 +83,6 @@ export class ProyectosComponent implements OnInit {
   activeInvestigators: { nombre: string; apellidos: string }[] = [];
   selectedInvestigators: string[] = [];
   proyecto: Proyecto = {};
-
   // Función para generar un ID secuencial
   private idCounter: number = 1;
   generateSequentialId() {
@@ -97,7 +95,8 @@ export class ProyectosComponent implements OnInit {
   constructor(
     private ProyectoyproductoService: ProyectoyproductoService,
     private formBuilder: FormBuilder,
-    private investigatorService: InvestigadorService
+    private investigatorService: InvestigadorService,
+    private SearchService:SearchService
   ) {
     this.firstFormGroup = this.formBuilder.group({
       codigo: [''],
@@ -366,6 +365,7 @@ export class ProyectosComponent implements OnInit {
       Soporte: ['',this.selectedFileProyecto],
     });
   }
+  
 
   ngOnInit(): void {
     this.selectedInvestigators = []; // Asegúrate de que selectedInvestigators esté vacío al principio
@@ -384,6 +384,10 @@ export class ProyectosComponent implements OnInit {
           value ? this._filter(value) : this.activeInvestigators.slice()
         )
       );
+    });
+    this.dataSource.paginator = this.paginator;
+    this.SearchService.getSearchQuery().subscribe(query => {
+      this.dataSource.filter = query.trim().toLowerCase();
     });
   }
   addCoinvestigador(investigador: {
