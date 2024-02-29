@@ -26,7 +26,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { InvestigadorService } from '../../services/registroInvestigador';
-
+import { SearchService } from '../../services/search.service';
 @Component({
   selector: 'app-proyectos',
   templateUrl: './proyectos.component.html',
@@ -62,7 +62,7 @@ import { InvestigadorService } from '../../services/registroInvestigador';
 
   @ViewChild('investigatorInput') investigatorInput!: ElementRef<HTMLInputElement>;
 
-  constructor( private announcer: LiveAnnouncer,private http: HttpClient,private _formBuilder: FormBuilder,private cdr: ChangeDetectorRef, private investigatorService: InvestigadorService) {
+  constructor( private announcer: LiveAnnouncer,private http: HttpClient,private _formBuilder: FormBuilder,private cdr: ChangeDetectorRef, private investigatorService: InvestigadorService, private searchService: SearchService) {
       
   }
 
@@ -79,6 +79,10 @@ import { InvestigadorService } from '../../services/registroInvestigador';
         startWith(''),
         map((value: string | null) => value ? this._filter(value) : this.activeInvestigators.slice())
       );
+    });
+    this.dataSource.paginator = this.paginator;
+    this.searchService.getSearchQuery().subscribe(query => {
+      this.dataSource.filter = query.trim().toLowerCase();
     });
   }
   
