@@ -29,7 +29,7 @@ export interface Software {
   id?: string;
   tiporegistro?: string;
   numero?: string;
-  fecha?: string;
+  fecha?: Date;
   pais?: string;
 }
 export interface Industrial {
@@ -143,7 +143,7 @@ export interface Producto {
   estadoProducto?: EstadoProducto;
   porcentajeComSemestral?: number;
   porcentajeRealMensual?: string;
-  fecha?: number;
+  fecha?: Date;
   origen?: string;
   Soporte?: File;
 }
@@ -160,12 +160,36 @@ export interface EntregableAdministrativo {
 }
 export interface Coinvestigador {
   id?: string;
-  coinvestigador?: string; // Dependiendo de lo que contenga un coinvestigador
+  coinvestigador?: string;
 }
 
+export interface financiacion{
+  id?:string;
+  valorPropuestoFin?: string;
+  valorEjecutadoFin?: string;
+}
+
+export interface entidadPostulo{
+  id?:string;
+  nombreInstitucion?:string;
+  nombreGrupo?:string;
+}
+export interface transacciones{
+  id?: string;
+  fecha?: Date;
+  acta?: string;
+  descripcion?: string;
+}
+export interface ubicacionProyecto{
+  id?: string;
+  instalacion?: string;
+  municipio?: string;
+  pais?: string;
+  departamento?: string;
+}
 export interface Proyecto {
   codigo?: string;
-  fecha?: number;
+  fecha?: Date;
   titulo?: string;
   investigador?: string;
   unidadAcademica?: string;
@@ -173,16 +197,16 @@ export interface Proyecto {
   coinvestigadores?: Coinvestigador[];
   area?: string;
   porcentajeEjecucionCorte?: number;
-  entidadPostulo?: string;
-  financiacion?: string;
+  entidadPostulo?: entidadPostulo;
+  financiacion?: financiacion;
   grupoInvestigacionPro?: string;
   porcentajeEjecucionFinCorte?: number;
   porcentajeAvance?: number;
   soporte?: File;
-  transacciones?: string;
+  transacciones?: transacciones;
   origen?: string;
   convocatoria?: string;
-  ubicacionProyecto?: string;
+  ubicacionProyecto?: ubicacionProyecto;
   estadoProyecto?: string;
   modalidadProyecto?: string;
   nivelRiesgoEtico?: string;

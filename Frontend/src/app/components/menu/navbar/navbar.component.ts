@@ -174,7 +174,7 @@ export class NavbarComponent {
   onSaveForm(): void {
     console.log(this.registroForm.value);
   } 
-
+ 
   guardarUsuario() {
     if (this.registroForm.valid) {
       if (this.registroForm.valid) {
