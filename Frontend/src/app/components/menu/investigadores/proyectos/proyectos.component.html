@@ -767,8 +767,11 @@
         </mat-tab>
         <!----------------------------- PRODUCTOS-->
         <mat-tab label="Producto">
-          <div class="titulo">
+          <div>
             <p>Codigo proyecto</p>
+
+          </div>
+          <div class="titulo">
             <p>Codigo producto</p>
             <p>Titulo</p>
             <p>Rol de producto</p>
@@ -803,9 +806,7 @@
             <mat-form-field class="form-field-spacing" appearance="fill">
               <input type="email" matInput autocomplete="off">
             </mat-form-field>
-            <mat-form-field class="form-field-spacing" appearance="fill">
-              <input type="email" matInput autocomplete="off">
-            </mat-form-field>
+            
           </div>
           <div class="titulo">
             <p>publicación</p>
@@ -854,14 +855,14 @@
           </div>
           <div class="reg">
             <mat-form-field class="form-field-spacing" appearance="fill">
-              <input matInput autocomplete="off">
+              <input matInput [matDatepicker]="picker" autocomplete="off" placeholder="Seleccione una fecha">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
             <mat-form-field class="form-field-spacing" appearance="fill">
               <input type="text" matInput autocomplete="off">
             </mat-form-field>
-            <mat-form-field class="form-field-spacing" appearance="fill">
-              <input type="email" matInput autocomplete="off">
-            </mat-form-field>
+            <input type="file" (change)="onFileSelected($event)" />
           </div>
           <mat-tab-group class="nuevo vertical-tabs" mat-stretch-tabs="false" mat-align-tabs="end">
             <mat-tab label="Capitulos">
