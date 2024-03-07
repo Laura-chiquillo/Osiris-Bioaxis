@@ -1,4 +1,5 @@
 from django.contrib.auth.hashers import check_password
+from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
@@ -6,9 +7,24 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Investigador, Proyecto
-from .serializer import (investigadorSerializer, productoSerializer,
-                         proyectoSerializer)
+from .models import (Apropiacion, Articulos, Capitulos, CategoriaMinciencias,
+                     Consultoria, Contenido, Contrato, CuartilEsperado,
+                     EstadoProducto, Estudiantes, Eventos, Industrial,
+                     Investigador, Libros, Licencia, ListaProducto, Maestria,
+                     PregFinalizadoyCurso, Producto, Proyecto, Reconocimientos,
+                     RolProducto, Software)
+from .serializer import (apropiacionSerializer, articulosSerializer,
+                         capitulosSerializer, categoriaMincienciasSerializer,
+                         consultoriaSerializer, contenidoSerializer,
+                         contratoSerializer, cuartilEsperadoSerializer,
+                         estadoProductoSerializer, estudiantesSerializer,
+                         eventosSerializer, industrialSerializer,
+                         investigadorSerializer, librosSerializer,
+                         licenciaSerializer, listaProductoSerializer,
+                         maestriaSerializer, pregFinalizadoyCursoSerializer,
+                         productoSerializer, proyectoSerializer,
+                         reconocimientosSerializer, rolProductoSerializer,
+                         softwareSerializer)
 
 
 class CustomAuthToken(APIView):
@@ -80,8 +96,6 @@ class ActualizarDatosUsuario(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-
-
 class CrearProyecto(APIView):
     def post(self, request, *args, **kwargs):
         # Obtener el nombre del investigador autenticado desde los datos del usuario en la solicitud
@@ -104,10 +118,35 @@ class CrearProyecto(APIView):
         data = [{'codigo': proyecto.codigo, 'titulo': proyecto.titulo} for proyecto in proyectos]
         return Response(data)
 
+from rest_framework.parsers import FileUploadParser
+
+
 class CrearNuevoProducto(APIView):
+    parser_class = (FileUploadParser,)
+    
     def post(self, request, *args, **kwargs):
-        serializer = productoSerializer(data=request.data)
+        archivo = request.FILES.get('Soporte')  # Obtén el archivo enviado desde el frontend
+        data = request.data.get('producto')  # Obtén los datos del producto del cuerpo de la solicitud
+        serializer = productoSerializer(data=data)
+        print(data)
         if serializer.is_valid():
-            serializer.save()
+            producto = serializer.save()
+
+            if archivo:  # Verifica si se envió un archivo
+                producto.Soporte = archivo  # Asigna el archivo al campo 'Soporte'
+                producto.save()  # Guarda el producto con el archivo
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+from rest_framework.response import Response
+from rest_framework.views import exception_handler
+
+
+def custom_exception_handler(exc, context):
+    response = exception_handler(exc, context)
+
+    if response is not None:
+        error_message = 'Error en la solicitud: {}'.format(response.data)
+        response.data = {'error': error_message}
+
+    return response

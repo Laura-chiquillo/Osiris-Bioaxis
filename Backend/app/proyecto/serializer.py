@@ -149,6 +149,7 @@ class productoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Producto
         fields = '__all__'
+    
 
 #------------------------ PROYECTOS ------------------------
 
