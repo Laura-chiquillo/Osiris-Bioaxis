@@ -1,6 +1,8 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
 import { Producto } from '../modelo/productos';
 import { Proyecto } from '../modelo/proyectos';
 
@@ -18,8 +20,8 @@ export class ProyectoyproductoService {
   }
     
     
-    //crear producto
-    private apiUrl2 = 'http://localhost:8000/producto';
+    
+  private apiUrl2 = 'http://localhost:8000/CrearProducto';
   crearProducto(nuevoProducto: Producto): Observable<Producto> {
     const httpOptions = {
       headers: {
@@ -35,4 +37,5 @@ export class ProyectoyproductoService {
         })
       )
 }
+
 }

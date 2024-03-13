@@ -3,6 +3,13 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator'; 
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 
+
+import { MatSelectModule } from '@angular/material/select';
+
+
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+
 import {
   FormBuilder,
   FormControl,
@@ -32,8 +39,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatRadioModule } from '@angular/material/radio';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-
 import { Investigador } from '../../modelo/investigador';
+import { Producto } from '../../modelo/productos';
 import { Coinvestigador, Proyecto } from '../../modelo/proyectos';
 import { ProyectoyproductoService } from '../../services/proyectoyproducto';
 import { InvestigadorService } from '../../services/registroInvestigador';
@@ -45,10 +52,13 @@ import { SearchService } from '../../services/search.service';
   standalone: true,
   imports: [
     MatTabsModule,
+    MatSelectModule,
     MatTableModule,
     MatPaginatorModule,
     MatButtonModule,
     MatStepperModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -78,7 +88,6 @@ export class ProyectosComponent implements OnInit {
   activeInvestigators: { nombre: string; apellidos: string }[] = [];
   selectedInvestigators: string[] = [];
   proyecto: Proyecto = {};
-
   // Función para generar un ID secuencial
   private idCounter: number = 1;
   generateSequentialId() {
@@ -92,7 +101,12 @@ export class ProyectosComponent implements OnInit {
     private ProyectoyproductoService: ProyectoyproductoService,
     private formBuilder: FormBuilder,
     private investigatorService: InvestigadorService,
+<<<<<<< HEAD
     private searchService: SearchService,
+=======
+    private SearchService:SearchService,
+    
+>>>>>>> 5da1377af036f2c050b6995ada1863571ae20f4a
   ) {
     this.firstFormGroup = this.formBuilder.group({
       codigo: [''],
@@ -253,8 +267,119 @@ export class ProyectosComponent implements OnInit {
         origen: [''],
         Soporte: ['',this.selectedFileProyecto],
     });
+<<<<<<< HEAD
     
+=======
+    this.productoFormGroup = this.formBuilder.group({
+      id: [''],
+      tituloProducto: [''],
+      rolProducto: [''],
+      investigador: [''],
+      listaProducto: this.formBuilder.group({
+        articulo: this.formBuilder.group({
+          id:[this.generateSequentialId()],
+          fuente:[''],
+        }),
+        capitulo: this.formBuilder.group({
+          id:[this.generateSequentialId()],
+          nombrepublicacion:[''],
+          isbn :[''],
+          fecha:[''],
+          editorial:[''],
+        }),
+        software: this.formBuilder.group({
+          id:[this.generateSequentialId()],
+          tiporegistro:[''],
+          numero:[''],
+          fecha:[''],
+          pais:[''],
+        }),
+        libro: this.formBuilder.group({
+          id:[this.generateSequentialId()],
+          isbn:[''],
+          fecha:[''],
+          editorial:[''],
+          luegarpublicacion:[''],
+        }),
+        prototipoIndustrial: this.formBuilder.group({
+          id:[this.generateSequentialId()],
+          fecha:[''],
+          pais:[''],
+          insitutofinanciador:[''],
+        }),
+        evento: this.formBuilder.group({
+          id:[this.generateSequentialId()],
+          fechainicio:[''],
+          fechafin:[''],
+          numparticinerno:[''],
+          numparticexterno:[''],
+          tipoevento:[''],
+        }),
+        reconocimiento: this.formBuilder.group({
+          id:[this.generateSequentialId()],
+          fecha:[''],
+          nombentidadotorgada:[''],
+        }),
+        consultoria: this.formBuilder.group({
+          id:[this.generateSequentialId()],
+          año:[''],
+          contrato:this.formBuilder.group({
+            id:[this.generateSequentialId()],
+            nombre:[''],
+            numero:[''],
+          }),
+          nombreEntidad:[''],
+        }),
+        contenido: this.formBuilder.group({
+          id:[this.generateSequentialId()],
+          paginaWeb:[''],
+          nombreEntidad:[''],
+        }),
+        pregFinalizadoyCurso: this.formBuilder.group({
+          id:[this.generateSequentialId()],
+          fechaInicio:[''],
+          reconocimientos:[''],
+          numeroPaginas:[''],
+        }),
+        apropiacion: this.formBuilder.group({
+          id:[this.generateSequentialId()],
+          fechainicio:[''],
+          fechaFin:[''],
+          licencia:this.formBuilder.group({
+            id:[this.generateSequentialId()],
+            nombre:[''],
+          }),
+          formato:[''],
+          medio:[''],
+          nombreEntidad:[''],
+        }),
+        maestria: this.formBuilder.group({
+          id:[this.generateSequentialId()],
+          fechaInicio:[''],
+          institucion:[''],
+        }),
+        proyectoCursoProducto: [''],
+        proyectoFormuladoProducto: [''],
+        proyectoRSUProducto: [''],
+      }),
+      cuartilEsperado: [''],
+      categoriaMinciencias: [''],
+      tipologiaProducto: [''],
+      publicacion: [''],
+      estudiantes: [''],
+      estadoProdIniSemestre: [''],
+      porcentanjeAvanFinSemestre: [''],
+      observaciones: [''],
+      estadoProducto: [''],
+      porcentajeComSemestral: [''],
+      porcentajeRealMensual: [''],
+      fecha:[new Date()],
+      origen: [''],
+      Soporte: ['',this.FileProducto],
+    });
+>>>>>>> 5da1377af036f2c050b6995ada1863571ae20f4a
   }
+  
 
   ngOnInit(): void {
     this.selectedInvestigators = []; // Asegúrate de que selectedInvestigators esté vacío al principio
@@ -275,7 +400,7 @@ export class ProyectosComponent implements OnInit {
       );
     });
     this.dataSource.paginator = this.paginator;
-    this.searchService.getSearchQuery().subscribe(query => {
+    this.SearchService.getSearchQuery().subscribe(query => {
       this.dataSource.filter = query.trim().toLowerCase();
     });
   }
@@ -473,6 +598,7 @@ export class ProyectosComponent implements OnInit {
   //------------------------------------------Guardar proyecto -----------------------------------
   //--------------------------------------------------------------------------------------
   //--------------------------------------------------------------------------------------
+  
   public firstFormGroup: FormGroup;
   public secondFormGroup: FormGroup;
 
@@ -650,7 +776,351 @@ export class ProyectosComponent implements OnInit {
     }
   }
 
-  // TABLA
+  //--------------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------------
+  //------------------------------------------PRODUCTO -----------------------------------
+  //--------------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------------
+ 
+  public productoFormGroup: FormGroup;
+
+  get id() {
+    return this.productoFormGroup.get('id');
+  }
+  get tituloProducto() {
+    return this.productoFormGroup.get('tituloProducto');
+  }
+  get rolProducto() {
+    return this.productoFormGroup.get('rolProducto');
+  }
+  get investigadorPrd() {
+    return this.productoFormGroup.get('investigador');
+  }
+  get listaProducto() {
+    return this.productoFormGroup.get('listaProducto');
+  }
+  get cuartilEsperado() {
+    return this.productoFormGroup.get('cuartilEsperado');
+  }
+  get categoriaMinciencias() {
+    return this.productoFormGroup.get('categoriaMinciencias');
+  }
+  get tipologiaProducto() {
+    return this.productoFormGroup.get('tipologiaProducto');
+  }
+  get publicacion() {
+    return this.productoFormGroup.get('publicacion');
+  }
+  get estudiantes() {
+    return this.productoFormGroup.get('estudiantes');
+  }
+  get estadoProdIniSemestre() {
+    return this.productoFormGroup.get('estadoProdIniSemestre');
+  }
+  get porcentanjeAvanFinSemestre() {
+    return this.productoFormGroup.get('porcentanjeAvanFinSemestre');
+  }
+  get observaciones() {
+    return this.productoFormGroup.get('observaciones');
+  }
+  get estadoProducto() {
+    return this.productoFormGroup.get('estadoProducto');
+  }
+  get porcentajeComSemestral() {
+    return this.productoFormGroup.get('porcentajeComSemestral');
+  }
+  get porcentajeRealMensual() {
+    return this.productoFormGroup.get('porcentajeRealMensual');
+  }
+  get fechaPrd() {
+    return this.productoFormGroup.get('fecha');
+  }
+  get origenPrd() {
+    return this.productoFormGroup.get('origen');
+  }
+  get Soporte() {
+    return this.productoFormGroup.get('Soporte');
+  }
+  get tipoevento(){
+    return this.productoFormGroup.get('tipoevento');
+  }
+  get fuente(){
+    return this.productoFormGroup.get('fuente');
+  }
+
+//tipologia producto
+typeProducto: string[] = ['A', 'A1', 'A2', 'B', 'Productos tipo TOP'];
+
+changeTipologia(e: Event) {
+  const target = e.target as HTMLInputElement;
+  if (target && this.tipologiaProducto) {
+    this.tipologiaProducto.setValue(target.value, {
+      onlySelf: true,
+    });
+  }
+}
+
+//Estado del producto
+typeEstado: string[] = ['resaccion', 'sometido', 'publicado'];
+
+changeEstado(e: Event) {
+  const target = e.target as HTMLInputElement;
+  if (target && this.estadoProducto) {
+    this.estadoProducto.setValue(target.value, {
+      onlySelf: true,
+    });
+  }
+}
+
+// Categoria minciencias
+typeMinciencias: string[] = ['A1', 'A2', 'B', 'C'];
+
+changeMinciencias(e: Event) {
+  const target = e.target as HTMLInputElement;
+  if (target && this.categoriaMinciencias) {
+    this.categoriaMinciencias.setValue(target.value, {
+      onlySelf: true,
+    });
+  }
+}
+
+// Cuartil esperado
+typeCuartil: string[] = ['A', 'B', 'C', 'D', 'Q', 'RNT'];
+
+changeCuartil(e: Event) {
+  const target = e.target as HTMLInputElement;
+  if (target && this.cuartilEsperado) {
+    this.cuartilEsperado.setValue(target.value, {
+      onlySelf: true,
+    });
+  }
+}
+
+// tipo de evento de eventos de lista productos
+typeEventos: string[] = ['Congreso', 'Seminario', 'Simposio', 'Conferencia', 'Feria', 'Encuentro academico'];
+
+changeEventos(e: Event) {
+  const target = e.target as HTMLInputElement;
+  if (target && this.tipoevento) {
+    this.tipoevento.setValue(target.value, {
+      onlySelf: true,
+    });
+  }
+}
+
+// tipo de fuente  de articulos de lista productos
+typeFuente: string[] = ['Electronico', 'Electronico'];
+
+changeFuente(e: Event) {
+  const target = e.target as HTMLInputElement;
+  if (target && this.fuente) {
+    this.fuente.setValue(target.value, {
+      onlySelf: true,
+    });
+  }
+}
+
+//------------------------- PORCENTAJES -----------------------
+
+value4: number = 0;
+value5: number = 0;
+value6: number = 0;
+
+onValue4Change(event: any) {
+  this.value4 = Number(event.target.value);
+  const porcentanjeAvanFinSemestre = this.productoFormGroup.get(
+    'porcentanjeAvanFinSemestre'
+  );
+  if (porcentanjeAvanFinSemestre) {
+    porcentanjeAvanFinSemestre.setValue(this.value4.toString());
+  }
+}
+
+onValue5Change(event: any) {
+  this.value5 = Number(event.target.value);
+  const porcentajeComSemestral = this.productoFormGroup.get(
+    'porcentajeComSemestral'
+  );
+  if (porcentajeComSemestral) {
+    porcentajeComSemestral.setValue(this.value5.toString());
+  }
+}
+onValue6Change(event: any) {
+  this.value6 = Number(event.target.value);
+  const porcentajeRealMensual = this.productoFormGroup.get('porcentajeRealMensual');
+  if (porcentajeRealMensual) {
+    porcentajeRealMensual.setValue(this.value6.toString());
+  }
+}
+
+disabled4 = false;
+max4 = 100;
+min4 = 0;
+showTicks4 = false;
+step4 = 1;
+thumbLabel4 = false;
+
+disabled5 = false;
+max5 = 100;
+min5 = 0;
+showTicks5 = false;
+step5 = 1;
+thumbLabel5 = false;
+
+disabled6 = false;
+max6 = 100;
+min6 = 0;
+showTicks6 = false;
+step6 = 1;
+thumbLabel6 = false;
+
+  //subir archivo producto
+  FileProducto: File = null!;
+
+  onFileSelected2(event: any) {
+    this.FileProducto = event.target.files[0] as File;
+  }
+
+  guardarProducto() {
+    if (this.productoFormGroup.valid) {
+      const producto: Producto= {
+        id: this.productoFormGroup.value.id,
+        tituloProducto: this.productoFormGroup.value.tituloProducto,
+        rolProducto: this.productoFormGroup.value.rolProducto,
+        investigador: this.productoFormGroup.value.investigador,
+        listaProducto: {
+          articulo: {
+            id: this.productoFormGroup.value.listaProducto.capitulo.id,
+            fuente: this.productoFormGroup.value.listaProducto.articulo.fuente
+          },
+          capitulo: {
+            id: this.productoFormGroup.value.listaProducto.capitulo.id,
+            nombrepublicacion: this.productoFormGroup.value.listaProducto.capitulo.nombrepublicacion,
+            isbn: this.productoFormGroup.value.listaProducto.capitulo.isbn,
+            fecha: this.productoFormGroup.value.listaProducto.capitulo.fecha,
+            editorial: this.productoFormGroup.value.listaProducto.capitulo.editorial
+          },
+          software: {
+            id: this.productoFormGroup.value.listaProducto.software.id,
+            tiporegistro: this.productoFormGroup.value.listaProducto.software.tiporegistro,
+            numero: this.productoFormGroup.value.listaProducto.software.numero,
+            fecha: this.productoFormGroup.value.listaProducto.software.fecha,
+            pais: this.productoFormGroup.value.listaProducto.software.pais
+          },
+          libro: {
+            id: this.productoFormGroup.value.listaProducto.libro.id,
+            isbn: this.productoFormGroup.value.listaProducto.libro.isbn,
+            fecha: this.productoFormGroup.value.listaProducto.libro.fecha,
+            editorial: this.productoFormGroup.value.listaProducto.libro.editorial,
+            luegarpublicacion: this.productoFormGroup.value.listaProducto.libro.luegarpublicacion
+          },
+          prototipoIndustrial: {
+            id: this.productoFormGroup.value.listaProducto.prototipoIndustrial.id,
+            fecha: this.productoFormGroup.value.listaProducto.prototipoIndustrial.fecha,
+            pais: this.productoFormGroup.value.listaProducto.prototipoIndustrial.pais,
+            insitutofinanciador: this.productoFormGroup.value.listaProducto.prototipoIndustrial.insitutofinanciador
+          },
+          evento: {
+            id: this.productoFormGroup.value.listaProducto.evento.id,
+            fechainicio: this.productoFormGroup.value.listaProducto.evento.fechainicio,
+            fechafin: this.productoFormGroup.value.listaProducto.evento.fechafin,
+            numparticinerno: this.productoFormGroup.value.listaProducto.evento.numparticinerno,
+            numparticexterno: this.productoFormGroup.value.listaProducto.evento.numparticexterno,
+            tipoevento: this.productoFormGroup.value.listaProducto.evento.tipoevento
+          },
+          reconocimiento: {
+            id: this.productoFormGroup.value.listaProducto.reconocimiento.id,
+            fecha: this.productoFormGroup.value.listaProducto.reconocimiento.fecha,
+            nombentidadotorgada: this.productoFormGroup.value.listaProducto.reconocimiento.nombentidadotorgada
+          },
+          consultoria: {
+            id: this.productoFormGroup.value.listaProducto.consultoria.id,
+            año: this.productoFormGroup.value.listaProducto.consultoria.año,
+            contrato: {
+              id: this.productoFormGroup.value.listaProducto.consultoria.contrato.id,
+              nombre: this.productoFormGroup.value.listaProducto.consultoria.contrato.nombre,
+              numero: this.productoFormGroup.value.listaProducto.consultoria.contrato.numero
+            },
+            nombreEntidad: this.productoFormGroup.value.listaProducto.consultoria.nombreEntidad
+          },
+          contenido: {
+            id: this.productoFormGroup.value.listaProducto.contenido.id,
+            paginaWeb: this.productoFormGroup.value.listaProducto.contenido.paginaWeb,
+            nombreEntidad: this.productoFormGroup.value.listaProducto.contenido.nombreEntidad
+          },
+          pregFinalizadoyCurso: {
+            id: this.productoFormGroup.value.listaProducto.pregFinalizadoyCurso.id,
+            fechaInicio: this.productoFormGroup.value.listaProducto.pregFinalizadoyCurso.fechaInicio,
+            reconocimientos: this.productoFormGroup.value.listaProducto.pregFinalizadoyCurso.reconocimientos,
+            numeroPaginas: this.productoFormGroup.value.listaProducto.pregFinalizadoyCurso.numeroPaginas
+          },
+          apropiacion: {
+            id: this.productoFormGroup.value.listaProducto.apropiacion.id,
+            fechainicio: this.productoFormGroup.value.listaProducto.apropiacion.fechainicio,
+            fechaFin: this.productoFormGroup.value.listaProducto.apropiacion.fechaFin,
+            licencia: {
+              id: this.productoFormGroup.value.listaProducto.apropiacion.licencia.id,
+              nombre: this.productoFormGroup.value.listaProducto.apropiacion.licencia.nombre
+            },
+            formato: this.productoFormGroup.value.listaProducto.apropiacion.formato,
+            medio: this.productoFormGroup.value.listaProducto.apropiacion.medio,
+            nombreEntidad: this.productoFormGroup.value.listaProducto.apropiacion.nombreEntidad
+          },
+          maestria: {
+            id: this.productoFormGroup.value.listaProducto.maestria.id,
+            fechaInicio: this.productoFormGroup.value.listaProducto.maestria.fechaInicio,
+            institucion: this.productoFormGroup.value.listaProducto.maestria.institucion
+          },
+          proyectoCursoProducto: this.productoFormGroup.value.listaProducto.proyectoCursoProducto,
+          proyectoFormuladoProducto: this.productoFormGroup.value.listaProducto.proyectoFormuladoProducto,
+          proyectoRSUProducto: this.productoFormGroup.value.listaProducto.proyectoRSUProducto
+        },
+        cuartilEsperado: this.productoFormGroup.value.cuartilEsperado,
+        categoriaMinciencias: this.productoFormGroup.value.categoriaMinciencias,
+        tipologiaProducto: this.productoFormGroup.value.tipologiaProducto,
+        publicacion: this.productoFormGroup.value.publicacion,
+        estudiantes: this.productoFormGroup.value.estudiantes,
+        estadoProdIniSemestre: this.productoFormGroup.value.estadoProdIniSemestre,
+        porcentanjeAvanFinSemestre: this.productoFormGroup.value.porcentanjeAvanFinSemestre,
+        observaciones: this.productoFormGroup.value.observaciones,
+        estadoProducto: this.productoFormGroup.value.estadoProducto,
+        porcentajeComSemestral: this.productoFormGroup.value.porcentajeComSemestral,
+        porcentajeRealMensual: this.productoFormGroup.value.porcentajeRealMensual,
+        fecha: this.productoFormGroup.value.fecha,
+        origen: this.productoFormGroup.value.origen,
+        Soporte: this.FileProducto,
+      }
+      console.log('Producto:', producto);
+      
+      this.ProyectoyproductoService.crearProducto(producto).subscribe(
+        (resp) => {
+          console.log('Se ha registrado el usuario exitosamente:', resp);
+          alert('Se ha registrado el usuario exitosamente.');
+          this.productoFormGroup.reset();
+        },
+        (error) => {
+          console.error('Error al registrar el usuario:', error);
+          alert('Error al registrar el usuario. Por favor, inténtalo de nuevo.');
+        }
+      );
+  
+  
+    } else {
+      alert('Por favor, completa el formulario correctamente.');
+    }
+  }
+  
+
+
+
+
+
+  //--------------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------------
+  //------------------------------------------TABLA -----------------------------------
+  //--------------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------------
+ 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 

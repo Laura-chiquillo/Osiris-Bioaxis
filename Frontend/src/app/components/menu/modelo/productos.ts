@@ -28,7 +28,7 @@ export interface Eventos {
     id?: string;
     tiporegistro?: string;
     numero?: string;
-    fecha?: string;
+    fecha?: Date;
     pais?: string;
   }
   export interface Industrial {
@@ -95,7 +95,7 @@ export interface Eventos {
     contenido?: Contenido;
     pregFinalizadoyCurso?: PregFinalizadoyCurso;
     apropiacion?: Apropiacion;
-    maestria?: Maestria; // Haciendo la propiedad maestria opcional
+    maestria?: Maestria;
     proyectoCursoProducto?: string;
     proyectoFormuladoProducto?: string;
     proyectoRSUProducto?: string;
@@ -107,20 +107,11 @@ export interface Eventos {
   }
   export interface CuartilEsperado {
     id?: string;
-    cuartil?: number;
+    cuartil?: string;
   }
   export interface CategoriaMinciencias {
     id?: string;
     categoria?: string;
-  }
-  export interface Estudiantes {
-    nombres?: string;
-    apellidos?: string;
-    semestre?: number;
-    fechaGrado?: Date;
-    codigoGrupo?: string;
-    tipoDocumento?: string;
-    numeroDocumento?: string;
   }
   export interface EstadoProducto {
     id?: string;
@@ -136,14 +127,14 @@ export interface Eventos {
     categoriaMinciencias?: CategoriaMinciencias;
     tipologiaProducto?: string;
     publicacion?: string;
-    estudiantes?: Estudiantes;
+    estudiantes?:String;
     estadoProdIniSemestre?: string;
     porcentanjeAvanFinSemestre?: number;
     observaciones?: string;
     estadoProducto?: EstadoProducto;
     porcentajeComSemestral?: number;
-    porcentajeRealMensual?: string;
-    fecha?: number;
+    porcentajeRealMensual?: number;
+    fecha?: Date;
     origen?: string;
     Soporte?: File;
   }

@@ -1,5 +1,5 @@
 from django.contrib.auth.hashers import make_password
-from django.db import models
+from django.db import models, transaction
 from rest_framework.authtoken.models import Token
 
 # Se crean las clases para los modelos
@@ -105,8 +105,8 @@ class Investigador(models.Model):
         
 class Eventos(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fechainicio = models.CharField(max_length=50)
-    fechafin = models.CharField(max_length=50)
+    fechainicio = models.DateTimeField()
+    fechafin = models.DateTimeField()
     numparticinerno = models.IntegerField()
     numparticexterno = models.IntegerField()
     tipoevento = [
@@ -125,7 +125,7 @@ class Articulos(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     fuente = [
        ("Electronico", "Electronico"),
-        ("Impreso", "Impreso"), 
+        ("Electronico", "Impreso"), 
     ]
     fuente = models.CharField(max_length=50, choices=fuente, default='Electronico')
     class Meta:
@@ -135,7 +135,7 @@ class Capitulos(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     nombrepublicacion = models.CharField(max_length=50)
     isbn = models.CharField(max_length=50)
-    fecha = models.DateField(max_length=50)
+    fecha = models.DateTimeField()
     editorial = models.CharField(max_length=50)
     class Meta:
         db_table = 'proyecto_Capitulos'
@@ -143,7 +143,7 @@ class Capitulos(models.Model):
 class Libros(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     isbn = models.CharField(max_length=50)
-    fecha = models.DateField(max_length=50)
+    fecha = models.DateTimeField()
     editorial = models.CharField(max_length=50)
     luegarpublicacion = models.CharField(max_length=50)
     class Meta:
@@ -153,14 +153,14 @@ class Software(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     tiporegistro = models.CharField(max_length=50)
     numero = models.CharField(max_length=50)
-    fecha = models.DateField(max_length=50)
+    fecha = models.DateTimeField()
     pais = models.CharField(max_length=50)
     class Meta:
         db_table = 'proyecto_Software'
 
 class Industrial(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fecha = models.DateField(max_length=50)
+    fecha = models.DateTimeField()
     pais = models.CharField(max_length=50)
     insitutofinanciador = models.CharField(max_length=50)
     class Meta:
@@ -168,7 +168,7 @@ class Industrial(models.Model):
 
 class Reconocimientos(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fecha = models.DateField(max_length=50)
+    fecha = models.DateTimeField()
     nombentidadotorgada = models.CharField(max_length=50)
     class Meta:
         db_table = 'proyecto_Reconocimientos'
@@ -181,8 +181,8 @@ class Licencia(models.Model):
 
 class Apropiacion(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fechainicio = models.DateField()
-    fechaFin = models.DateField()
+    fechainicio = models.DateTimeField()
+    fechaFin = models.DateTimeField()
     licencia = models.ForeignKey(Licencia,null=False,blank=False,on_delete=models.CASCADE)
     formato = models.CharField(max_length=50)
     medio = models.CharField(max_length=50)
@@ -199,7 +199,7 @@ class Contrato(models.Model):
 
 class Consultoria(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    año = models.DateField()
+    año = models.CharField(max_length=50)
     contrato = models.ForeignKey(Contrato,null=False,blank=False,on_delete=models.CASCADE)
     nombreEntidad = models.CharField(max_length=50)
     class Meta:
@@ -214,7 +214,7 @@ class Contenido(models.Model):
 
 class PregFinalizadoyCurso(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fechaInicio = models.DateField()
+    fechaInicio = models.DateTimeField()
     reconocimientos = models.CharField(max_length=50)
     numeroPaginas = models.IntegerField()
     class Meta:
@@ -222,7 +222,7 @@ class PregFinalizadoyCurso(models.Model):
 
 class Maestria(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fechaInicio = models.DateField()
+    fechaInicio = models.DateTimeField()
     institucion = models.CharField(max_length=50)
     class Meta:
         db_table = 'proyecto_Maestria'
@@ -283,7 +283,7 @@ class Estudiantes(models.Model):
     nombres = models.CharField(max_length=50)
     apellidos = models.CharField(max_length=50)
     semestre = models.IntegerField()
-    fechaGrado = models.DateField()
+    fechaGrado = models.DateTimeField()
     codigoGrupo = models.CharField(max_length=50)
     tipoDocumento = [
         ("CC", "Cédula de ciudadanía"),
@@ -332,7 +332,7 @@ class Producto(models.Model):
     estadoProducto = models.ForeignKey(EstadoProducto,null=False,blank=False,on_delete=models.CASCADE)
     porcentajeComSemestral = models.IntegerField()
     porcentajeRealMensual = models.IntegerField()
-    fecha = models.DateField()
+    fecha = models.DateTimeField()
     origen = models.CharField(max_length=5000)
     Soporte = models.FileField(upload_to ='uploadsProducto/',max_length=1000, blank=True)
     class Meta:
