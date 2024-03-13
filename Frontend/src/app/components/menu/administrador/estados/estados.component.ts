@@ -9,6 +9,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SearchService } from '../../services/search.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { InvestigadorService } from '../../services/registroInvestigador';
+
 @Component({
   selector: 'app-estados',
   templateUrl: './estados.component.html',
@@ -18,20 +20,22 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class EstadosComponent {
   displayedColumns = ['Nombre', 'Rol', 'Estado', 'Fecha'];
-  dataSource: MatTableDataSource<PeriodicElement>;
+  dataSource: MatTableDataSource<any>;
   
   displayedColumns2 = ['Nombre', 'Lider', 'Estado', 'Fecha'];
   dataSource2: MatTableDataSource<PeriodicElement2>;
-
+ 
   displayedColumns3 = ['Nombre', 'Lider', 'Estado', 'Fecha'];
   dataSource3: MatTableDataSource<PeriodicElement3>;
 
-  constructor(private searchService: SearchService) {
-    this.dataSource = new MatTableDataSource(ELEMENT_DATA);
-    this.dataSource2 = new MatTableDataSource(ELEMENT_DATA2);
-    this.dataSource3 = new MatTableDataSource(ELEMENT_DATA3);
+  constructor(private searchService: SearchService, private investigadorService:InvestigadorService) {
+ 
+    this.dataSource = new MatTableDataSource<any>([]);
+    this.dataSource2 = new MatTableDataSource<any>([]);
+    this.dataSource3 = new MatTableDataSource<any>([]);
   }
   ngOnInit() {
+    this.getData();
     this.searchService.getSearchQuery().subscribe(query => {
       // Aplica el filtro a dataSource
       this.dataSource.filter = query.trim().toLowerCase();
@@ -42,17 +46,25 @@ export class EstadosComponent {
       // Aplica el filtro a dataSource3
       this.dataSource3.filter = query.trim().toLowerCase();
     });
+
+   
   }
+  getData() {
+  this.investigadorService.getUsuarios().subscribe(data => {
+    this.dataSource = new MatTableDataSource(data);
+  });
+}
+
   
 }
 
 
 
 export interface PeriodicElement {
-  Nombre: string;
-  Rol: String;
-  Estado: String;
-  Fecha: string;
+  nombre: string;
+  rolinvestigador: String;
+  estado: String;
+  fecha: string;
   }
 
 export interface PeriodicElement2 {
@@ -69,15 +81,6 @@ export interface PeriodicElement3 {
   Fecha: string;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {Nombre: 'Laura', Rol: 'Hydrogen', Estado:'Activo', Fecha: 'H'},
-  {Nombre: 'Camilo', Rol: 'Hydrogen', Estado:'Activo', Fecha: 'H'},
-  {Nombre: 'John Fredy', Rol: 'Hydrogen', Estado:'Activo', Fecha: 'H'},
-  {Nombre: 'Gabriela', Rol: 'Hydrogen', Estado:'Activo', Fecha: 'H'},
-  {Nombre: 'Alejandro', Rol: 'Hydrogen', Estado:'Activo', Fecha: 'H'},
-  {Nombre: 'Carlos', Rol: 'Hydrogen', Estado:'Activo', Fecha: 'H'},
-  {Nombre: 'Yuliana', Rol: 'Hydrogen', Estado:'Activo', Fecha: 'H'},
-];
 
 const ELEMENT_DATA2: PeriodicElement2[] = [
   {Nombre: 'IOT', Lider: 'Hydrogen', Estado:'Activo', Fecha: 'H'},

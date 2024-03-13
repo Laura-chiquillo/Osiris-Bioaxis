@@ -101,8 +101,12 @@ export class ProyectosComponent implements OnInit {
     private ProyectoyproductoService: ProyectoyproductoService,
     private formBuilder: FormBuilder,
     private investigatorService: InvestigadorService,
+<<<<<<< HEAD
+    private searchService: SearchService,
+=======
     private SearchService:SearchService,
     
+>>>>>>> 5da1377af036f2c050b6995ada1863571ae20f4a
   ) {
     this.firstFormGroup = this.formBuilder.group({
       codigo: [''],
@@ -263,6 +267,9 @@ export class ProyectosComponent implements OnInit {
         origen: [''],
         Soporte: ['',this.selectedFileProyecto],
     });
+<<<<<<< HEAD
+    
+=======
     this.productoFormGroup = this.formBuilder.group({
       id: [''],
       tituloProducto: [''],
@@ -367,6 +374,7 @@ export class ProyectosComponent implements OnInit {
       origen: [''],
       Soporte: ['',this.FileProducto],
     });
+>>>>>>> 5da1377af036f2c050b6995ada1863571ae20f4a
   }
   
 

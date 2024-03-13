@@ -14,6 +14,9 @@ import { SharedModule } from '../shared/shared.module';
 import { MenuRoutingModule } from './menu-routing.module';
 import { MenuComponent } from './menu.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { FormsModule } from '@angular/forms';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 @NgModule({
   declarations: [
     MenuComponent,
@@ -32,7 +35,9 @@ import { NavbarComponent } from './navbar/navbar.component';
     MatIconModule,
     MatButtonModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    FormsModule,
+    MatSlideToggleModule
   ],
 })
 export class MenuModule {

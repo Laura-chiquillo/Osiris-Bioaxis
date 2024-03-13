@@ -36,8 +36,10 @@ class CustomAuthToken(APIView):
             return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
 
         # Verificar la contraseña
+        print("Contraseña almacenada en la base de datos:", investigador.contrasena)
         if not check_password(password, investigador.contrasena):
             print("Contraseña incorrecta")
+            print("Contraseña almacenada en la base de datos:", investigador.contrasena)
             return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
 
         # Generar tokens
