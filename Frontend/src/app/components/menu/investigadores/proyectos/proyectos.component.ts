@@ -1076,7 +1076,7 @@ thumbLabel6 = false;
         origen: this.productoFormGroup.value.origen,
         Soporte: this.FileProducto,
       }
-      console.log('Producto:', producto);
+      console.log('Producto:', producto)
       
       this.ProyectoyproductoService.crearProducto(producto).subscribe(
         (resp) => {
@@ -1089,8 +1089,6 @@ thumbLabel6 = false;
           alert('Error al registrar el usuario. Por favor, inténtalo de nuevo.');
         }
       );
-  
-  
     } else {
       alert('Por favor, completa el formulario correctamente.');
     }

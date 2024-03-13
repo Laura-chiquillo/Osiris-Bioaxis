@@ -126,7 +126,7 @@ class CrearNuevoProducto(APIView):
     def post(self, request, *args, **kwargs):
         archivo = request.FILES.get('Soporte')  # Obtén el archivo enviado desde el frontend
         data = request.data.get('producto')  # Obtén los datos del producto del cuerpo de la solicitud
-        print(data)
+        print(archivo)
         serializer = productoSerializer(data=data)
         if serializer.is_valid():
             producto = serializer.save()
