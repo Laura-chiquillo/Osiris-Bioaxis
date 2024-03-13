@@ -35,7 +35,8 @@ export class NavbarComponent {
     if (this.loginForm.valid) {
       const correo = this.loginForm.get('correo')?.value;
       const contrasena = this.loginForm.get('contrasena')?.value;
-  
+      console.log('Contraseña enviada al backend:', contrasena);
+      
       this.autenticacionService.login(correo, contrasena).subscribe(
         (response) => {
           console.log('Respuesta del servidor:', response);
@@ -223,3 +224,4 @@ export class NavbarComponent {
   }
   }
 }
+

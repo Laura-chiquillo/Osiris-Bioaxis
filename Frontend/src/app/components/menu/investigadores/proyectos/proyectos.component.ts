@@ -85,17 +85,14 @@ export class ProyectosComponent implements OnInit {
     return this.idCounter++;
   }
 
-<<<<<<< HEAD
-  constructor( private announcer: LiveAnnouncer,private http: HttpClient,private _formBuilder: FormBuilder,private cdr: ChangeDetectorRef, private investigatorService: InvestigadorService, private searchService: SearchService) {
-      
-=======
   @ViewChild('investigatorInput')
   investigatorInput!: ElementRef<HTMLInputElement>;
 
   constructor(
     private ProyectoyproductoService: ProyectoyproductoService,
     private formBuilder: FormBuilder,
-    private investigatorService: InvestigadorService
+    private investigatorService: InvestigadorService,
+    private searchService: SearchService,
   ) {
     this.firstFormGroup = this.formBuilder.group({
       codigo: [''],
@@ -257,7 +254,6 @@ export class ProyectosComponent implements OnInit {
         Soporte: ['',this.selectedFileProyecto],
     });
     
->>>>>>> 433f02dc5d1e8a9f265b4b41a21834d805e83eef
   }
 
   ngOnInit(): void {
