@@ -4,26 +4,23 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework.views import APIView, exception_handler
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import (Apropiacion, Articulos, Capitulos, CategoriaMinciencias,
-                     Consultoria, Contenido, Contrato, CuartilEsperado,
-                     EstadoProducto, Estudiantes, Eventos, Industrial,
-                     Investigador, Libros, Licencia, ListaProducto, Maestria,
+from .models import (Apropiacion, Articulos, Capitulos, Consultoria, Contenido,
+                     Contrato, Estudiantes, Eventos, Industrial, Investigador,
+                     Libros, Licencia, ListaProducto, Maestria,
                      PregFinalizadoyCurso, Producto, Proyecto, Reconocimientos,
-                     RolProducto, Software)
+                     Software)
 from .serializer import (apropiacionSerializer, articulosSerializer,
-                         capitulosSerializer, categoriaMincienciasSerializer,
-                         consultoriaSerializer, contenidoSerializer,
-                         contratoSerializer, cuartilEsperadoSerializer,
-                         estadoProductoSerializer, estudiantesSerializer,
-                         eventosSerializer, industrialSerializer,
-                         investigadorSerializer, librosSerializer,
-                         licenciaSerializer, listaProductoSerializer,
-                         maestriaSerializer, pregFinalizadoyCursoSerializer,
-                         productoSerializer, proyectoSerializer,
-                         reconocimientosSerializer, rolProductoSerializer,
+                         capitulosSerializer, consultoriaSerializer,
+                         contenidoSerializer, contratoSerializer,
+                         estudiantesSerializer, eventosSerializer,
+                         industrialSerializer, investigadorSerializer,
+                         librosSerializer, licenciaSerializer,
+                         listaProductoSerializer, maestriaSerializer,
+                         pregFinalizadoyCursoSerializer, productoSerializer,
+                         proyectoSerializer, reconocimientosSerializer,
                          softwareSerializer)
 
 
@@ -127,8 +124,8 @@ class CrearNuevoProducto(APIView):
     def post(self, request, *args, **kwargs):
         archivo = request.FILES.get('Soporte')  # Obtén el archivo enviado desde el frontend
         data = request.data.get('producto')  # Obtén los datos del producto del cuerpo de la solicitud
-        serializer = productoSerializer(data=data)
         print(data)
+        serializer = productoSerializer(data=data)
         if serializer.is_valid():
             producto = serializer.save()
 
@@ -138,15 +135,15 @@ class CrearNuevoProducto(APIView):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-from rest_framework.response import Response
-from rest_framework.views import exception_handler
+
 
 
 def custom_exception_handler(exc, context):
-    response = exception_handler(exc, context)
+            response = exception_handler(exc, context)
 
-    if response is not None:
-        error_message = 'Error en la solicitud: {}'.format(response.data)
-        response.data = {'error': error_message}
+            if response is not None:
+                error_message = 'Error en la solicitud: {}'.format(response.data)
+                response.data = {'error': error_message}
 
-    return response
+            return response
+

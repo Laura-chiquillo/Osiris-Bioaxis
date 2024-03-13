@@ -1,7 +1,6 @@
-import { HttpClient, HttpErrorResponse, } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { Producto } from '../modelo/productos';
 import { Proyecto } from '../modelo/proyectos';
@@ -23,19 +22,7 @@ export class ProyectoyproductoService {
     
   private apiUrl2 = 'http://localhost:8000/CrearProducto';
   crearProducto(nuevoProducto: Producto): Observable<Producto> {
-    const httpOptions = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    };
-  
-    return this.http.post<Producto>(this.apiUrl2, nuevoProducto, httpOptions)
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          console.error('Error al realizar la solicitud:', error);
-          return throwError(error);
-        })
-      )
+    return this.http.post<Proyecto>(this.apiUrl, nuevoProducto);
 }
 
 }

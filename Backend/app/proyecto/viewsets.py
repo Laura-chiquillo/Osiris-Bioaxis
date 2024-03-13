@@ -1,33 +1,30 @@
-from http.client import responses
 import statistics
+from http.client import responses
 from telnetlib import STATUS
 from urllib import response
+
 from django.forms import ValidationError
-from rest_framework import generics
-from rest_framework import status
+from rest_framework import generics, status
 from rest_framework.response import Response
 
 from .models import (Apropiacion, Articulos, AvanceProyecto, Capitulos,
-                     CategoriaMinciencias, Coinvestigador, Consultoria,
-                     Contenido, Contrato, CuartilEsperado, EntidadPostulo,
-                     EntregableAdministrativo, EstadoProducto, EstadoProyecto,
+                     Coinvestigador, Consultoria, Contenido, Contrato,
+                     EntidadPostulo, EntregableAdministrativo, EstadoProyecto,
                      Estudiantes, Eventos, Financiacion, Grupoinvestigacion,
                      GrupoInvestigacionPro, Imagen, Industrial, Investigador,
                      Libros, Licencia, LineaInvestigacion, ListaProducto,
                      Maestria, ModalidadProyecto, Origen, Posgrado,
                      PregFinalizadoyCurso, Pregrado, Producto, Proyecto,
-                     Reconocimientos, RolProducto, Software, Transacciones,
-                     Ubicacion, UbicacionProyecto, UnidadAcademica)
+                     Reconocimientos, Software, Transacciones, Ubicacion,
+                     UbicacionProyecto, UnidadAcademica)
 from .serializer import (apropiacionSerializer, articulosSerializer,
                          avanceProyectoSerializer, capitulosSerializer,
-                         categoriaMincienciasSerializer,
                          coinvestigadorSerializer, consultoriaSerializer,
                          contenidoSerializer, contratoSerializer,
-                         cuartilEsperadoSerializer, entidadPostuloSerializer,
+                         entidadPostuloSerializer,
                          entregableAdministrativoSerializer,
-                         estadoProductoSerializer, estadoProyectoSerializer,
-                         estudiantesSerializer, eventosSerializer,
-                         financiacionSerializer,
+                         estadoProyectoSerializer, estudiantesSerializer,
+                         eventosSerializer, financiacionSerializer,
                          grupoInvestigacionCoSerializer,
                          grupoinvestigacionSerializer, imagenSerializer,
                          industrialSerializer, investigadorSerializer,
@@ -37,10 +34,9 @@ from .serializer import (apropiacionSerializer, articulosSerializer,
                          origenSerializer, posgradoSerializer,
                          pregFinalizadoyCursoSerializer, pregradoSerializer,
                          productoSerializer, proyectoSerializer,
-                         reconocimientosSerializer, rolProductoSerializer,
-                         softwareSerializer, transaccionesSerializer,
-                         ubicacionProyectoSerializer, ubicacionSerializer,
-                         unidadAcademicaSerializer)
+                         reconocimientosSerializer, softwareSerializer,
+                         transaccionesSerializer, ubicacionProyectoSerializer,
+                         ubicacionSerializer, unidadAcademicaSerializer)
 
 #------------------------ investigador ------------------------
 
@@ -155,25 +151,11 @@ class listaProductoList(generics.ListCreateAPIView):
     queryset = ListaProducto.objects.all()
     serializer_class = listaProductoSerializer
 
-class rolProductoList(generics.ListCreateAPIView):
-    queryset = RolProducto.objects.all()
-    serializer_class = rolProductoSerializer
-
-class cuartilEsperadoList(generics.ListCreateAPIView):
-    queryset = CuartilEsperado.objects.all()
-    serializer_class = cuartilEsperadoSerializer
-
-class categoriaMincienciasList(generics.ListCreateAPIView):
-    queryset = CategoriaMinciencias.objects.all()
-    serializer_class = categoriaMincienciasSerializer
 
 class estudiantesList(generics.ListCreateAPIView):
     queryset = Estudiantes.objects.all()
     serializer_class = estudiantesSerializer
 
-class estadoProductoList(generics.ListCreateAPIView):
-    queryset = EstadoProducto.objects.all()
-    serializer_class = estadoProductoSerializer
 
 class productoList(generics.ListCreateAPIView):
     queryset = Producto.objects.all()
@@ -239,25 +221,10 @@ class listaProductoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = ListaProducto.objects.all()
     serializer_class = listaProductoSerializer
 
-class rolProductoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = RolProducto.objects.all()
-    serializer_class = rolProductoSerializer
-
-class cuartilEsperadoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = CuartilEsperado.objects.all()
-    serializer_class = cuartilEsperadoSerializer
-
-class categoriaMincienciasRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = CategoriaMinciencias.objects.all()
-    serializer_class = categoriaMincienciasSerializer
 
 class estudiantesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Estudiantes.objects.all()
     serializer_class = estudiantesSerializer
-
-class estadoProductoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = EstadoProducto.objects.all()
-    serializer_class = estadoProductoSerializer
 
 class productoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Producto.objects.all()

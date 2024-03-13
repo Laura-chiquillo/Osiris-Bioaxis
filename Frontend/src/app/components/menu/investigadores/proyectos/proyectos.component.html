@@ -357,30 +357,11 @@
                             <input  type="text" formControlName="rolProducto" matInput autocomplete="off" placeholder="Rol del producto">
                         </mat-form-field>
                     </div>
-                    <div class="titulo">
-                        <p>Investigador</p>
-                        <p>Cuartil esperado</p>
-                        <p>Categoría Minciencias</p>
-                        <p>Tipología del producto</p>
-                    </div>
-                    <div class="reg">
-                        <mat-form-field class="form-field-spacing" appearance="fill">
-                            <input  type="text" formControlName="investigador" matInput autocomplete="off" placeholder="Investigador">
-                        </mat-form-field>
-                        <mat-form-field class="form-field-spacing" appearance="fill">
-                            <input  type="text" formControlName="cuartilEsperado" matInput autocomplete="off" placeholder="Cuartil esperado">
-                        </mat-form-field>
-                        <mat-form-field class="form-field-spacing" appearance="fill">
-                            <input  type="text"formControlName="categoriaMinciencias" matInput autocomplete="off" placeholder="Categoría Minciencias">
-                        </mat-form-field>
-                        <mat-form-field class="form-field-spacing" appearance="fill">
-                            <input  type="text" formControlName="tipologiaProducto" matInput autocomplete="off" placeholder="Tipología del producto">
-                        </mat-form-field>
-                    </div>
+                    
                     <div class="titulo">
                         <p>Publicación</p>
+                        <p>Investigador</p>
                         <p>Nombre estudiantes</p>
-                        <p>Estado inicio semestre</p>
                         <p>Porcentaje avance fin de semestre</p>
                     </div>
                     <div class="reg">
@@ -388,10 +369,10 @@
                             <input type="text" formControlName="publicacion" matInput autocomplete="off" placeholder="Publicación">
                         </mat-form-field>
                         <mat-form-field class="form-field-spacing" appearance="fill">
-                            <input type="text" formControlName="estudiantes" matInput autocomplete="off" placeholder="Nombre estudiantes">
-                        </mat-form-field>
+                          <input  type="text" formControlName="investigador" matInput autocomplete="off" placeholder="Investigador">
+                      </mat-form-field>
                         <mat-form-field class="form-field-spacing" appearance="fill">
-                            <input type="text" formControlName="estadoProdIniSemestre" matInput autocomplete="off" placeholder="Estado inicio semestre">
+                            <input type="text" formControlName="estudiantes" matInput autocomplete="off" placeholder="Nombre estudiantes">
                         </mat-form-field>
                         <mat-form-field class="form-field-spacing" appearance="fill">
                             <input type="text" formControlName="porcentanjeAvanFinSemestre" matInput autocomplete="off" placeholder="Porcentaje avance fin de semestre">
@@ -789,32 +770,11 @@
             </div>
             <div class="titulo">
               <p>Investigador</p>
-              <p>Cuartil esperado</p>
-              <p>Categoria minciencia</p>
-              <p>Tipologia del producto</p>
             </div>
             <div class="reg">
               <mat-form-field class="form-field-spacing" appearance="fill">
                 <input formControlName="investigador"  matInput autocomplete="off">
               </mat-form-field>
-              <mat-form-field class="form-field-spacing2">
-                <mat-label>Seleccione</mat-label>
-                <mat-select formControlName="cuartilEsperado">
-                    <mat-option *ngFor="let tipo of typeCuartil" [value]="tipo">{{ tipo }}</mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field class="form-field-spacing2">
-                <mat-label>Seleccione</mat-label>
-                <mat-select formControlName="categoriaMinciencias">
-                    <mat-option *ngFor="let tipo of typeMinciencias" [value]="tipo">{{ tipo }}</mat-option>
-                </mat-select>
-            </mat-form-field>
-              <mat-form-field class="form-field-spacing2">
-                <mat-label>Seleccione</mat-label>
-                <mat-select formControlName="tipologiaProducto">
-                    <mat-option *ngFor="let tipo of typeProducto" [value]="tipo">{{ tipo }}</mat-option>
-                </mat-select>
-            </mat-form-field>
             </div>
             <div class="titulo">
               <p>publicación</p>

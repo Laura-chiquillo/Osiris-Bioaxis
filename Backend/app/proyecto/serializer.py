@@ -1,16 +1,15 @@
 from rest_framework import serializers
 
 from .models import (Apropiacion, Articulos, AvanceProyecto, Capitulos,
-                     CategoriaMinciencias, Coinvestigador, Consultoria,
-                     Contenido, Contrato, CuartilEsperado, EntidadPostulo,
-                     EntregableAdministrativo, EstadoProducto, EstadoProyecto,
+                     Coinvestigador, Consultoria, Contenido, Contrato,
+                     EntidadPostulo, EntregableAdministrativo, EstadoProyecto,
                      Estudiantes, Eventos, Financiacion, Grupoinvestigacion,
                      GrupoInvestigacionPro, Imagen, Industrial, Investigador,
                      Libros, Licencia, LineaInvestigacion, ListaProducto,
                      Maestria, ModalidadProyecto, Origen, Posgrado,
                      PregFinalizadoyCurso, Pregrado, Producto, Proyecto,
-                     Reconocimientos, RolProducto, Software, Transacciones,
-                     Ubicacion, UbicacionProyecto, UnidadAcademica)
+                     Reconocimientos, Software, Transacciones, Ubicacion,
+                     UbicacionProyecto, UnidadAcademica)
 
 #------------------------ investigador ------------------------
 
@@ -120,29 +119,9 @@ class listaProductoSerializer(serializers.ModelSerializer):
         model = ListaProducto
         fields = '__all__'
 
-class rolProductoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RolProducto
-        fields = '__all__'
-
-class cuartilEsperadoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CuartilEsperado
-        fields = '__all__'
-
-class categoriaMincienciasSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CategoriaMinciencias
-        fields = '__all__'
-
 class estudiantesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Estudiantes
-        fields = '__all__'
-
-class estadoProductoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EstadoProducto
         fields = '__all__'
 
 class productoSerializer(serializers.ModelSerializer):

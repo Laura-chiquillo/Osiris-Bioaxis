@@ -247,38 +247,6 @@ class ListaProducto(models.Model):
     class Meta:
         db_table = 'proyecto_Listaproducto'
 
-class RolProducto(models.Model):
-    id = models.CharField(max_length=50, primary_key=True)
-    rol = models.CharField(max_length=50)
-    class Meta:
-        db_table = 'proyecto_Rolproducto'
-
-class CuartilEsperado(models.Model):
-    id = models.CharField(max_length=50, primary_key=True)
-    cuartil = [
-        ("A", "A"),
-        ("B", "B"),
-        ("C", "C"),
-        ("D", "D"),
-        ("Q", "Q"),
-        ("RNT", "RNT"),
-    ]
-    cuartil = models.CharField(max_length=50, choices=cuartil, default='A')
-    class Meta:
-        db_table = 'proyecto_Cuartilesperado'
-
-class CategoriaMinciencias(models.Model):
-    id = models.CharField(max_length=50, primary_key=True)
-    categoria = [
-        ("A1", "A1"),
-        ("A2", "A2"),
-        ("B", "B"),
-        ("C", "C"),
-    ]
-    categoria = models.CharField(max_length=50, choices=categoria, default='Junior')
-    class Meta:
-        db_table = 'proyecto_Categoriaminciencias'
-
 class Estudiantes(models.Model):
     nombres = models.CharField(max_length=50)
     apellidos = models.CharField(max_length=50)
@@ -297,25 +265,11 @@ class Estudiantes(models.Model):
     class Meta:
         db_table = 'proyecto_Estudiantes'
 
-class EstadoProducto(models.Model):
-    id = models.CharField(max_length=50, primary_key=True)
-    estado = [
-        ("resaccion", "resaccion"),
-        ("sometido", "sometido"),
-        ("publicado", "publicado"),
-    ]
-    estado = models.CharField(max_length=50, choices=estado, default='En proceso')
-    class Meta:
-        db_table = 'proyecto_Estadoproducto'
-
 class Producto(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     tituloProducto = models.CharField(max_length=50)
-    rolProducto = models.ForeignKey(RolProducto,null=False,blank=False,on_delete=models.CASCADE)
     investigador = models.ForeignKey(Investigador,null=False,blank=False,on_delete=models.CASCADE)
     listaProducto = models.ForeignKey(ListaProducto,null=False,blank=False,on_delete=models.CASCADE)
-    cuartilEsperado = models.ForeignKey(CuartilEsperado,null=False,blank=False,on_delete=models.CASCADE)
-    categoriaMinciencias = models.ForeignKey(CategoriaMinciencias,null=False,blank=False,on_delete=models.CASCADE)
     tipologiaProducto = [
         ("A","A"),
         ("A1","A1"),
@@ -329,7 +283,12 @@ class Producto(models.Model):
     estadoProdIniSemestre = models.CharField(max_length=50)
     porcentanjeAvanFinSemestre= models.IntegerField()
     observaciones = models.CharField(max_length=50)
-    estadoProducto = models.ForeignKey(EstadoProducto,null=False,blank=False,on_delete=models.CASCADE)
+    estadoProducto  = [
+        ("resaccion", "resaccion"),
+        ("sometido", "sometido"),
+        ("publicado", "publicado"),
+    ]
+    estadoProducto = models.CharField(max_length=50, choices=estadoProducto, default='En proceso')
     porcentajeComSemestral = models.IntegerField()
     porcentajeRealMensual = models.IntegerField()
     fecha = models.DateTimeField()

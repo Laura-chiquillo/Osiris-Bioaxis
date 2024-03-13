@@ -355,9 +355,6 @@ export class ProyectosComponent implements OnInit {
         proyectoFormuladoProducto: [''],
         proyectoRSUProducto: [''],
       }),
-      cuartilEsperado: [''],
-      categoriaMinciencias: [''],
-      tipologiaProducto: [''],
       publicacion: [''],
       estudiantes: [''],
       estadoProdIniSemestre: [''],
@@ -978,7 +975,6 @@ thumbLabel6 = false;
       const producto: Producto= {
         id: this.productoFormGroup.value.id,
         tituloProducto: this.productoFormGroup.value.tituloProducto,
-        rolProducto: this.productoFormGroup.value.rolProducto,
         investigador: this.productoFormGroup.value.investigador,
         listaProducto: {
           articulo: {
@@ -1067,8 +1063,6 @@ thumbLabel6 = false;
           proyectoFormuladoProducto: this.productoFormGroup.value.listaProducto.proyectoFormuladoProducto,
           proyectoRSUProducto: this.productoFormGroup.value.listaProducto.proyectoRSUProducto
         },
-        cuartilEsperado: this.productoFormGroup.value.cuartilEsperado,
-        categoriaMinciencias: this.productoFormGroup.value.categoriaMinciencias,
         tipologiaProducto: this.productoFormGroup.value.tipologiaProducto,
         publicacion: this.productoFormGroup.value.publicacion,
         estudiantes: this.productoFormGroup.value.estudiantes,

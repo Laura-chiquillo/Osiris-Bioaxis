@@ -100,38 +100,20 @@ export interface Eventos {
     proyectoFormuladoProducto?: string;
     proyectoRSUProducto?: string;
   }
-  
-  export interface RolProducto {
-    id?: string;
-    rol?: string;
-  }
-  export interface CuartilEsperado {
-    id?: string;
-    cuartil?: string;
-  }
-  export interface CategoriaMinciencias {
-    id?: string;
-    categoria?: string;
-  }
-  export interface EstadoProducto {
-    id?: string;
-    estado?: string;
-  }
+
+
   export interface Producto {
     id?: string;
     tituloProducto?: string;
-    rolProducto?: RolProducto;
     investigador ?: string;
     listaProducto ?: ListaProducto;
-    cuartilEsperado?: CuartilEsperado;
-    categoriaMinciencias?: CategoriaMinciencias;
     tipologiaProducto?: string;
     publicacion?: string;
     estudiantes?:String;
     estadoProdIniSemestre?: string;
     porcentanjeAvanFinSemestre?: number;
     observaciones?: string;
-    estadoProducto?: EstadoProducto;
+    estadoProducto?: string;
     porcentajeComSemestral?: number;
     porcentajeRealMensual?: number;
     fecha?: Date;
