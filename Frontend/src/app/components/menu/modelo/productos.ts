@@ -14,13 +14,13 @@ export interface Eventos {
     id?: string;
     nombrepublicacion?: string;
     isbn?: string;
-    fecha?: Date;
+    fecha?: string;
     editorial?: string;
   }
   export interface Libros {
     id?: string;
     isbn?: string;
-    fecha?: Date;
+    fecha?: string;
     editorial?: string;
     luegarpublicacion?: string;
   }
@@ -28,18 +28,18 @@ export interface Eventos {
     id?: string;
     tiporegistro?: string;
     numero?: string;
-    fecha?: Date;
+    fecha?: string;
     pais?: string;
   }
   export interface Industrial {
     id?: string;
-    fecha?: Date;
+    fecha?: string;
     pais?: string;
     insitutofinanciador?: string;
   }
   export interface Reconocimientos {
     id?: string;
-    fecha?: Date;
+    fecha?: string;
     nombentidadotorgada?: string;
   }
   export interface Licencia {
@@ -48,8 +48,8 @@ export interface Eventos {
   }
   export interface Apropiacion {
     id?: string;
-    fechainicio?: Date;
-    fechaFin?: Date;
+    fechainicio?: string;
+    fechaFin?: string;
     licencia?: Licencia;
     formato?: string;
     medio?: string;
@@ -62,7 +62,7 @@ export interface Eventos {
   }
   export interface Consultoria {
     id?: string;
-    año?: Date;
+    año?: string;
     contrato?: Contrato;
     nombreEntidad?: string;
   }
@@ -73,13 +73,13 @@ export interface Eventos {
   }
   export interface PregFinalizadoyCurso {
     id?: string;
-    fechaInicio?: Date;
+    fechaInicio?: string;
     reconocimientos?: string;
     numeroPaginas?: number;
   }
   export interface Maestria {
     id?: string;
-    fechaInicio?: Date;
+    fechaInicio?: string;
     institucion?: string;
   }
   export interface ListaProducto {
@@ -116,7 +116,7 @@ export interface Eventos {
     estadoProducto?: string;
     porcentajeComSemestral?: number;
     porcentajeRealMensual?: number;
-    fecha?: Date;
+    fecha?: string;
     origen?: string;
     Soporte?: File;
   }

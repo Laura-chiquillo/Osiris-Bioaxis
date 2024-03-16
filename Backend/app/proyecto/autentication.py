@@ -124,7 +124,7 @@ class CrearNuevoProducto(APIView):
     parser_class = (FileUploadParser,)
 
     def post(self, request, *args, **kwargs):
-        archivo = request.FILES.get('Soporte')
+        soporte = request.FILES.get('Soporte')
         data = request.data.get('producto')
         print("Datos resividos",data)
 
@@ -327,15 +327,30 @@ class CrearNuevoProducto(APIView):
             proyectoRSUProducto=lista_producto_proyectoRSUProducto
             )
         
-        data['listaProducto'] = lista_producto.id
 
-        serializer = productoSerializer(data=data)
+        producto_data = {
+            'id': data.get('id'),
+            'tituloProducto': data.get('tituloProducto'),
+            'investigador': data.get('investigador'),
+            'publicacion': data.get('publicacion'),
+            'estudiantes': data.get('estudiantes'),
+            'estadoProdIniSemestre': data.get('estadoProdIniSemestre'),
+            'porcentanjeAvanFinSemestre': data.get('porcentanjeAvanFinSemestre'),
+            'observaciones': data.get('observaciones'),
+            'estadoProducto': data.get('estadoProducto'),
+            'porcentajeComSemestral': data.get('porcentajeComSemestral'),
+            'porcentajeRealMensual': data.get('porcentajeRealMensual'),
+            'fecha': data.get('fecha'),
+            'origen': data.get('origen'),
+        }
+        producto_data['listaProducto'] = lista_producto.id
+
+        serializer = productoSerializer(data=producto_data)
         if serializer.is_valid():
             producto = serializer.save()
-
-            if archivo:
-                producto.Soporte = archivo
-                producto.save()
+            if soporte:  # Verifica si se envió un archivo
+                producto.Soporte = soporte  # Asigna el archivo al campo 'Soporte'
+                producto.save()  # Guarda el producto con el archivo
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

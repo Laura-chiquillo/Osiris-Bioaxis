@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.hashers import make_password
 from django.db import models, transaction
 from rest_framework.authtoken.models import Token
@@ -105,10 +107,10 @@ class Investigador(models.Model):
         
 class Eventos(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fechainicio = models.DateTimeField()
-    fechafin = models.DateTimeField()
-    numparticinerno = models.IntegerField()
-    numparticexterno = models.IntegerField()
+    fechainicio = models.DateTimeField(default=datetime.datetime.now)
+    fechafin = models.DateTimeField(default=datetime.datetime.now)
+    numparticinerno = models.IntegerField(default=0)
+    numparticexterno = models.IntegerField(default=0)
     tipoevento = [
          ("Congreso", "Congreso"),
         ("Seminario", "Seminario"),
@@ -133,97 +135,97 @@ class Articulos(models.Model):
    
 class Capitulos(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    nombrepublicacion = models.CharField(max_length=50)
-    isbn = models.CharField(max_length=50)
-    fecha = models.DateTimeField()
-    editorial = models.CharField(max_length=50)
+    nombrepublicacion = models.CharField(max_length=50,default='NA')
+    isbn = models.CharField(max_length=50,default='NA')
+    fecha = models.DateTimeField(default=datetime.datetime.now)
+    editorial = models.CharField(max_length=50,default='NA')
     class Meta:
         db_table = 'proyecto_Capitulos'
 
 class Libros(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    isbn = models.CharField(max_length=50)
-    fecha = models.DateTimeField()
-    editorial = models.CharField(max_length=50)
-    luegarpublicacion = models.CharField(max_length=50)
+    isbn = models.CharField(max_length=50,default='NA')
+    fecha = models.DateTimeField(default=datetime.datetime.now)
+    editorial = models.CharField(max_length=50,default='NA')
+    luegarpublicacion = models.CharField(max_length=50,default='NA')
     class Meta:
         db_table = 'proyecto_Libros'
 
 class Software(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    tiporegistro = models.CharField(max_length=50)
-    numero = models.CharField(max_length=50)
-    fecha = models.DateTimeField()
-    pais = models.CharField(max_length=50)
+    tiporegistro = models.CharField(max_length=50,default='NA')
+    numero = models.CharField(max_length=50,default='NA')
+    fecha = models.DateTimeField(default=datetime.datetime.now)
+    pais = models.CharField(max_length=50,default='NA')
     class Meta:
         db_table = 'proyecto_Software'
 
 class Industrial(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fecha = models.DateTimeField()
-    pais = models.CharField(max_length=50)
-    insitutofinanciador = models.CharField(max_length=50)
+    fecha = models.DateTimeField(default=datetime.datetime.now)
+    pais = models.CharField(max_length=50,default='NA')
+    insitutofinanciador = models.CharField(max_length=50,default='NA')
     class Meta:
         db_table = 'proyecto_Industrial'
 
 class Reconocimientos(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fecha = models.DateTimeField()
-    nombentidadotorgada = models.CharField(max_length=50)
+    fecha = models.DateTimeField(default=datetime.datetime.now)
+    nombentidadotorgada = models.CharField(max_length=50,default='NA')
     class Meta:
         db_table = 'proyecto_Reconocimientos'
 
 class Licencia(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    nombre = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=50,default='NA')
     class Meta:
         db_table = 'proyecto_Licencia'
 
 class Apropiacion(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fechainicio = models.DateTimeField()
-    fechaFin = models.DateTimeField()
+    fechainicio = models.DateTimeField(default=datetime.datetime.now)
+    fechaFin = models.DateTimeField(default=datetime.datetime.now)
     licencia = models.ForeignKey(Licencia,null=False,blank=False,on_delete=models.CASCADE)
-    formato = models.CharField(max_length=50)
-    medio = models.CharField(max_length=50)
-    nombreEntidad = models.CharField(max_length=50)
+    formato = models.CharField(max_length=50,default='NA')
+    medio = models.CharField(max_length=50,default='NA')
+    nombreEntidad = models.CharField(max_length=50,default='NA')
     class Meta:
         db_table = 'proyecto_Apropiacion'
 
 class Contrato(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    nombre = models.CharField(max_length=50)
-    numero = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=50,default='NA')
+    numero = models.CharField(max_length=50,default='NA')
     class Meta:
         db_table = 'proyecto_Contrato'
 
 class Consultoria(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    año = models.CharField(max_length=50)
+    año = models.CharField(max_length=50,default='NA')
     contrato = models.ForeignKey(Contrato,null=False,blank=False,on_delete=models.CASCADE)
-    nombreEntidad = models.CharField(max_length=50)
+    nombreEntidad = models.CharField(max_length=50,default='NA')
     class Meta:
         db_table = 'proyecto_Consultoria'
 
 class Contenido(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    nombreEntidad = models.CharField(max_length=50)
-    paginaWeb = models.CharField(max_length=50)
+    nombreEntidad = models.CharField(max_length=50,default='NA')
+    paginaWeb = models.CharField(max_length=50,default='NA')
     class Meta:
         db_table = 'proyecto_Contenido'
 
 class PregFinalizadoyCurso(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fechaInicio = models.DateTimeField(blank=True)
-    reconocimientos = models.CharField(max_length=50, blank=True)
-    numeroPaginas = models.IntegerField(blank=True)
+    fechaInicio = models.DateTimeField(default=datetime.datetime.now)
+    reconocimientos = models.CharField(max_length=50, blank=True,default='NA')
+    numeroPaginas = models.IntegerField(blank=True,default='NA')
     class Meta:
         db_table = 'proyecto_Pregfinalizadoycurso'
 
 class Maestria(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fechaInicio = models.DateTimeField()
-    institucion = models.CharField(max_length=50)
+    fechaInicio = models.DateTimeField(default=datetime.datetime.now)
+    institucion = models.CharField(max_length=50,default='NA')
     class Meta:
         db_table = 'proyecto_Maestria'
 
@@ -251,7 +253,7 @@ class Estudiantes(models.Model):
     nombres = models.CharField(max_length=50)
     apellidos = models.CharField(max_length=50)
     semestre = models.IntegerField()
-    fechaGrado = models.DateTimeField()
+    fechaGrado = models.DateTimeField(default=datetime.datetime.now)
     codigoGrupo = models.CharField(max_length=50)
     tipoDocumento = [
         ("CC", "Cédula de ciudadanía"),
@@ -274,7 +276,7 @@ class Producto(models.Model):
     estudiantes = models.ForeignKey(Estudiantes,null=False,blank=False,on_delete=models.CASCADE)
     estadoProdIniSemestre = models.CharField(max_length=50)
     porcentanjeAvanFinSemestre= models.IntegerField()
-    observaciones = models.CharField(max_length=50)
+    observaciones = models.CharField(max_length=500)
     estadoProducto  = [
         ("resaccion", "resaccion"),
         ("sometido", "sometido"),
@@ -283,7 +285,7 @@ class Producto(models.Model):
     estadoProducto = models.CharField(max_length=50, choices=estadoProducto, default='En proceso')
     porcentajeComSemestral = models.IntegerField()
     porcentajeRealMensual = models.IntegerField()
-    fecha = models.DateTimeField()
+    fecha = models.DateTimeField(default=datetime.datetime.now)
     origen = models.CharField(max_length=5000)
     Soporte = models.FileField(upload_to ='uploadsProducto/',max_length=1000, blank=True)
     class Meta:

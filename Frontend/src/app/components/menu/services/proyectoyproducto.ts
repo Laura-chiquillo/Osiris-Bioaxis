@@ -22,8 +22,10 @@ export class ProyectoyproductoService {
     
   private apiUrl2 = 'http://localhost:8000/CrearProducto';
   crearProducto(producto: Producto): Observable<Producto> {
-    console.log(producto)
-    return this.http.post<Producto>(this.apiUrl2, producto);
+    const datos = { producto };
+    console.log(datos);
+    return this.http.post<Producto>(this.apiUrl2, datos);
   }
+  
 
 }
