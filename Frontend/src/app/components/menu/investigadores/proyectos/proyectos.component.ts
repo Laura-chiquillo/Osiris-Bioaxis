@@ -269,6 +269,7 @@ export class ProyectosComponent implements OnInit {
       rolProducto: [''],
       investigador: [''],
       listaProducto: this.formBuilder.group({
+        id:[this.generateSequentialId()],
         articulo: this.formBuilder.group({
           id:[this.generateSequentialId()],
           fuente:[''],
@@ -837,17 +838,6 @@ export class ProyectosComponent implements OnInit {
     return this.productoFormGroup.get('fuente');
   }
 
-//tipologia producto
-typeProducto: string[] = ['A', 'A1', 'A2', 'B', 'Productos tipo TOP'];
-
-changeTipologia(e: Event) {
-  const target = e.target as HTMLInputElement;
-  if (target && this.tipologiaProducto) {
-    this.tipologiaProducto.setValue(target.value, {
-      onlySelf: true,
-    });
-  }
-}
 
 //Estado del producto
 typeEstado: string[] = ['resaccion', 'sometido', 'publicado'];
@@ -856,30 +846,6 @@ changeEstado(e: Event) {
   const target = e.target as HTMLInputElement;
   if (target && this.estadoProducto) {
     this.estadoProducto.setValue(target.value, {
-      onlySelf: true,
-    });
-  }
-}
-
-// Categoria minciencias
-typeMinciencias: string[] = ['A1', 'A2', 'B', 'C'];
-
-changeMinciencias(e: Event) {
-  const target = e.target as HTMLInputElement;
-  if (target && this.categoriaMinciencias) {
-    this.categoriaMinciencias.setValue(target.value, {
-      onlySelf: true,
-    });
-  }
-}
-
-// Cuartil esperado
-typeCuartil: string[] = ['A', 'B', 'C', 'D', 'Q', 'RNT'];
-
-changeCuartil(e: Event) {
-  const target = e.target as HTMLInputElement;
-  if (target && this.cuartilEsperado) {
-    this.cuartilEsperado.setValue(target.value, {
       onlySelf: true,
     });
   }
@@ -898,7 +864,7 @@ changeEventos(e: Event) {
 }
 
 // tipo de fuente  de articulos de lista productos
-typeFuente: string[] = ['Electronico', 'Electronico'];
+typeFuente: string[] = ['Electronico', 'Impreso'];
 
 changeFuente(e: Event) {
   const target = e.target as HTMLInputElement;
@@ -968,7 +934,7 @@ thumbLabel6 = false;
 
   onFileSelected2(event: any) {
     this.FileProducto = event.target.files[0] as File;
-  }
+  } 
 
   guardarProducto() {
     if (this.productoFormGroup.valid) {
@@ -977,6 +943,7 @@ thumbLabel6 = false;
         tituloProducto: this.productoFormGroup.value.tituloProducto,
         investigador: this.productoFormGroup.value.investigador,
         listaProducto: {
+          id: this.productoFormGroup.value.listaProducto.id,
           articulo: {
             id: this.productoFormGroup.value.listaProducto.capitulo.id,
             fuente: this.productoFormGroup.value.listaProducto.articulo.fuente
@@ -1063,7 +1030,6 @@ thumbLabel6 = false;
           proyectoFormuladoProducto: this.productoFormGroup.value.listaProducto.proyectoFormuladoProducto,
           proyectoRSUProducto: this.productoFormGroup.value.listaProducto.proyectoRSUProducto
         },
-        tipologiaProducto: this.productoFormGroup.value.tipologiaProducto,
         publicacion: this.productoFormGroup.value.publicacion,
         estudiantes: this.productoFormGroup.value.estudiantes,
         estadoProdIniSemestre: this.productoFormGroup.value.estadoProdIniSemestre,

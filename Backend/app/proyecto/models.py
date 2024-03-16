@@ -125,7 +125,7 @@ class Articulos(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     fuente = [
        ("Electronico", "Electronico"),
-        ("Electronico", "Impreso"), 
+        ("Impreso", "Impreso"), 
     ]
     fuente = models.CharField(max_length=50, choices=fuente, default='Electronico')
     class Meta:
@@ -214,9 +214,9 @@ class Contenido(models.Model):
 
 class PregFinalizadoyCurso(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fechaInicio = models.DateTimeField()
-    reconocimientos = models.CharField(max_length=50)
-    numeroPaginas = models.IntegerField()
+    fechaInicio = models.DateTimeField(blank=True)
+    reconocimientos = models.CharField(max_length=50, blank=True)
+    numeroPaginas = models.IntegerField(blank=True)
     class Meta:
         db_table = 'proyecto_Pregfinalizadoycurso'
 
@@ -270,14 +270,6 @@ class Producto(models.Model):
     tituloProducto = models.CharField(max_length=50)
     investigador = models.ForeignKey(Investigador,null=False,blank=False,on_delete=models.CASCADE)
     listaProducto = models.ForeignKey(ListaProducto,null=False,blank=False,on_delete=models.CASCADE)
-    tipologiaProducto = [
-        ("A","A"),
-        ("A1","A1"),
-        ("A2","A2"),
-        ("B","B"),
-        ("Productos tipo TOP","Productos tipo TOP"),
-    ]
-    tipologiaProducto= models.CharField(max_length=50, choices=tipologiaProducto, default='En proceso')
     publicacion = models.CharField(max_length=50)
     estudiantes = models.ForeignKey(Estudiantes,null=False,blank=False,on_delete=models.CASCADE)
     estadoProdIniSemestre = models.CharField(max_length=50)
