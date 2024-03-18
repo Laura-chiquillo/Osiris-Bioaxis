@@ -8,6 +8,8 @@ import { Investigador } from '../modelo/investigador';
 })
 export class InvestigadorService {
   private apiUrl = 'http://localhost:8000/investigador'; 
+  private apiUrl2 = 'http://localhost:8000/grupoinvestigacion'; 
+  private apiUrl3 = 'http://localhost:8000/mostrarInvestigador'; 
 
   constructor(private http: HttpClient) { }
 
@@ -15,6 +17,40 @@ export class InvestigadorService {
   getUsuarios(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}`);
   }
+
+  getInvestigadores(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl3}`);
+  }
+  //getInvestigadores(): Observable<any[]> {
+    //return this.http.get<any[]>(`${this.apiUrl}`).pipe(
+      //switchMap((investigadores: any[]) => {
+        // Obtener los IDs únicos de los grupos de investigadores
+        //const uniqueGrupoIds = new Set(investigadores.map(investigador => investigador.grupoinvestigacion));
+
+        // Obtener el nombre de cada grupo
+        //const observables = Array.from(uniqueGrupoIds).map(idGrupo => {
+          //return this.http.get<Grupoinvestigacion>(`${this.apiUrl2}/${idGrupo}`).pipe(
+            //map((grupo: Grupoinvestigacion) => ({ id: idGrupo, nombre: grupo.nombre }))
+          //);
+        //});
+
+        // Combinar todas las solicitudes en paralelo
+        //return forkJoin(observables).pipe(
+          //map(grupos => {
+            // Crear un mapa para buscar rápidamente el nombre del grupo por ID
+            //const grupoMap = new Map(grupos.map(grupo => [grupo.id, grupo.nombre]));
+
+            // Asignar el nombre del grupo a cada investigador
+            //return investigadores.map(investigador => ({
+              //...investigador,
+              //nombre_grupo: grupoMap.get(investigador.grupoinvestigacion)
+            //}));
+          //})
+        //);
+      //})
+    //);
+  //}
+
 
   //registro
   registrarInvestigador(nuevoInvestigador: Investigador): Observable<Investigador> {

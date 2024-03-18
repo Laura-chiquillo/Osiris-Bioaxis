@@ -18,3 +18,8 @@ export interface Investigador {
     ubicacion?: number;
     imagen?: number;
 }
+
+export interface Grupoinvestigacion{
+    codigo?:string;
+    nombre?:string;
+}

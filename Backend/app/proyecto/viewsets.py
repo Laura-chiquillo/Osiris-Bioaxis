@@ -8,35 +8,29 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 
 from .models import (Apropiacion, Articulos, AvanceProyecto, Capitulos,
-                     Coinvestigador, Consultoria, Contenido, Contrato,
-                     EntidadPostulo, EntregableAdministrativo, EstadoProyecto,
-                     Estudiantes, Eventos, Financiacion, Grupoinvestigacion,
-                     GrupoInvestigacionPro, Imagen, Industrial, Investigador,
-                     Libros, Licencia, LineaInvestigacion, ListaProducto,
-                     Maestria, ModalidadProyecto, Origen, Posgrado,
-                     PregFinalizadoyCurso, Pregrado, Producto, Proyecto,
-                     Reconocimientos, Software, Transacciones, Ubicacion,
-                     UbicacionProyecto, UnidadAcademica)
+                     Consultoria, Contenido, Contrato, EntidadPostulo,
+                     EntregableAdministrativo, Estudiantes, Eventos,
+                     Financiacion, Grupoinvestigacion, Imagen, Industrial,
+                     Investigador, Libros, Licencia, ListaProducto, Maestria,
+                     Posgrado, PregFinalizadoyCurso, Pregrado, Producto,
+                     Proyecto, Reconocimientos, Software, Transacciones,
+                     Ubicacion, UbicacionProyecto)
 from .serializer import (apropiacionSerializer, articulosSerializer,
                          avanceProyectoSerializer, capitulosSerializer,
-                         coinvestigadorSerializer, consultoriaSerializer,
-                         contenidoSerializer, contratoSerializer,
-                         entidadPostuloSerializer,
+                         consultoriaSerializer, contenidoSerializer,
+                         contratoSerializer, entidadPostuloSerializer,
                          entregableAdministrativoSerializer,
-                         estadoProyectoSerializer, estudiantesSerializer,
-                         eventosSerializer, financiacionSerializer,
-                         grupoInvestigacionCoSerializer,
-                         grupoinvestigacionSerializer, imagenSerializer,
-                         industrialSerializer, investigadorSerializer,
-                         librosSerializer, licenciaSerializer,
-                         lineaInvestigacionSerializer, listaProductoSerializer,
-                         maestriaSerializer, modalidadProyectoSerializer,
-                         origenSerializer, posgradoSerializer,
+                         estudiantesSerializer, eventosSerializer,
+                         financiacionSerializer, grupoinvestigacionSerializer,
+                         imagenSerializer, industrialSerializer,
+                         investigadorSerializer, librosSerializer,
+                         licenciaSerializer, listaProductoSerializer,
+                         maestriaSerializer, posgradoSerializer,
                          pregFinalizadoyCursoSerializer, pregradoSerializer,
                          productoSerializer, proyectoSerializer,
                          reconocimientosSerializer, softwareSerializer,
                          transaccionesSerializer, ubicacionProyectoSerializer,
-                         ubicacionSerializer, unidadAcademicaSerializer)
+                         ubicacionSerializer)
 
 #------------------------ investigador ------------------------
 
@@ -232,13 +226,6 @@ class productoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
 #---------------------------- PROYECTOS ----------------------------
 
-class unidadAcademicaList(generics.ListCreateAPIView):
-    queryset = UnidadAcademica.objects.all()
-    serializer_class = unidadAcademicaSerializer
-
-class coinvestigadorList(generics.ListCreateAPIView):
-    queryset = Coinvestigador.objects.all()
-    serializer_class = coinvestigadorSerializer
 
 class entidadPostuloList(generics.ListCreateAPIView):
     queryset = EntidadPostulo.objects.all()
@@ -248,37 +235,17 @@ class financiacionList(generics.ListCreateAPIView):
     queryset = Financiacion.objects.all()
     serializer_class = financiacionSerializer
 
-class grupoInvestigacionCoList(generics.ListCreateAPIView):
-    queryset = GrupoInvestigacionPro.objects.all()
-    serializer_class = grupoInvestigacionCoSerializer
-
 class transaccionesList(generics.ListCreateAPIView):
     queryset = Transacciones.objects.all()
     serializer_class = transaccionesSerializer
-
-class origenList(generics.ListCreateAPIView):
-    queryset = Origen.objects.all()
-    serializer_class = origenSerializer
 
 class ubicacionProyectoList(generics.ListCreateAPIView):
     queryset = UbicacionProyecto.objects.all()
     serializer_class = ubicacionProyectoSerializer
 
-class estadoProyectoList(generics.ListCreateAPIView):
-    queryset = EstadoProyecto.objects.all()
-    serializer_class = estadoProyectoSerializer
-
-class modalidadProyectoList(generics.ListCreateAPIView):
-    queryset = ModalidadProyecto.objects.all()
-    serializer_class = modalidadProyectoSerializer
-
 class avanceProyectoList(generics.ListCreateAPIView):
     queryset = AvanceProyecto.objects.all()
     serializer_class = avanceProyectoSerializer
-
-class lineaInvestigacionList(generics.ListCreateAPIView):
-    queryset = LineaInvestigacion.objects.all()
-    serializer_class = lineaInvestigacionSerializer
 
 class entregableAdministrativoList(generics.ListCreateAPIView):
     queryset = EntregableAdministrativo.objects.all()
@@ -288,10 +255,6 @@ class proyectoList(generics.ListCreateAPIView):
     queryset = Proyecto.objects.all()
     serializer_class = proyectoSerializer
 
-class unidadAcademicaRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = UnidadAcademica.objects.all()
-    serializer_class = unidadAcademicaSerializer
-
 class entidadPostuloRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = EntidadPostulo.objects.all()
     serializer_class = entidadPostuloSerializer
@@ -300,45 +263,21 @@ class financiacionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Financiacion.objects.all()
     serializer_class = financiacionSerializer
 
-class grupoInvestigacionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = GrupoInvestigacionPro.objects.all()
-    serializer_class = grupoInvestigacionCoSerializer
-
 class transaccionesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Transacciones.objects.all()
     serializer_class = transaccionesSerializer
-
-class origenRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Origen.objects.all()
-    serializer_class = origenSerializer
 
 class ubicacionProyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = UbicacionProyecto.objects.all()
     serializer_class = ubicacionProyectoSerializer
 
-class estadoProyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = EstadoProyecto.objects.all()
-    serializer_class = estadoProyectoSerializer
-
-class modalidadProyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = ModalidadProyecto.objects.all()
-    serializer_class = modalidadProyectoSerializer
-
 class avanceProyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = AvanceProyecto.objects.all()
     serializer_class = avanceProyectoSerializer
 
-class lineaInvestigacionRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = LineaInvestigacion.objects.all()
-    serializer_class = lineaInvestigacionSerializer
-
 class entregableAdministrativoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = EntregableAdministrativo.objects.all()
     serializer_class = entregableAdministrativoSerializer
-
-class coinvestigadorRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Coinvestigador.objects.all()
-    serializer_class = coinvestigadorSerializer
 
 class proyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Proyecto.objects.all()

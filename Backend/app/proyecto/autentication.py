@@ -1,6 +1,6 @@
 from django.contrib.auth.hashers import check_password
 from django.db import transaction
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import serializers, status
 from rest_framework.exceptions import ValidationError
@@ -10,20 +10,13 @@ from rest_framework.views import APIView, exception_handler
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import (Apropiacion, Articulos, Capitulos, Consultoria, Contenido,
-                     Contrato, Estudiantes, Eventos, Industrial, Investigador,
-                     Libros, Licencia, ListaProducto, Maestria,
+                     Contrato, EntidadPostulo, EntregableAdministrativo,
+                     Estudiantes, Eventos, Financiacion, Industrial,
+                     Investigador, Libros, Licencia, ListaProducto, Maestria,
                      PregFinalizadoyCurso, Producto, Proyecto, Reconocimientos,
-                     Software)
-from .serializer import (apropiacionSerializer, articulosSerializer,
-                         capitulosSerializer, consultoriaSerializer,
-                         contenidoSerializer, contratoSerializer,
-                         estudiantesSerializer, eventosSerializer,
-                         industrialSerializer, investigadorSerializer,
-                         librosSerializer, licenciaSerializer,
-                         listaProductoSerializer, maestriaSerializer,
-                         pregFinalizadoyCursoSerializer, productoSerializer,
-                         proyectoSerializer, reconocimientosSerializer,
-                         softwareSerializer)
+                     Software, Transacciones, UbicacionProyecto)
+from .serializer import (investigadorSerializer, productoSerializer,
+                         proyectoSerializer)
 
 
 class CustomAuthToken(APIView):
@@ -98,26 +91,126 @@ class ActualizarDatosUsuario(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class CrearProyecto(APIView):
+    parser_class = (FileUploadParser,)
     def post(self, request, *args, **kwargs):
-        # Obtener el nombre del investigador autenticado desde los datos del usuario en la solicitud
-        numId_investigador = request.data.get('numerodocumento')
+        soporte = request.FILES.get('Soporte')
+        data =request.data.get('proyecto')
 
-        # Crear una instancia del proyecto con el nombre del investigador establecido
-        proyecto_data = request.data
-        proyecto_data['investigadores'] = numId_investigador
+        entidadPostulo_data= data.get('entidadPostulo')
+        entidadPostulo_id = entidadPostulo_data.get('id')
+        entidadPostulo_nombreIntitucion = entidadPostulo_data.get('nombreInstitucion')
+        entidadPostulo_nombreGrupo = entidadPostulo_data.get('nombreGrupo')
+        entidadPostulo,_=EntidadPostulo.objects.get_or_create(
+            id=entidadPostulo_id,
+            nombreInstitucion=entidadPostulo_nombreIntitucion,
+            nombreGrupo=entidadPostulo_nombreGrupo
+        )
+        
+        financiacion_data = data.get('financiacion')
+        financiacion_id = financiacion_data.get('id')
+        financiacion_valorPropuestoFin = financiacion_data.get('valorPropuestoFin')
+        financiacion_valorEjecutadoFin = financiacion_data.get('valorEjecutadoFin')
+        financiacion,_=Financiacion.objects.get_or_create(
+            id=financiacion_id,
+            valorPropuestoFin=financiacion_valorPropuestoFin,
+            valorEjecutadoFin=financiacion_valorEjecutadoFin
+        )
 
-        serializer = proyectoSerializer(data=proyecto_data)
+        transacciones_data = data.get('transacciones')
+        transacciones_id= transacciones_data.get('id')
+        transacciones_fecha=transacciones_data.get('fecha')
+        transacciones_acta=transacciones_data.get('acta')
+        transacciones_descripcion=transacciones_data.get('descripcion')
+        transacciones,_=Transacciones.objects.get_or_create(
+            id=transacciones_id,
+            fecha=transacciones_fecha,
+            acta=transacciones_acta,
+            descripcion=transacciones_descripcion
+        )
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def get(self, request, *args, **kwargs):
-        proyectos = Proyecto.objects.all()
-        data = [{'codigo': proyecto.codigo, 'titulo': proyecto.titulo} for proyecto in proyectos]
-        return Response(data)
+        ubicacionProyecto_data = data.get('ubicacionProyecto')
+        ubicacionProyecto_id= ubicacionProyecto_data.get('id')
+        ubicacionProyecto_instalacion= ubicacionProyecto_data.get('instalacion')
+        ubicacionProyecto_municipio=ubicacionProyecto_data.get('municipio')
+        ubicacionProyecto_pais=ubicacionProyecto_data.get('pais')
+        ubicacionProyecto_departamento=ubicacionProyecto_data.get('departamento')
+        ubicacionProyecto,_=UbicacionProyecto.objects.get_or_create(
+            id=ubicacionProyecto_id,
+            instalacion=ubicacionProyecto_instalacion,
+            municipio=ubicacionProyecto_municipio,
+            pais=ubicacionProyecto_pais,
+            departamento=ubicacionProyecto_departamento
+        )
+        
+        entregableAdministrativo_data = data.get('entregableAdministrativo')
+        entregableAdministrativo_id=entregableAdministrativo_data.get('id')
+        entregableAdministrativo_nombre=entregableAdministrativo_data.get('nombre')
+        entregableAdministrativo_titulo=entregableAdministrativo_data.get('titulo')
+        entregableAdministrativo_calidad=entregableAdministrativo_data.get('calidad')
+        entregableAdministrativo_entregable=entregableAdministrativo_data.get('entregable')
+        entregableAdministrativo_pendiente=entregableAdministrativo_data.get('pendiente')
+        entregableAdministrativo_clasificacion=entregableAdministrativo_data.get('clasificacion')
+        entregableAdministrativo,_=EntregableAdministrativo.objects.get_or_create(
+            id=entregableAdministrativo_id,
+            nombre=entregableAdministrativo_nombre,
+            titulo=entregableAdministrativo_titulo,
+            calidad=entregableAdministrativo_calidad,
+            entregable=entregableAdministrativo_entregable,
+            pendiente=entregableAdministrativo_pendiente,
+            clasificacion=entregableAdministrativo_clasificacion
+        )
+
+        
+        proyecto_data = {
+            'codigo': data.get('codigo'),
+            'fecha': data.get('fecha'),
+            'titulo': data.get('titulo'),
+            'investigadores': data.get('investigadores'),
+            'area': data.get('area'),
+            'porcentajeEjecucionCorte': data.get('porcentajeEjecucionCorte'),
+            'grupoInvestigacionPro': data.get('grupoInvestigacionPro'),
+            'porcentajeEjecucionFinCorte': data.get('porcentajeEjecucionFinCorte'),
+            'porcentajeAvance': data.get('porcentajeAvance'),
+            'origen': data.get('origen'),
+            'convocatoria': data.get('convocatoria'),
+            'estado': data.get('estado'),
+            'modalidad': data.get('modalidad'),
+            'nivelRiesgoEtico': data.get('nivelRiesgoEtico'),
+            'lineaInvestigacion': data.get('lineaInvestigacion'),
+            'etapa': data.get('etapa'),
+            'unidadAcademica': data.get('unidadAcademica'),
+        }
+  
+        proyecto_data['entidadPostulo'] = entidadPostulo
+        proyecto_data['financiacion'] = financiacion
+        proyecto_data['transacciones'] = transacciones
+        proyecto_data['ubicacionProyecto']=ubicacionProyecto
+        proyecto_data['entregableAdministrativo']=entregableAdministrativo
+        
+        
+        
+        
+        coinvestigadores_ids = data.get('coinvestigadores')
+        print("IDs de coinvestigadores:", coinvestigadores_ids)
+        coinvestigadores_id = Investigador.objects.filter(numerodocumento__in=coinvestigadores_ids)
+        print("Coinvestigadores recuperados:", coinvestigadores_id)
+        #print("coinvestigador",coinvestigadores_ids)
+        #print("cPROYECTOOOO",proyecto_data)
+
+        #proyecto_data['coinvestigadores']= coinvestigadores_id
+        
+        proyecto = Proyecto.objects.create(**proyecto_data)
+        
+        
+        proyecto.coinvestigadores.set(coinvestigadores_id)
+
+        if soporte:  # Verifica si se envió un archivo
+                proyecto.Soporte = soporte  # Asigna el archivo al campo 'Soporte'
+                proyecto.save()  # Guarda el producto con el archivo
+
+        return Response(proyecto.data, status=status.HTTP_201_CREATED)
+        #print(serializer.errors)
+        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CrearNuevoProducto(APIView):
@@ -354,3 +447,38 @@ class CrearNuevoProducto(APIView):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class MostrarInvestigadores(APIView):
+    def get(self, request, *args, **kwargs):
+        investigadores = Investigador.objects.all()
+
+        data = []
+        for investigador in investigadores:
+            proyectos = investigador.proyecto_set.all()
+            productos = investigador.producto_set.all()
+            
+            proyectos_data = [{
+                'codigo': proyecto.codigo,
+                'fecha': proyecto.fecha,
+                'titulo': proyecto.titulo,
+                # otros campos del proyecto si los hay
+            } for proyecto in proyectos]
+
+            productos_data = [{
+                'id': producto.id,
+                'tituloProducto': producto.tituloProducto,
+                # otros campos del producto si los hay
+            } for producto in productos]
+            
+            investigador_data = {
+                'nombre': investigador.nombre,
+                'apellidos': investigador.apellidos,
+                'numerodocumento': investigador.numerodocumento,
+                'Grupoinvestigacion':investigador.grupoinvestigacion.nombre,
+                'proyectos': proyectos_data,
+                'productos': productos_data
+                # otros campos del investigador si los hay
+            }
+            data.append(investigador_data)
+
+        return JsonResponse(data, safe=False)

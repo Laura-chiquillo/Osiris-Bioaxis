@@ -1,15 +1,13 @@
 from rest_framework import serializers
 
 from .models import (Apropiacion, Articulos, AvanceProyecto, Capitulos,
-                     Coinvestigador, Consultoria, Contenido, Contrato,
-                     EntidadPostulo, EntregableAdministrativo, EstadoProyecto,
-                     Estudiantes, Eventos, Financiacion, Grupoinvestigacion,
-                     GrupoInvestigacionPro, Imagen, Industrial, Investigador,
-                     Libros, Licencia, LineaInvestigacion, ListaProducto,
-                     Maestria, ModalidadProyecto, Origen, Posgrado,
-                     PregFinalizadoyCurso, Pregrado, Producto, Proyecto,
-                     Reconocimientos, Software, Transacciones, Ubicacion,
-                     UbicacionProyecto, UnidadAcademica)
+                     Consultoria, Contenido, Contrato, EntidadPostulo,
+                     EntregableAdministrativo, Estudiantes, Eventos,
+                     Financiacion, Grupoinvestigacion, Imagen, Industrial,
+                     Investigador, Libros, Licencia, ListaProducto, Maestria,
+                     Posgrado, PregFinalizadoyCurso, Pregrado, Producto,
+                     Proyecto, Reconocimientos, Software, Transacciones,
+                     Ubicacion, UbicacionProyecto)
 
 #------------------------ investigador ------------------------
 
@@ -133,11 +131,6 @@ class productoSerializer(serializers.ModelSerializer):
 
 #------------------------ PROYECTOS ------------------------
 
-class unidadAcademicaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UnidadAcademica
-        fields = '__all__'
-
 class entidadPostuloSerializer(serializers.ModelSerializer):
     class Meta:
         model = EntidadPostulo
@@ -148,34 +141,15 @@ class financiacionSerializer(serializers.ModelSerializer):
         model = Financiacion
         fields = '__all__'
 
-class grupoInvestigacionCoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GrupoInvestigacionPro
-        fields = '__all__'
-
 class transaccionesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transacciones
         fields = '__all__'
 
-class origenSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Origen
-        fields = '__all__'
 
 class ubicacionProyectoSerializer(serializers.ModelSerializer):
     class Meta:
         model = UbicacionProyecto
-        fields = '__all__'
-
-class estadoProyectoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EstadoProyecto
-        fields = '__all__'
-
-class modalidadProyectoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ModalidadProyecto
         fields = '__all__'
 
 class avanceProyectoSerializer(serializers.ModelSerializer):
@@ -183,19 +157,9 @@ class avanceProyectoSerializer(serializers.ModelSerializer):
         model = AvanceProyecto
         fields = '__all__'
 
-class lineaInvestigacionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LineaInvestigacion
-        fields = '__all__'
-
 class entregableAdministrativoSerializer(serializers.ModelSerializer):
     class Meta:
         model = EntregableAdministrativo
-        fields = '__all__'
-
-class coinvestigadorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Coinvestigador
         fields = '__all__'
 
 class proyectoSerializer(serializers.ModelSerializer):
