@@ -17,11 +17,41 @@
       </div>
       <!-- PAGINACIÓN-->
       <mat-tab-group dynamicHeight class="mat-tab" >
-          <mat-tab label="Información del grupo" >
+        <mat-tab label="Información del grupo" >
+          
+          <div class="container">
             <div class="example-large-box mat-elevation-z4">
-              aportar al mejoramiento de la salud y calidad de vida desde la investigación en ingeniería de los sistemas de información, el desarrollo sostenible y el uso de medios técnico-tecnológicos.
+              <div class="content">
+                <img mat-card-image src="https://images.squarespace-cdn.com/content/v1/5f43e0c90ae7c17f8f8febbf/1624372945616-WCOAF6NAUO22J5BCPI2X/Enmascarar+grupo+3%402x.jpg" alt="Photo of a Shiba Inu">
+                <p class="info">
+                  Correo electrónico: osiris&#64;unbosque.edu.co
+                  <br>
+                  Facultad de Ingeniería, Edificio Fundadores, piso 3
+                  <br>
+                  Universidad El Bosque, Bogotá, D. C. - Colombia
+                </p>
+              </div>
             </div>
-          </mat-tab>
+          </div>
+          
+          <div class="container">
+            <div class="icons-container">
+              <p>
+                <mat-icon>settings</mat-icon>
+                Misión del grupo: aportar al mejoramiento de la salud y calidad de vida desde la investigación en ingeniería de los sistemas de información, el desarrollo sostenible y el uso de medios técnico-tecnológicos.
+              </p>
+          
+              <p>
+                <mat-icon>fingerprint</mat-icon>
+              </p>
+          
+              <p>
+                <mat-icon>menu_book</mat-icon>
+              </p>
+            </div>
+          </div>
+          
+        </mat-tab>
           <mat-tab label="Investigadores">
             <mat-accordion>
               <mat-expansion-panel *ngFor="let user of users" hideToggle>

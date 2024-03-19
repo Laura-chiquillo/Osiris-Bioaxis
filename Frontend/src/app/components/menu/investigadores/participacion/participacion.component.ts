@@ -3,6 +3,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { ProyectoyproductoService } from '../../services/proyectoyproducto';
 import { SearchService } from '../../services/search.service';
 
 @Component({
@@ -13,12 +14,13 @@ import { SearchService } from '../../services/search.service';
   imports: [MatCardModule, MatTableModule, MatPaginatorModule, MatIconModule],
 })
 export class ParticipacionComponent {
+  
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-
+ 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private searchService: SearchService) {}
+  constructor(private searchService: SearchService, private ProyectoyproductoService:ProyectoyproductoService) {}
 
   ngOnInit() {
     

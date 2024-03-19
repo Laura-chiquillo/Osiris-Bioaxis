@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Investigador } from '../modelo/investigador';
 import { AutenticacionService } from '../services/autenticacion';
 import { InvestigadorService } from '../services/registroInvestigador';
- 
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -101,6 +101,9 @@ export class NavbarComponent {
     }
   }
   
+  // mostrar imagen del grupo
+  imagenURL: string = 'https://images.squarespace-cdn.com/content/v1/5f43e0c90ae7c17f8f8febbf/1624372945616-WCOAF6NAUO22J5BCPI2X/Enmascarar+grupo+3%402x.jpg';
+  urlDeLaImagen: string = this.imagenURL;
   // mostrar informacion de todos los investigadores
   users: any[] = [];
   ngOnInit(): void {

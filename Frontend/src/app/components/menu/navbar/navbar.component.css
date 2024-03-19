@@ -13,10 +13,36 @@
   gap: 20px;
 }
 
-.example-header-image {
-  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-  background-size: cover;
+img[mat-card-image] {
+  width: 320px !important;
+  height: 190px !important;
 }
+
+
+
+.example-large-box {
+  display: flex;
+}
+
+.example-large-box .content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 200px; /* Ajusta el valor según sea necesario */
+}
+
+.example-large-box .info {
+  font-size: 13.5px;
+  margin-top: 10px; /* Ajusta el valor según sea necesario */
+}
+
+.icons-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-left: 20px; /* Ajusta el valor según sea necesario */
+}
+
 .body{
   display: flex;
   justify-content: center;

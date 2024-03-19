@@ -288,6 +288,13 @@ class Producto(models.Model):
     fecha = models.DateTimeField(default=datetime.datetime.now)
     origen = models.CharField(max_length=5000)
     Soporte = models.FileField(upload_to ='uploadsProducto/',max_length=1000, blank=True)
+    etapa = [
+        ("Aprobado","Aprobado"),
+        ("Rechazado","Rechazado"),
+        ("Corregir","Corregir"),
+        ("Espera","Espera")
+    ]
+    etapa=models.CharField(max_length=50, choices=etapa, default='Espera')
     class Meta:
         db_table = 'proyecto_Producto'
 
