@@ -6,6 +6,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
+import { AutenticacionService } from '../services/autenticacion';
 import { SearchService } from '../services/search.service';
 
 @Component({
@@ -17,9 +18,13 @@ import { SearchService } from '../services/search.service';
 })
 
 export class InvesigadoresComponent {
-  constructor(private searchService: SearchService) {}
+  constructor(private searchService: SearchService, private AutenticacionService:AutenticacionService ) {}
 
   onSearchInputChange(event: any) {
     this.searchService.setSearchQuery(event.target.value);
+  }
+
+  logout() {
+    this.AutenticacionService.logout(); // Llama al método logout() del servicio de autenticación
   }
 }

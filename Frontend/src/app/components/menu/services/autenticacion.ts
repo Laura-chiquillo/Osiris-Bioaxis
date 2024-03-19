@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,7 +10,7 @@ export class AutenticacionService {
 
     apiUrl = 'http://localhost:8000/custom-token-auth/';
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient,private router: Router) { }
 
     login(correo: string, contrasena: string): Observable<any> {
         const body = {
@@ -31,4 +32,16 @@ export class AutenticacionService {
         return userData ? JSON.parse(userData) : null;
       }
      
+      logout(): void {
+        // Eliminar los datos del usuario del LocalStorage
+        localStorage.removeItem('userData');
+        // Redireccionar al usuario a la página de inicio de sesión u otra página deseada.
+        this.router.navigate(['/menu']);
+      }
+
+      isLoggedIn(): boolean {
+        // Verifica si hay algún dato de usuario en el almacenamiento local
+        // o algún otro criterio para determinar si el usuario está autenticado
+        return localStorage.getItem('userData') !== null;
+      }
 }
