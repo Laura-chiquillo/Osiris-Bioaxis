@@ -351,7 +351,7 @@ class Proyecto(models.Model):
     investigadores = models.CharField(max_length=50)
     unidadAcademica =  models.CharField(max_length=50)
     producto = models.ForeignKey(Producto,null=True,blank=True,on_delete=models.CASCADE)
-    coinvestigadores = models.ManyToManyField(Investigador,blank=True)
+    coinvestigador = models.ManyToManyField(Investigador)
     area = models.CharField(max_length=50)
     porcentajeEjecucionCorte = models.IntegerField()
     entidadPostulo = models.ForeignKey(EntidadPostulo,null=False,blank=False,on_delete=models.CASCADE)

@@ -163,6 +163,8 @@ class entregableAdministrativoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class proyectoSerializer(serializers.ModelSerializer):
+    coinvestigadores= investigadorSerializer(read_only=True, many=True)
     class Meta:
         model = Proyecto
         fields = '__all__'
+    

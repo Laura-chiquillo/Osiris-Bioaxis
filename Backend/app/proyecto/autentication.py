@@ -90,6 +90,7 @@ class ActualizarDatosUsuario(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+
 class CrearProyecto(APIView):
     parser_class = (FileUploadParser,)
     def post(self, request, *args, **kwargs):
@@ -186,31 +187,23 @@ class CrearProyecto(APIView):
         proyecto_data['transacciones'] = transacciones
         proyecto_data['ubicacionProyecto']=ubicacionProyecto
         proyecto_data['entregableAdministrativo']=entregableAdministrativo
+    
         
-        
-        
-        
+        proyecto = Proyecto.objects.create(**proyecto_data)  # Crea el objeto Proyecto con los datos relacionados
+
         coinvestigadores_ids = data.get('coinvestigadores')
-        print("IDs de coinvestigadores:", coinvestigadores_ids)
-        coinvestigadores_id = Investigador.objects.filter(numerodocumento__in=coinvestigadores_ids)
-        print("Coinvestigadores recuperados:", coinvestigadores_id)
-        #print("coinvestigador",coinvestigadores_ids)
-        #print("cPROYECTOOOO",proyecto_data)
+        coinvestigadores = Investigador.objects.filter(numerodocumento__in=coinvestigadores_ids)
 
-        #proyecto_data['coinvestigadores']= coinvestigadores_id
-        
-        proyecto = Proyecto.objects.create(**proyecto_data)
-        
-        
-        proyecto.coinvestigadores.set(coinvestigadores_id)
+        proyecto.coinvestigadores.set(coinvestigadores)  # Asigna los coinvestigadores al proyecto usando set()
 
-        if soporte:  # Verifica si se envió un archivo
-                proyecto.Soporte = soporte  # Asigna el archivo al campo 'Soporte'
-                proyecto.save()  # Guarda el producto con el archivo
+        if soporte:
+            proyecto.Soporte = soporte
+            proyecto.save()
 
-        return Response(proyecto.data, status=status.HTTP_201_CREATED)
-        #print(serializer.errors)
-        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = proyectoSerializer(proyecto)  # Serializa el proyecto creado
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 
 class CrearNuevoProducto(APIView):
