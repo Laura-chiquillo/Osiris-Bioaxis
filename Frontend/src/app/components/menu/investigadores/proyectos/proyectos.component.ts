@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator'; // Asegúrate de importar MatPaginator desde '@angular/material/paginator'
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -1087,6 +1087,7 @@ thumbLabel6 = false;
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     
+    console.log("DATOS TRAIDOS:" ,this.ProyectoyproductoService.getProductosDelUsuario())
     forkJoin([
       this.ProyectoyproductoService.getProductosDelUsuario(),
       this.ProyectoyproductoService.getProyectosDelUsuario()
@@ -1096,9 +1097,9 @@ thumbLabel6 = false;
         ...producto,
         tipo: 'Producto',
         id:producto.id,
-        tituloProducto: producto.tituloProducto || '', // Asegurar que todas las propiedades definidas en la interfaz Producto estén presentes
+        tituloProducto: producto.titulo_producto || '', // Asegurar que todas las propiedades definidas en la interfaz Producto estén presentes
         fecha: producto.fecha || '',
-        estadoProducto: producto.estadoProducto || '',
+        estadoProducto: producto.estado_producto || '',
         etapa:producto.etapa|| '',
         tipologiaProducto: producto.tipologiaProducto || '',
       }));
@@ -1127,22 +1128,46 @@ thumbLabel6 = false;
   
   accionDos(element: any) {
     console.log('Elemento seleccionado:', element);
-    const dialogRef = this.dialog.open(DialogContentExampleDialog, {
-      data: element // Pasar el elemento seleccionado al cuadro de diálogo
-    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    let dialogRef: MatDialogRef<any> | undefined;
+
+    if (element.tipo === 'Producto') {
+      dialogRef = this.dialog.open(DialogContentExampleDialog, {
+        data: element
+      });
+    } else if (element.tipo === 'Proyecto') {
+      dialogRef = this.dialog.open(DialogContentExampleDialog2, {
+        data: element
+      });
+    }
+
+    if (dialogRef) {
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
+      });
+    }
   }
+
   
 }
+
+
 @Component({
   selector: 'dialog-content-example-dialog',
   templateUrl: 'dialog-content-example-dialog.html',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule],
+  imports: [MatDialogModule, MatButtonModule], // No es necesario importar aquí
 })
 export class DialogContentExampleDialog {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
+}
+
+@Component({
+  selector: 'dialog-content-example-dialog2', // Cambiado el selector
+  templateUrl: 'dialog-content-example-dialog2.html',
+  standalone: true,
+  imports: [MatDialogModule, MatButtonModule], // No es necesario importar aquí
+})
+export class DialogContentExampleDialog2 {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {} // Añadido la inyección de datos
 }

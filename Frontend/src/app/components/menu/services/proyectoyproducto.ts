@@ -33,12 +33,20 @@ export class ProyectoyproductoService {
   );
   }
 
+  private apiUrl5 = 'http://localhost:8000/mostrarProductos';
+
   getProductosDelUsuario(): Observable<any[]> {
-    const numeroDocumento = this.AutenticacionService.obtenerDatosUsuario().numerodocumento; // Suponiendo que 'numeroDocumento' es la clave que contiene el número de documento en los datos del usuario    
-    return this.http.get<any[]>(this.apiUrl4).pipe(
-        map((productos: any[]) => productos.filter(producto => producto.investigador === numeroDocumento))
+    const numeroDocumento = this.AutenticacionService.obtenerDatosUsuario().numerodocumento;
+    console.log('Número de documento del usuario:', numeroDocumento);
+
+    return this.http.get<any[]>(this.apiUrl5).pipe(
+        map((productos: any[]) => {
+            console.log('Productos obtenidos del servidor:', productos.filter(producto => producto.investigador.numerodocumento === numeroDocumento));
+            return productos.filter(producto => producto.investigador.numerodocumento === numeroDocumento);
+        })
     );
 }
+
 
   //Crear proyectos y productos
     private apiUrl = 'http://localhost:8000/CrearProyecto';

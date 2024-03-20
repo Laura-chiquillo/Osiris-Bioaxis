@@ -276,7 +276,7 @@ class Producto(models.Model):
     estudiantes = models.ForeignKey(Estudiantes,null=False,blank=False,on_delete=models.CASCADE)
     estadoProdIniSemestre = models.CharField(max_length=50)
     porcentanjeAvanFinSemestre= models.IntegerField()
-    observaciones = models.CharField(max_length=500)
+    observaciones = models.CharField(max_length=1500)
     estadoProducto  = [
         ("resaccion", "resaccion"),
         ("sometido", "sometido"),

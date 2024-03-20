@@ -475,3 +475,151 @@ class MostrarInvestigadores(APIView):
             data.append(investigador_data)
 
         return JsonResponse(data, safe=False)
+    
+
+class MostrarProductos(APIView):
+    def get(self, request, *args, **kwargs):
+        productos = Producto.objects.all()
+        data = []
+
+        for producto in productos:
+            # Información relacionada
+            lista_producto = producto.listaProducto
+            investigador = producto.investigador
+            estudiantes = producto.estudiantes
+
+            # Obtener información de la lista de productos
+            articulo = lista_producto.articulo
+            capitulo = lista_producto.capitulo
+            software = lista_producto.software
+            libro = lista_producto.libro
+            prototipo_industrial = lista_producto.prototipoIndustrial
+            evento = lista_producto.evento
+            reconocimiento = lista_producto.reconocimiento
+            consultoria = lista_producto.consultoria
+            contenido = lista_producto.contenido
+            preg_finalizado_curso = lista_producto.pregFinalizadoyCurso
+            apropiacion = lista_producto.apropiacion
+            maestria = lista_producto.maestria
+
+            # Construir datos del producto y la información relacionada
+            producto_data = {
+                'id': producto.id,
+                'titulo_producto': producto.tituloProducto,
+                'publicacion': producto.publicacion,
+                'estado_producto': producto.estadoProducto,
+                'fecha': producto.fecha,
+                #'soporte': producto.Soporte,
+                'observaciones': producto.observaciones,
+                'porcentanjeAvanFinSemestre': producto.porcentanjeAvanFinSemestre,
+                'porcentaje_com_semestral': producto.porcentajeComSemestral,
+                'porcentaje_real_mensual': producto.porcentajeRealMensual,
+                'origen': producto.origen,
+                'etapa': producto.etapa,
+                'investigador': {
+                    'nombre': investigador.nombre,
+                    'apellidos': investigador.apellidos,
+                    'numerodocumento': investigador.numerodocumento,
+                    'Grupoinvestigacion': investigador.grupoinvestigacion.nombre,
+                },
+                'lista_producto': {
+                    'proyectoCursoProducto': lista_producto.proyectoCursoProducto,
+                    'proyectoFormuladoProducto': lista_producto.proyectoFormuladoProducto,
+                    'proyectoRSUProducto': lista_producto.proyectoRSUProducto,
+                    'articulo': {
+                        'id': articulo.id,
+                        'fuente': articulo.fuente,
+                    } if articulo else None,
+                    'capitulo': {
+                        'id': capitulo.id,
+                        'nombre_publicacion': capitulo.nombrepublicacion,
+                        'isbn': capitulo.isbn,
+                        'fecha': capitulo.fecha,
+                        'editorial': capitulo.editorial,
+                    } if capitulo else None,
+                    'software': {
+                        'id': software.id,
+                        'tiporegistro': software.tiporegistro,
+                        'numero': software.numero,
+                        'fecha': software.fecha,
+                        'pais': software.pais,
+                    } if software else None,
+                    'libro': {
+                        'id': libro.id,
+                        'isbn': libro.isbn,
+                        'fecha': libro.fecha,
+                        'editorial': libro.editorial,
+                        'luegarpublicacion': libro.luegarpublicacion,
+                    } if libro else None,
+                    'prototipo_industrial': {
+                        'id': prototipo_industrial.id,
+                        'fecha': prototipo_industrial.fecha,
+                        'pais': prototipo_industrial.pais,
+                        'insitutofinanciador': prototipo_industrial.insitutofinanciador,
+                    } if prototipo_industrial else None,
+                    'evento': {
+                        'id': evento.id,
+                        'fechainicio': evento.fechainicio,
+                        'fechafin': evento.fechafin,
+                        'numparticinerno': evento.numparticinerno,
+                        'numparticexterno': evento.numparticexterno,
+                        'tipoevento': evento.tipoevento,
+                    } if evento else None,
+                    'reconocimiento': {
+                        'id': reconocimiento.id,
+                        'fecha': reconocimiento.fecha,
+                        'nombentidadotorgada': reconocimiento.nombentidadotorgada,
+                    } if reconocimiento else None,
+                    'consultoria': {
+                        'id': consultoria.id,
+                        'ano': consultoria.año,
+                        'contrato': {
+                            'id': consultoria.contrato.id,
+                            'nombre': consultoria.contrato.nombre,
+                            'numero': consultoria.contrato.numero,
+                        },
+                        'nombre_entidad': consultoria.nombreEntidad,
+                    } if consultoria else None,
+                    'contenido': {
+                        'id': contenido.id,
+                        'nombre_entidad': contenido.nombreEntidad,
+                        'pagina_web': contenido.paginaWeb,
+                    } if contenido else None,
+                    'preg_finalizado_curso': {
+                        'id': preg_finalizado_curso.id,
+                        'fecha_inicio': preg_finalizado_curso.fechaInicio,
+                        'reconocimientos': preg_finalizado_curso.reconocimientos,
+                        'numero_paginas': preg_finalizado_curso.numeroPaginas,
+                    } if preg_finalizado_curso else None,
+                    'apropiacion': {
+                        'id': apropiacion.id,
+                        'fechainicio': apropiacion.fechainicio,
+                        'fecha_fin': apropiacion.fechaFin,
+                        'licencia': {
+                            'id': apropiacion.licencia.id,
+                            'nombre': apropiacion.licencia.nombre,
+                        },
+                        'formato': apropiacion.formato,
+                        'medio': apropiacion.medio,
+                        'nombre_entidad': apropiacion.nombreEntidad,
+                    } if apropiacion else None,
+                    'maestria': {
+                        'id': maestria.id,
+                        'fecha_inicio': maestria.fechaInicio,
+                        'institucion': maestria.institucion,
+                    } if maestria else None,
+                },
+                'estudiantes': {
+                    'nombres': estudiantes.nombres,
+                    'apellidos': estudiantes.apellidos,
+                    'semestre': estudiantes.semestre,
+                    'fecha_grado': estudiantes.fechaGrado,
+                    'codigo_grupo': estudiantes.codigoGrupo,
+                    'tipo_documento': estudiantes.tipoDocumento,
+                    'numero_documento': estudiantes.numeroDocumento,
+                }
+            }
+
+            data.append(producto_data)
+
+        return Response(data)

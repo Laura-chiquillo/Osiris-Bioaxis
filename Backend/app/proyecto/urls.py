@@ -2,7 +2,7 @@ from django.urls import path
 
 from .autentication import (ActualizarDatosUsuario, CrearNuevoProducto,
                             CrearProyecto, CustomAuthToken,
-                            MostrarInvestigadores)
+                            MostrarInvestigadores, MostrarProductos)
 from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
                        articuloRetrieveUpdateDestroy, articulosList,
                        avanceProyectoList, avanceProyectoRetrieveUpdateDestroy,
@@ -43,7 +43,8 @@ urlpatterns = [
     path("CrearProyecto", CrearProyecto.as_view(), name="Crear-Proyecto"),
     path("CrearProducto", CrearNuevoProducto.as_view(), name="Crear-NuevoProducto"),
     path('ActualizarInvestigador',ActualizarDatosUsuario.as_view(), name='actualizar-investigador'),
-    path("mostrarInvestigador", MostrarInvestigadores.as_view(), name="mostrar-NuevoProducto"),
+    path("mostrarInvestigador", MostrarInvestigadores.as_view(), name="mostrar-NuevoinvestigadoresP"),
+    path("mostrarProductos", MostrarProductos.as_view(), name="mostrar-NuevoProductos"),
 
 
     path('investigador', investigadorList.as_view(), name='create-investigador-list'),
