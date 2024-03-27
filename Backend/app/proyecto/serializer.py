@@ -1,13 +1,14 @@
 from rest_framework import serializers
 
 from .models import (Apropiacion, Articulos, AvanceProyecto, Capitulos,
-                     Consultoria, Contenido, Contrato, EntidadPostulo,
-                     EntregableAdministrativo, Estudiantes, Eventos,
+                     CategoriaMinciencias, Consultoria, Contenido, Contrato,
+                     CuartilEsperado, EntidadPostulo, EntregableAdministrativo,
+                     EstadoProducto, EstadoProyecto, Estudiantes, Eventos,
                      Financiacion, Grupoinvestigacion, Imagen, Industrial,
                      Investigador, Libros, Licencia, ListaProducto, Maestria,
-                     Posgrado, PregFinalizadoyCurso, Pregrado, Producto,
-                     Proyecto, Reconocimientos, Software, Transacciones,
-                     Ubicacion, UbicacionProyecto)
+                     ParticipantesExternos, Posgrado, PregFinalizadoyCurso,
+                     Pregrado, Producto, Proyecto, Reconocimientos, Software,
+                     TipoEventos, Transacciones, Ubicacion, UbicacionProyecto)
 
 #------------------------ investigador ------------------------
 
@@ -122,6 +123,31 @@ class estudiantesSerializer(serializers.ModelSerializer):
         model = Estudiantes
         fields = '__all__'
 
+class cuartilEsperadoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CuartilEsperado
+        fields = '__all__'
+
+class categoriaMincienciasSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoriaMinciencias
+        fields = '__all__'
+
+class tipoEventoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoEventos
+        fields = '__all__'
+
+class participantesExternosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ParticipantesExternos
+        fields = '__all__'
+
+class estadoProductoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EstadoProducto
+        fields = '__all__'
+    
 class productoSerializer(serializers.ModelSerializer):
     Soporte = serializers.FileField(required=False)
     class Meta:
@@ -160,6 +186,11 @@ class avanceProyectoSerializer(serializers.ModelSerializer):
 class entregableAdministrativoSerializer(serializers.ModelSerializer):
     class Meta:
         model = EntregableAdministrativo
+        fields = '__all__'
+
+class estadoProyecotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EstadoProyecto
         fields = '__all__'
 
 class proyectoSerializer(serializers.ModelSerializer):

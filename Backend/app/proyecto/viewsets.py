@@ -8,27 +8,31 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 
 from .models import (Apropiacion, Articulos, AvanceProyecto, Capitulos,
-                     Consultoria, Contenido, Contrato, EntidadPostulo,
-                     EntregableAdministrativo, Estudiantes, Eventos,
+                     CategoriaMinciencias, Consultoria, Contenido, Contrato,
+                     CuartilEsperado, EntidadPostulo, EntregableAdministrativo,
+                     EstadoProducto, EstadoProyecto, Estudiantes, Eventos,
                      Financiacion, Grupoinvestigacion, Imagen, Industrial,
                      Investigador, Libros, Licencia, ListaProducto, Maestria,
-                     Posgrado, PregFinalizadoyCurso, Pregrado, Producto,
-                     Proyecto, Reconocimientos, Software, Transacciones,
-                     Ubicacion, UbicacionProyecto)
+                     ParticipantesExternos, Posgrado, PregFinalizadoyCurso,
+                     Pregrado, Producto, Proyecto, Reconocimientos, Software,
+                     TipoEventos, Transacciones, Ubicacion, UbicacionProyecto)
 from .serializer import (apropiacionSerializer, articulosSerializer,
                          avanceProyectoSerializer, capitulosSerializer,
-                         consultoriaSerializer, contenidoSerializer,
-                         contratoSerializer, entidadPostuloSerializer,
+                         categoriaMincienciasSerializer, consultoriaSerializer,
+                         contenidoSerializer, contratoSerializer,
+                         cuartilEsperadoSerializer, entidadPostuloSerializer,
                          entregableAdministrativoSerializer,
+                         estadoProductoSerializer, estadoProyecotSerializer,
                          estudiantesSerializer, eventosSerializer,
                          financiacionSerializer, grupoinvestigacionSerializer,
                          imagenSerializer, industrialSerializer,
                          investigadorSerializer, librosSerializer,
                          licenciaSerializer, listaProductoSerializer,
-                         maestriaSerializer, posgradoSerializer,
-                         pregFinalizadoyCursoSerializer, pregradoSerializer,
-                         productoSerializer, proyectoSerializer,
-                         reconocimientosSerializer, softwareSerializer,
+                         maestriaSerializer, participantesExternosSerializer,
+                         posgradoSerializer, pregFinalizadoyCursoSerializer,
+                         pregradoSerializer, productoSerializer,
+                         proyectoSerializer, reconocimientosSerializer,
+                         softwareSerializer, tipoEventoSerializer,
                          transaccionesSerializer, ubicacionProyectoSerializer,
                          ubicacionSerializer)
 
@@ -155,6 +159,26 @@ class productoList(generics.ListCreateAPIView):
     queryset = Producto.objects.all()
     serializer_class = productoSerializer
 
+class participantesExternosList(generics.ListCreateAPIView):
+    queryset = ParticipantesExternos.objects.all()
+    serializer_class = participantesExternosSerializer
+
+class tipoEventoList(generics.ListCreateAPIView):
+    queryset = TipoEventos.objects.all()
+    serializer_class = tipoEventoSerializer
+
+class categoriaMincienciasList(generics.ListCreateAPIView):
+    queryset = CategoriaMinciencias.objects.all()
+    serializer_class = categoriaMincienciasSerializer
+
+class cuartilEsperadoList(generics.ListCreateAPIView):
+    queryset = CuartilEsperado.objects.all()
+    serializer_class = cuartilEsperadoSerializer
+
+class estadoProductoList(generics.ListCreateAPIView):
+    queryset = EstadoProducto.objects.all()
+    serializer_class = estadoProductoSerializer
+
 class eventoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Eventos.objects.all()
     serializer_class = eventosSerializer
@@ -250,6 +274,10 @@ class avanceProyectoList(generics.ListCreateAPIView):
 class entregableAdministrativoList(generics.ListCreateAPIView):
     queryset = EntregableAdministrativo.objects.all()
     serializer_class = entregableAdministrativoSerializer
+
+class estadoProyectoList(generics.ListCreateAPIView):
+    queryset = EstadoProyecto.objects.all()
+    serializer_class = estadoProyecotSerializer
 
 class proyectoList(generics.ListCreateAPIView):
     queryset = Proyecto.objects.all()

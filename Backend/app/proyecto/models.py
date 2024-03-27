@@ -98,28 +98,29 @@ class Investigador(models.Model):
     def generate_token(self):
         token, created = Token.objects.get_or_create(user=self)  # Genera o recupera el token para este investigador
         return token.key 
+    def deferred_setup():
+        from rest_framework.authtoken.models import Token
+    deferred_setup()
     class Meta:
         db_table = 'proyecto_Investigador'
 
 #---------------------------------------------------------------------------------------
 # ----------------------------------------------------- Producto -----------------------
 #---------------------------------------------------------------------------------------
-        
+
+class TipoEventos(models.Model):
+    id = models.AutoField(primary_key=True)
+    tipo = models.CharField( max_length=150)
+    class Meta:
+        db_table = 'proyecto_TipoEventos'
+    
 class Eventos(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     fechainicio = models.DateTimeField(default=datetime.datetime.now)
     fechafin = models.DateTimeField(default=datetime.datetime.now)
     numparticinerno = models.IntegerField(default=0)
     numparticexterno = models.IntegerField(default=0)
-    tipoevento = [
-         ("Congreso", "Congreso"),
-        ("Seminario", "Seminario"),
-        ("Simposio", "Simposio"),
-        ("Conferencia", "Conferencia"),
-        ("Encuentro academico", "Encuentro academico"),
-        ("Feria", "Feria"),
-    ]
-    tipoevento = models.CharField(max_length=50, choices=tipoevento, default='Congreso')
+    tipoevento = models.ForeignKey(TipoEventos,null=False,blank=False,on_delete=models.CASCADE)
     class Meta:
         db_table = 'proyecto_Eventos'
 
@@ -267,34 +268,58 @@ class Estudiantes(models.Model):
     class Meta:
         db_table = 'proyecto_Estudiantes'
 
+class ParticipantesExternos(models.Model):
+    numerodocumento = models.CharField(max_length=50,primary_key=True)
+    nombre = models.CharField(max_length=50)
+    apellidos = models.CharField(max_length=50)
+    institucion = models.CharField(max_length=150)
+    class Meta:
+        db_table = 'proyecto_ParticipantesExternos'
+
+class EstadoProducto(models.Model):
+    id = models.AutoField(primary_key=True)
+    estado = models.CharField(max_length=150)
+    class Meta:
+        db_table = 'proyecto_EstadoProducto'
+
+class CategoriaMinciencias(models.Model):
+    id = models.AutoField(primary_key=True)
+    categoria=models.CharField(max_length=150)
+    class Meta:
+        db_table = 'proyecto_CategoriaMinciencias'
+
+class CuartilEsperado(models.Model):
+    id = models.AutoField(primary_key=True)
+    cuartil=models.CharField(max_length=150)
+    class Meta:
+        db_table = 'proyecto_CuartilEsperado'
+
 class Producto(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     tituloProducto = models.CharField(max_length=50)
-    investigador = models.ForeignKey(Investigador,null=False,blank=False,on_delete=models.CASCADE)
+    investigador = models.CharField(max_length=50)
+    coinvestigador = models.ManyToManyField(Investigador)
     listaProducto = models.ForeignKey(ListaProducto,null=False,blank=False,on_delete=models.CASCADE)
     publicacion = models.CharField(max_length=50)
-    estudiantes = models.ForeignKey(Estudiantes,null=False,blank=False,on_delete=models.CASCADE)
-    estadoProdIniSemestre = models.CharField(max_length=50)
+    estudiantes = models.ManyToManyField(Estudiantes)
     porcentanjeAvanFinSemestre= models.IntegerField()
     observaciones = models.CharField(max_length=1500)
-    estadoProducto  = [
-        ("resaccion", "resaccion"),
-        ("sometido", "sometido"),
-        ("publicado", "publicado"),
-    ]
-    estadoProducto = models.CharField(max_length=50, choices=estadoProducto, default='En proceso')
+    estadoProducto = models.ForeignKey(EstadoProducto,null=False,blank=False,on_delete=models.CASCADE)
     porcentajeComSemestral = models.IntegerField()
     porcentajeRealMensual = models.IntegerField()
     fecha = models.DateTimeField(default=datetime.datetime.now)
     origen = models.CharField(max_length=5000)
     Soporte = models.FileField(upload_to ='uploadsProducto/',max_length=1000, blank=True)
-    etapa = [
+    estadoProceso = [
         ("Aprobado","Aprobado"),
         ("Rechazado","Rechazado"),
         ("Corregir","Corregir"),
         ("Espera","Espera")
     ]
-    etapa=models.CharField(max_length=50, choices=etapa, default='Espera')
+    estadoProceso=models.CharField(max_length=50, choices=estadoProceso, default='Espera')
+    cuartilEsperado=models.ForeignKey(CuartilEsperado,null=False,blank=False,on_delete=models.CASCADE)
+    categoriaMinciencias=models.ForeignKey(CategoriaMinciencias,null=False,blank=False,on_delete=models.CASCADE)
+    participantesExternos = models.ManyToManyField(ParticipantesExternos)
     class Meta:
         db_table = 'proyecto_Producto'
 
@@ -344,11 +369,17 @@ class EntregableAdministrativo(models.Model):
     class Meta:
         db_table = 'proyecto_Entregableadministrativo'
 
+class EstadoProyecto(models.Model):
+    id = models.AutoField(primary_key=True)
+    estado = models.CharField(max_length=150)
+    class Meta:
+        db_table = 'proyecto_EstadoProyecto'
+
 class Proyecto(models.Model):
     codigo = models.CharField(max_length=50, primary_key=True)
     fecha = models.DateTimeField()
     titulo = models.CharField(max_length=500)
-    investigadores = models.CharField(max_length=50)
+    investigador = models.CharField(max_length=50)
     unidadAcademica =  models.CharField(max_length=50)
     producto = models.ForeignKey(Producto,null=True,blank=True,on_delete=models.CASCADE)
     coinvestigador = models.ManyToManyField(Investigador)
@@ -368,14 +399,7 @@ class Proyecto(models.Model):
     origen = models.CharField(max_length=50, choices=origen, default='nacional')
     convocatoria = models.CharField(max_length=50)
     ubicacionProyecto = models.ForeignKey(UbicacionProyecto,null=False,blank=False,on_delete=models.CASCADE)
-    estado = [
-        ("Propuesta", "Propuesta"),
-        ("Iniciado", "Iniciado"),
-        ("Ejecucion", "Ejecucion"),
-        ("Finalizado", "Finalizado"),
-        ("Detenido", "Detenido"),
-    ]
-    estado = models.CharField(max_length=50, choices=estado, default='Propuesta')
+    estado =models.ForeignKey(EstadoProyecto,null=False,blank=False,on_delete=models.CASCADE)
     modalidad = [
         ("general", "general"),
         ("clinical", "clinical"),
@@ -390,14 +414,16 @@ class Proyecto(models.Model):
     ]
     nivelRiesgoEtico = models.CharField(max_length=50, choices=nivelRiesgoEtico, default='Sin riesgo')
     lineaInvestigacion =models.CharField(max_length=50)
-    etapa = [
+    estadoProceso = [
         ("Aprobado","Aprobado"),
         ("Rechazado","Rechazado"),
         ("Corregir","Corregir"),
         ("Espera","Espera")
     ]
-    etapa=models.CharField(max_length=50, choices=etapa, default='Espera')
+    estadoProceso=models.CharField(max_length=50, choices=estadoProceso, default='Espera')
     entregableAdministrativo = models.ForeignKey(EntregableAdministrativo,null=False,blank=False,on_delete=models.CASCADE)
+    estudiantes = models.ManyToManyField(Estudiantes)
+    participantesExternos = models.ManyToManyField(ParticipantesExternos)
     class Meta:
         db_table = 'proyecto_Proyecto'
 
