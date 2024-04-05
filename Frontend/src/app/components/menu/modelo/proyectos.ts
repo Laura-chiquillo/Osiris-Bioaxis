@@ -161,6 +161,7 @@ export interface EntregableAdministrativo {
 export interface Coinvestigador {
   id?: string;
   coinvestigador?: string;
+  correo?: string;
 }
 
 export interface financiacion{
@@ -212,4 +213,23 @@ export interface Proyecto {
   nivelRiesgoEtico?: string;
   lineaInvestigacion?: string;
   entregableAdministrativo?: EntregableAdministrativo;
+  estudiantes?: Estudiante[];
+  participantesExternos?: ParticipanteExterno[];
+}
+
+export interface Estudiante {
+  numeroDocumento?: string;
+  nombres?: string;
+  apellidos?: string;
+  semestre?: number;
+  fechaGrado?: Date;
+  codigoGrupo?: string;
+  tipoDocumento?: string;
+}
+
+export interface ParticipanteExterno {
+  numerodocumento?: string;
+  nombre?: string;
+  apellidos?: string;
+  institucion?: number;
 }
