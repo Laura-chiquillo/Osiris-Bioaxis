@@ -9,7 +9,7 @@ from rest_framework.response import Response
 
 from .models import (Apropiacion, Articulos, AvanceProyecto, Capitulos,
                      CategoriaMinciencias, Consultoria, Contenido, Contrato,
-                     CuartilEsperado, EntidadPostulo, EntregableAdministrativo,
+                     CuartilEsperado, EntidadPostulo, EntregableAdministrativoProyecto, EntregableAdministrativoProducto,
                      EstadoProducto, EstadoProyecto, Estudiantes, Eventos,
                      Financiacion, Grupoinvestigacion, Imagen, Industrial,
                      Investigador, Libros, Licencia, ListaProducto, Maestria,
@@ -21,7 +21,7 @@ from .serializer import (apropiacionSerializer, articulosSerializer,
                          categoriaMincienciasSerializer, consultoriaSerializer,
                          contenidoSerializer, contratoSerializer,
                          cuartilEsperadoSerializer, entidadPostuloSerializer,
-                         entregableAdministrativoSerializer,
+                         entregableAdministrativoProyectoSerializer,entregableAdministrativoProductoSerializer,
                          estadoProductoSerializer, estadoProyecotSerializer,
                          estudiantesSerializer, eventosSerializer,
                          financiacionSerializer, grupoinvestigacionSerializer,
@@ -247,6 +247,12 @@ class estudiantesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 class productoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Producto.objects.all()
     serializer_class = productoSerializer
+    
+    def put(self, request, *args, **kwargs):
+        obj = Producto.objects.get(pk=request.data.get('id'))
+        obj.estadoProceso = request.data.get('estadoProceso')
+        obj.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 #---------------------------- PROYECTOS ----------------------------
 
@@ -271,9 +277,45 @@ class avanceProyectoList(generics.ListCreateAPIView):
     queryset = AvanceProyecto.objects.all()
     serializer_class = avanceProyectoSerializer
 
-class entregableAdministrativoList(generics.ListCreateAPIView):
-    queryset = EntregableAdministrativo.objects.all()
-    serializer_class = entregableAdministrativoSerializer
+class entregableAdministrativoProyectoList(generics.ListCreateAPIView):
+    queryset = EntregableAdministrativoProyecto.objects.all()
+    serializer_class = entregableAdministrativoProyectoSerializer
+    
+    def post(self, request, *args, **kwargs):
+        admin_data = {
+            'id': EntregableAdministrativoProyecto.objects.count()+1,
+            'nombre': request.data.get('nombre'),
+            'titulo': request.data.get('titulo'),
+            'calidad': request.data.get('calidad'),
+            'entregable': request.data.get('entregable'),
+            'pendiente': request.data.get('pendiente'),
+            'clasificacion': request.data.get('clasificacion'),
+            'proyecto_id': Proyecto.objects.get(pk=request.data.get('proyecto_id_id')),
+        }
+        admin = EntregableAdministrativoProyecto.objects.create(**admin_data)
+        serializer = entregableAdministrativoProyectoSerializer(admin) 
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+class entregableAdministrativoProductoList(generics.ListCreateAPIView):
+    queryset = EntregableAdministrativoProducto.objects.all()
+    serializer_class = entregableAdministrativoProductoSerializer
+    
+    def post(self, request, *args, **kwargs):
+        admin_data = {
+            'id': EntregableAdministrativoProducto.objects.count()+1,
+            'nombre': request.data.get('nombre'),
+            'titulo': request.data.get('titulo'),
+            'calidad': request.data.get('calidad'),
+            'entregable': request.data.get('entregable'),
+            'pendiente': request.data.get('pendiente'),
+            'clasificacion': request.data.get('clasificacion'),
+            'producto_id': Producto.objects.get(pk=request.data.get('producto_id_id')),
+        }
+        admin = EntregableAdministrativoProducto.objects.create(**admin_data)
+        serializer = entregableAdministrativoProductoSerializer(admin) 
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class estadoProyectoList(generics.ListCreateAPIView):
     queryset = EstadoProyecto.objects.all()
@@ -303,10 +345,19 @@ class avanceProyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
     queryset = AvanceProyecto.objects.all()
     serializer_class = avanceProyectoSerializer
 
-class entregableAdministrativoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = EntregableAdministrativo.objects.all()
-    serializer_class = entregableAdministrativoSerializer
+class entregableAdministrativoProyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = EntregableAdministrativoProyecto.objects.all()
+    serializer_class = entregableAdministrativoProyectoSerializer
+    
+class entregableAdministrativoProductoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = EntregableAdministrativoProducto.objects.all()
+    serializer_class = entregableAdministrativoProductoSerializer
 
 class proyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Proyecto.objects.all()
     serializer_class = proyectoSerializer
+    def put(self, request, *args, **kwargs):
+        obj = Proyecto.objects.get(pk=request.data.get('codigo'))
+        obj.estadoProceso = request.data.get('estadoProceso')
+        obj.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
