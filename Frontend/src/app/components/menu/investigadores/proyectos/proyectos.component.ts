@@ -42,7 +42,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Investigador } from '../../modelo/investigador';
-import { Producto } from '../../modelo/productos';
+import { Evento, Producto } from '../../modelo/productos';
 import { Coinvestigador, Estudiantes, ParticipanteExterno, Proyecto } from '../../modelo/proyectos';
 import { ProyectoyproductoService } from '../../services/proyectoyproducto';
 import { EstudiantesService } from '../../services/estudiantes';
@@ -55,6 +55,8 @@ import { UsuarioSesion } from '../../modelo/usuario';
 import { DialogoCreacionEstudiantesComponent } from '../../dialogo-creacion-estudiantes/dialogo-creacion-estudiantes.component';
 import { ParticipantesExternosService } from '../../services/participantesExternos';
 import { DialogoCreacionParticipantesComponent } from '../../dialogo-creacion-participantes/dialogo-creacion-participantes.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { DialogoConfiguracionEntregableComponent } from './dialogo-configuracion-entregable/dialogo-configuracion-entregable.component';
 
 @Component({
   selector: 'app-proyectos',
@@ -91,7 +93,8 @@ import { DialogoCreacionParticipantesComponent } from '../../dialogo-creacion-pa
     HttpClientModule,
     MatButtonModule, 
     MatDialogModule, 
-    DialogoCreacionEstudiantesComponent
+    DialogoCreacionEstudiantesComponent,
+    MatTooltipModule,
   ],
 })
 export class ProyectosComponent implements OnInit {
@@ -124,8 +127,6 @@ export class ProyectosComponent implements OnInit {
     {value: 'Corregir', viewValue: 'Corregir'},
     {value: 'Espera', viewValue: 'Espera'},
   ];
-  // indice dinámico para tablas
-  generalIndex!: number;
   // índice de las pestaña Proyectos y Nuevo
   demo1TabIndex!: number;
 
@@ -199,112 +200,113 @@ export class ProyectosComponent implements OnInit {
       }),
     });
     this.secondFormGroup = this.formBuilder.group({
-        id: [''],
-        tituloProducto: [''],
-        rolProducto: [''],
-        investigador: [''],
-        listaProducto: this.formBuilder.group({
-          articulo: this.formBuilder.group({
-            id:[''],
-            fuente:[''],
-          }),
-          capitulo: this.formBuilder.group({
-            id:[''],
-            nombrepublicacion:[''],
-            isbn :[''],
-            fecha:[''],
-            editorial:[''],
-          }),
-          software: this.formBuilder.group({
-            id:[''],
-            tiporegistro:[''],
-            numero:[''],
-            fecha:[''],
-            pais:[''],
-          }),
-          libro: this.formBuilder.group({
-            id:[''],
-            isbn:[''],
-            fecha:[''],
-            editorial:[''],
-            luegarpublicacion:[''],
-          }),
-          prototipoIndustrial: this.formBuilder.group({
-            id:[''],
-            fecha:[''],
-            pais:[''],
-            insitutofinanciador:[''],
-          }),
-          evento: this.formBuilder.group({
-            id:[''],
-            fechainicio:[''],
-            fechafin:[''],
-            numparticinerno:[''],
-            numparticexterno:[''],
-            tipoevento:[''],
-          }),
-          reconocimiento: this.formBuilder.group({
-            id:[''],
-            fecha:[''],
-            nombentidadotorgada:[''],
-          }),
-          consultoria: this.formBuilder.group({
-            id:[''],
-            año:[''],
-            contrato:this.formBuilder.group({
-              id:[''],
-              nombre:[''],
-              numero:[''],
-            }),
-            nombreEntidad:[''],
-          }),
-          contenido: this.formBuilder.group({
-            id:[''],
-            paginaWeb:[''],
-            nombreEntidad:[''],
-          }),
-          pregFinalizadoyCurso: this.formBuilder.group({
-            id:[''],
-            fechaInicio:[''],
-            reconocimientos:[''],
-            numeroPaginas:[''],
-          }),
-          apropiacion: this.formBuilder.group({
-            id:[''],
-            fechainicio:[''],
-            fechaFin:[''],
-            licencia:this.formBuilder.group({
-              id:[''],
-              nombre:[''],
-            }),
-            formato:[''],
-            medio:[''],
-            nombreEntidad:[''],
-          }),
-          maestria: this.formBuilder.group({
-            id:[''],
-            fechaInicio:[''],
-            institucion:[''],
-          }),
-          proyectoCursoProducto: [''],
-          proyectoFormuladoProducto: [''],
-          proyectoRSUProducto: [''],
+      id: [''],
+      tituloProducto: [''],
+      rolProducto: [''],
+      investigador: [''],
+      listaProducto: this.formBuilder.group({
+        id:[''],
+        articulo: this.formBuilder.group({
+          id:[''],
+          fuente:[''],
         }),
-        cuartilEsperado: [''],
-        categoriaMinciencias: [''],
-        tipologiaProducto: [''],
-        publicacion: [''],
-        estudiantes: [''],
-        participantesExternos: [''],
-        estadoProdIniSemestre: [''],
-        porcentanjeAvanFinSemestre: [''],
-        observaciones: [''],
-        estadoProducto: [''],
-        porcentajeComSemestral: [''],
-        porcentajeRealMensual: [''],
-        fecha: [''],
-        origen: [''],
-        Soporte: ['',this.selectedFileProyecto],
+        capitulo: this.formBuilder.group({
+          id:[''],
+          nombrepublicacion:[''],
+          isbn :[''],
+          fecha:[''],
+          editorial:[''],
+        }),
+        software: this.formBuilder.group({
+          id:[''],
+          tiporegistro:[''],
+          numero:[''],
+          fechaSoftware:[''],
+          pais:[''],
+        }),
+        libro: this.formBuilder.group({
+          id:[''],
+          isbn:[''],
+          fechaLibro:[''],
+          editorial:[''],
+          luegarpublicacion:[''],
+        }),
+        prototipoIndustrial: this.formBuilder.group({
+          id:[''],
+          fecha:[''],
+          pais:[''],
+          insitutofinanciador:[''],
+        }),
+        evento: this.formBuilder.group({
+          id:[''],
+          fechainicio:[''],
+          fechafin:[''],
+          numparticinerno:[''],
+          numparticexterno:[''],
+          tipoevento:[''],
+        }),
+        reconocimiento: this.formBuilder.group({
+          id:[''],
+          fecha:[''],
+          nombentidadotorgada:[''],
+        }),
+        consultoria: this.formBuilder.group({
+          id:[''],
+          año:[''],
+          contrato:this.formBuilder.group({
+            id:[''],
+            nombre:[''],
+            numero:[''],
+          }),
+          nombreEntidad:[''],
+        }),
+        contenido: this.formBuilder.group({
+          id:[''],
+          paginaWeb:[''],
+          nombreEntidad:[''],
+        }),
+        pregFinalizadoyCurso: this.formBuilder.group({
+          id:[''],
+          fechaInicio:[''],
+          reconocimientos:[''],
+          numeroPaginas:[''],
+        }),
+        apropiacion: this.formBuilder.group({
+          id:[''],
+          fechainicio:[''],
+          fechaFin:[''],
+          licencia:this.formBuilder.group({
+            id:[''],
+            nombre:[''],
+          }),
+          formato:[''],
+          medio:[''],
+          nombreEntidad:[''],
+        }),
+        maestria: this.formBuilder.group({
+          id:[''],
+          fechaInicio:[''],
+          institucion:[''],
+        }),
+        proyectoCursoProducto: [''],
+        proyectoFormuladoProducto: [''],
+        proyectoRSUProducto: [''],
+      }),
+      publicacion: [''],
+      estudiantes: [''],
+      participantesExternos: [''],
+      estadoProdIniSemestre: [''],
+      porcentanjeAvanFinSemestre: [0],
+      observaciones: [''],
+      estadoProducto: [''],
+      porcentajeComSemestral: [0],
+      porcentajeRealMensual: [0],
+      fechaProducto:[new Date()],
+      origen: [''],
+      Soporte: ['',this.FileProducto],
+      estudiantesProducto: [''],
+      participantesExternosProducto: [''],
+      coinvestigadoresProducto: [''],
     });
     this.productoFormGroup = this.formBuilder.group({
       id: [''],
@@ -328,13 +330,13 @@ export class ProyectosComponent implements OnInit {
           id:[''],
           tiporegistro:[''],
           numero:[''],
-          fecha:[''],
+          fechaSoftware:[''],
           pais:[''],
         }),
         libro: this.formBuilder.group({
           id:[''],
           isbn:[''],
-          fecha:[''],
+          fechaLibro:[''],
           editorial:[''],
           luegarpublicacion:[''],
         }),
@@ -418,12 +420,37 @@ export class ProyectosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.obtenerProyectos();
     this.obtenerUsuarios();
     this.configurarDatasource();
     this.obtenerDatosUsuarioSesion();
     this.obtenerEstudiantes();
     this.obtenerParticipantesExternos();
+    this.obtenerEventos();
+  }
+
+  openDialogoConfiguracionEntregable(data: any, tipo:string): void {
+    const dialogRef = this.dialog.open(DialogoConfiguracionEntregableComponent, {
+      data: {
+        title: 'Entregables '+tipo,
+        buttonTitle: 'CREAR',
+        type:tipo,
+        data:data,
+      },
+      width: '25%',
+      disableClose: true,
+      panelClass: 'custom-modalbox',
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        Swal.fire({
+          title: 'Registro Exitoso !!!',
+          text: 'Se ha registrado una notificación',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        });
+        
+      } 
+    });
   }
 
   estudiantesData: Estudiantes[] = [];
@@ -442,6 +469,14 @@ export class ProyectosComponent implements OnInit {
   obtenerParticipantesExternos(){
     this.participantesExternosService.getParticipantesExternos().subscribe((data) => {    
       this.participanteExternoData = data;
+    });
+  }
+
+  eventosData: Evento[]= [];
+
+  obtenerEventos(){
+    const eventos = this.ProyectoyproductoService.getEventos().subscribe((data) => {    
+      this.eventosData = data;
     });
   }
 
@@ -473,12 +508,6 @@ export class ProyectosComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.SearchService.getSearchQuery().subscribe(query => {
       this.dataSource.filter = query.trim().toLowerCase();
-    });
-  }
-
-  obtenerProyectos(){
-    this.ProyectoyproductoService.getProyectos().subscribe(resp => {
-      this.generalIndex = resp.length + 1;
     });
   }
 
@@ -760,8 +789,8 @@ export class ProyectosComponent implements OnInit {
   get porcentajeAvance() {
     return this.firstFormGroup.get('porcentajeAvance');
   }
-  get soporte() {
-    return this.firstFormGroup.get('Soporte');
+  get soporteProyecto() {
+    return this.firstFormGroup.get('soporteProyecto');
   }
   get transacciones() {
     return this.firstFormGroup.get('transacciones');
@@ -806,48 +835,116 @@ export class ProyectosComponent implements OnInit {
     if (this.firstFormGroup.valid && this.secondFormGroup.valid) {
       const proyecto: Proyecto = {
         codigo: this.firstFormGroup.get('codigo')?.value,
-        fecha: this.firstFormGroup.get('fecha')?.value,
+        fecha: moment(this.firstFormGroup.get('fecha')?.value).format('YYYY-MM-DD'),
         titulo: this.firstFormGroup.get('titulo')?.value,
         investigador: this.firstFormGroup.get('investigador')?.value,
         unidadAcademica: this.firstFormGroup.get('unidadAcademica')?.value,
         producto: {
-          id: this.secondFormGroup.get('producto.id')?.value,
-          tituloProducto: this.secondFormGroup.get('producto.tituloProducto')
-            ?.value,
-          rolProducto: this.secondFormGroup.get('producto.rolProducto')?.value,
-          investigador: this.secondFormGroup.get('producto.investigador')
-            ?.value,
-          listaProducto: this.secondFormGroup.get('producto.listaProducto')
-            ?.value,
-          cuartilEsperado: this.secondFormGroup.get('producto.cuartilEsperado')
-            ?.value,
-          categoriaMinciencias: this.secondFormGroup.get(
-            'producto.categoriaMinciencias'
-          )?.value,
-          tipologiaProducto: this.secondFormGroup.get(
-            'producto.tipologiaProducto'
-          )?.value,
-          publicacion: this.secondFormGroup.get('producto.publicacion')?.value,
-          estudiantes: this.secondFormGroup.get('producto.estudiantes')?.value,
-          estadoProdIniSemestre: this.secondFormGroup.get(
-            'producto.estadoProdIniSemestre'
-          )?.value,
-          porcentanjeAvanFinSemestre: this.secondFormGroup.get(
-            'producto.porcentanjeAvanFinSemestre'
-          )?.value,
-          observaciones: this.secondFormGroup.get('producto.observaciones')
-            ?.value,
-          estadoProducto: this.secondFormGroup.get('producto.estadoProducto')
-            ?.value,
-          porcentajeComSemestral: this.secondFormGroup.get(
-            'producto.porcentajeComSemestral'
-          )?.value,
-          porcentajeRealMensual: this.secondFormGroup.get(
-            'producto.porcentajeRealMensual'
-          )?.value,
-          fecha: this.secondFormGroup.get('producto.fecha')?.value,
-          origen: this.secondFormGroup.get('producto.origen')?.value,
-          Soporte: this.secondFormGroup.get('producto.Soporte')?.value,
+          id: this.secondFormGroup.value.id,
+          tituloProducto: this.secondFormGroup.value.tituloProducto,
+          investigador: this.usuarioSesion.numerodocumento,
+          listaProducto: {
+            id: this.secondFormGroup.value.listaProducto.id,
+            articulo: {
+              id: this.secondFormGroup.value.listaProducto.capitulo.id,
+              fuente: this.secondFormGroup.value.listaProducto.articulo.fuente
+            },
+            capitulo: {
+              id: this.secondFormGroup.value.listaProducto.capitulo.id,
+              nombrepublicacion: this.secondFormGroup.value.listaProducto.capitulo.nombrepublicacion,
+              isbn: this.secondFormGroup.value.listaProducto.capitulo.isbn,
+              fecha: this.secondFormGroup.value.listaProducto.capitulo.fecha,
+              editorial: this.secondFormGroup.value.listaProducto.capitulo.editorial
+            },
+            software: {
+              id: this.secondFormGroup.value.listaProducto.software.id,
+              tiporegistro: this.secondFormGroup.value.listaProducto.software.tiporegistro,
+              numero: this.secondFormGroup.value.listaProducto.software.numero,
+              fecha: this.secondFormGroup.value.listaProducto.software.fechaSoftware,
+              pais: this.secondFormGroup.value.listaProducto.software.pais
+            },
+            libro: {
+              id: this.secondFormGroup.value.listaProducto.libro.id,
+              isbn: this.secondFormGroup.value.listaProducto.libro.isbn,
+              fecha: this.secondFormGroup.value.listaProducto.libro.fechaLibro,
+              editorial: this.secondFormGroup.value.listaProducto.libro.editorial,
+              luegarpublicacion: this.secondFormGroup.value.listaProducto.libro.luegarpublicacion
+            },
+            prototipoIndustrial: {
+                id: this.secondFormGroup.value.listaProducto.prototipoIndustrial.id,
+                fecha: this.secondFormGroup.value.listaProducto.prototipoIndustrial.fecha,
+                pais: this.secondFormGroup.value.listaProducto.prototipoIndustrial.pais,
+                insitutofinanciador: this.secondFormGroup.value.listaProducto.prototipoIndustrial.insitutofinanciador
+            },
+            evento: {
+                id: this.secondFormGroup.value.listaProducto.evento.id,
+                fechainicio: this.secondFormGroup.value.listaProducto.evento.fechainicio,
+                fechafin: this.secondFormGroup.value.listaProducto.evento.fechafin,
+                numparticinerno: this.secondFormGroup.value.listaProducto.evento.numparticinerno,
+                numparticexterno: this.secondFormGroup.value.listaProducto.evento.numparticexterno,
+                tipoevento: this.secondFormGroup.value.listaProducto.evento.tipoevento
+            },
+            reconocimiento: {
+                id: this.secondFormGroup.value.listaProducto.reconocimiento.id,
+                fecha: this.secondFormGroup.value.listaProducto.reconocimiento.fecha,
+                nombentidadotorgada: this.secondFormGroup.value.listaProducto.reconocimiento.nombentidadotorgada
+            },
+            consultoria: {
+                id: this.secondFormGroup.value.listaProducto.consultoria.id,
+                año: this.secondFormGroup.value.listaProducto.consultoria.año,
+                contrato: {
+                    id: this.secondFormGroup.value.listaProducto.consultoria.contrato.id,
+                    nombre: this.secondFormGroup.value.listaProducto.consultoria.contrato.nombre,
+                    numero: this.secondFormGroup.value.listaProducto.consultoria.contrato.numero
+                },
+                nombreEntidad: this.secondFormGroup.value.listaProducto.consultoria.nombreEntidad
+            },
+            contenido: {
+                id: this.secondFormGroup.value.listaProducto.contenido.id,
+                paginaWeb: this.secondFormGroup.value.listaProducto.contenido.paginaWeb,
+                nombreEntidad: this.secondFormGroup.value.listaProducto.contenido.nombreEntidad
+            },
+            pregFinalizadoyCurso: {
+                id: this.secondFormGroup.value.listaProducto.pregFinalizadoyCurso.id,
+                fechaInicio: this.secondFormGroup.value.listaProducto.pregFinalizadoyCurso.fechaInicio,
+                reconocimientos: this.secondFormGroup.value.listaProducto.pregFinalizadoyCurso.reconocimientos,
+                numeroPaginas: this.secondFormGroup.value.listaProducto.pregFinalizadoyCurso.numeroPaginas
+            },
+            apropiacion: {
+                id: this.secondFormGroup.value.listaProducto.apropiacion.id,
+                fechainicio: this.secondFormGroup.value.listaProducto.apropiacion.fechainicio,
+                fechaFin: this.secondFormGroup.value.listaProducto.apropiacion.fechaFin,
+                licencia: {
+                    id: this.secondFormGroup.value.listaProducto.apropiacion.licencia.id,
+                    nombre: this.secondFormGroup.value.listaProducto.apropiacion.licencia.nombre
+                },
+                formato: this.secondFormGroup.value.listaProducto.apropiacion.formato,
+                medio: this.secondFormGroup.value.listaProducto.apropiacion.medio,
+                nombreEntidad: this.secondFormGroup.value.listaProducto.apropiacion.nombreEntidad
+            },
+            maestria: {
+                id: this.secondFormGroup.value.listaProducto.maestria.id,
+                fechaInicio: this.secondFormGroup.value.listaProducto.maestria.fechaInicio,
+                institucion: this.secondFormGroup.value.listaProducto.maestria.institucion
+            },
+            proyectoCursoProducto: this.secondFormGroup.value.listaProducto.proyectoCursoProducto,
+            proyectoFormuladoProducto: this.secondFormGroup.value.listaProducto.proyectoFormuladoProducto,
+            proyectoRSUProducto: this.secondFormGroup.value.listaProducto.proyectoRSUProducto
+          },
+          publicacion: this.secondFormGroup.value.publicacion,
+          estudiantes: this.secondFormGroup.value.estudiantes,
+          estadoProdIniSemestre: this.secondFormGroup.value.estadoProdIniSemestre,
+          porcentanjeAvanFinSemestre: this.secondFormGroup.value.porcentanjeAvanFinSemestre,
+          observaciones: this.secondFormGroup.value.observaciones,
+          estadoProducto: this.secondFormGroup.value.estadoProducto,
+          porcentajeComSemestral: this.secondFormGroup.value.porcentajeComSemestral,
+          porcentajeRealMensual: this.secondFormGroup.value.porcentajeRealMensual,
+          fecha: moment(this.secondFormGroup.value.fechaProducto).format('YYYY-MM-DD'),
+          origen: this.secondFormGroup.value.origen,
+          Soporte: this.selectedFileProduct,
+          estudiantesProducto:  this.secondFormGroup.value.estudiantesProducto,
+          participantesExternosProducto:  this.secondFormGroup.value.participantesExternosProducto,
+          coinvestigadoresProducto:  this.secondFormGroup.value.coinvestigadoresProducto,
         },
         coinvestigadores: this.firstFormGroup.get('coinvestigadores')?.value,
         area: this.firstFormGroup.get('area')?.value,
@@ -862,7 +959,8 @@ export class ProyectosComponent implements OnInit {
           'porcentajeEjecucionFinCorte'
         )?.value,
         porcentajeAvance: this.firstFormGroup.get('porcentajeAvance')?.value,
-        soporte: this.firstFormGroup.get('soporte')?.value,
+        soporte: this.selectedFileProyecto,
+        soporteProducto: this.selectedFileProduct,
         transacciones: this.firstFormGroup.get('transacciones')?.value,
         origen: this.firstFormGroup.get('origen')?.value,
         convocatoria: this.firstFormGroup.get('convocatoria')?.value,
@@ -872,33 +970,12 @@ export class ProyectosComponent implements OnInit {
         nivelRiesgoEtico: this.firstFormGroup.get('nivelRiesgoEtico')?.value,
         lineaInvestigacion:
           this.firstFormGroup.get('lineaInvestigacion')?.value,
-        entregableAdministrativo: this.firstFormGroup.get(
-          'entregableAdministrativo'
-        )?.value,
         estudiantes: this.firstFormGroup.get('estudiantesProyecto')?.value,
         participantesExternos: this.firstFormGroup.get(
           'participantesExternosProyecto'
         )?.value,
       };
 
-      if(proyecto.entidadPostulo?.id !== undefined) {
-        proyecto.entidadPostulo.id = this.generalIndex.toString();
-      } 
-      if(proyecto.entregableAdministrativo?.id !== undefined) {
-        proyecto.entregableAdministrativo.id = this.generalIndex.toString();
-      } 
-      if(proyecto.financiacion?.id !== undefined) {
-        proyecto.financiacion.id = this.generalIndex.toString();
-      } 
-      if(proyecto.producto?.id !== undefined) {
-        proyecto.producto.id = this.generalIndex.toString();
-      }
-      if(proyecto.transacciones?.id !== undefined) {
-        proyecto.transacciones.id = this.generalIndex.toString();
-      } 
-      if(proyecto.ubicacionProyecto?.id !== undefined) {
-        proyecto.ubicacionProyecto.id = this.generalIndex.toString();
-      }       
       proyecto.estadoProyecto = "Espera";
       proyecto.investigador = this.usuarioSesion.numerodocumento;
 
@@ -1047,9 +1124,6 @@ changeEstado(e: Event) {
   }
 }
 
-// tipo de evento de eventos de lista productos
-typeEventos: string[] = ['Congreso', 'Seminario', 'Simposio', 'Conferencia', 'Feria', 'Encuentro academico'];
-
 changeEventos(e: Event) {
   const target = e.target as HTMLInputElement;
   if (target && this.tipoevento) {
@@ -1125,11 +1199,15 @@ showTicks6 = false;
 step6 = 1;
 thumbLabel6 = false;
 
+
+  selectedFileProduct: File = null!;
+
+
   //subir archivo producto
   FileProducto: File = null!;
 
   onFileSelected2(event: any) {
-    this.FileProducto = event.target.files[0] as File;
+    this.selectedFileProduct = event.target.files[0] as File;
   } 
 
   guardarProducto() {
@@ -1155,13 +1233,13 @@ thumbLabel6 = false;
             id: this.productoFormGroup.value.listaProducto.software.id,
             tiporegistro: this.productoFormGroup.value.listaProducto.software.tiporegistro,
             numero: this.productoFormGroup.value.listaProducto.software.numero,
-            fecha: this.productoFormGroup.value.listaProducto.software.fecha,
+            fecha: this.productoFormGroup.value.listaProducto.software.fechaSoftware,
             pais: this.productoFormGroup.value.listaProducto.software.pais
           },
           libro: {
             id: this.productoFormGroup.value.listaProducto.libro.id,
             isbn: this.productoFormGroup.value.listaProducto.libro.isbn,
-            fecha: this.productoFormGroup.value.listaProducto.libro.fecha,
+            fecha: this.productoFormGroup.value.listaProducto.libro.fechaLibro,
             editorial: this.productoFormGroup.value.listaProducto.libro.editorial,
             luegarpublicacion: this.productoFormGroup.value.listaProducto.libro.luegarpublicacion
           },
@@ -1234,9 +1312,9 @@ thumbLabel6 = false;
         estadoProducto: this.productoFormGroup.value.estadoProducto,
         porcentajeComSemestral: this.productoFormGroup.value.porcentajeComSemestral,
         porcentajeRealMensual: this.productoFormGroup.value.porcentajeRealMensual,
-        fecha: this.productoFormGroup.value.fechaProducto,
+        fecha: moment(this.productoFormGroup.value.fechaProducto).format('YYYY-MM-DD'),
         origen: this.productoFormGroup.value.origen,
-        Soporte: this.FileProducto,
+        Soporte: this.selectedFileProduct,
         estudiantesProducto:  this.productoFormGroup.value.estudiantesProducto,
         participantesExternosProducto:  this.productoFormGroup.value.participantesExternosProducto,
         coinvestigadoresProducto:  this.productoFormGroup.value.coinvestigadoresProducto,
@@ -1251,6 +1329,9 @@ thumbLabel6 = false;
                 confirmButtonText: 'Aceptar'
               });
               this.productoFormGroup.reset();
+              this.ngAfterViewInit();
+              this.ngOnInit();
+              this.demo1TabIndex = 0;
           },
           (error) => {
               console.error('Error al registrar el usuario:', error);
@@ -1294,13 +1375,13 @@ thumbLabel6 = false;
     ]).subscribe(([productos, proyectos]) => {
 
       // Ajustar los datos de los productos para asegurarse de que tengan todas las propiedades definidas en la interfaz Producto
-      const productosAjustados = productos.map(producto => ({
+      const productosAjustados = productos.reverse().map(producto => ({
         ...producto,
         tipo: 'Producto',
         id:producto.id,
-        tituloProducto: producto.titulo_producto || '', // Asegurar que todas las propiedades definidas en la interfaz Producto estén presentes
+        tituloProducto: producto.tituloProducto || '', // Asegurar que todas las propiedades definidas en la interfaz Producto estén presentes
         fecha: producto.fecha || '',
-        estadoProducto: producto.estado_producto || '',
+        estadoProducto: producto.estadoProceso || '',
         etapa:producto.etapa|| '',
         tipologiaProducto: producto.tipologiaProducto || '',
       }));
@@ -1309,6 +1390,7 @@ thumbLabel6 = false;
       const proyectosAjustados = proyectos.reverse().map(proyecto => ({
         tituloProducto: proyecto.titulo,
         etapa: proyecto.etapa,
+        id: proyecto.codigo,
         fecha: proyecto.fecha,
         estadoProceso: proyecto.estadoProceso,
         tipo: 'Proyecto',
@@ -1320,7 +1402,6 @@ thumbLabel6 = false;
       
       // Asignar los datos combinados a dataSource
       this.dataSource.data = combinedData;
-      //obj.sort((a, b) => (a > b ? -1 : 1))
     });
   }
   
