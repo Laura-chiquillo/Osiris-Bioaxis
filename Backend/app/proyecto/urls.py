@@ -12,18 +12,24 @@ from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
                        contenidoRetrieveUpdateDestroy, contratoList,
                        contratoRetrieveUpdateDestroy, cuartilEsperadoList,
                        entidadPostuloList, entidadPostuloRetrieveUpdateDestroy,
+<<<<<<< HEAD
                        avanceEntregableProductoList, 
                        avanceEntregableProductoRetrieveUpdateDestroy,
                        avanceEntregableProyectoList, 
                        avanceEntregableProyectoRetrieveUpdateDestroy,
+=======
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
                        entregableAdministrativoProyectoList,
                        entregableAdministrativoProyectoRetrieveUpdateDestroy,
                        entregableAdministrativoProductoList,
                        entregableAdministrativoProductoRetrieveUpdateDestroy,
+<<<<<<< HEAD
                        configuracionEntregableProductoList,
                        configuracionEntregableProductoRetrieveUpdateDestroy,
                        configuracionEntregableProyectoList,
                        configuracionEntregableProyectoRetrieveUpdateDestroy,
+=======
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
                        estadoProductoList, estadoProyectoList, estudiantesList,
                        estudiantesRetrieveUpdateDestroy,
                        eventoRetrieveUpdateDestroy, eventosList,
@@ -120,8 +126,11 @@ urlpatterns = [
     path('avanceProyecto', avanceProyectoList.as_view(), name='create-avanceProyecto-list'),
     path('entregableAdministrativoProyecto', entregableAdministrativoProyectoList.as_view(), name='create-entregableAdministrativoProyecto-list'),
     path('entregableAdministrativoProducto', entregableAdministrativoProductoList.as_view(), name='create-entregableAdministrativoProducto-list'),
+<<<<<<< HEAD
     path('configuracionEntregableProducto', configuracionEntregableProductoList.as_view(), name='create-configuracionEntregableProducto-list'),
     path('configuracionEntregableProyecto', configuracionEntregableProyectoList.as_view(), name='create-configuracionEntregableProyecto-list'),
+=======
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
     path('proyecto', proyectoList.as_view(), name='create-proyecto-list'),
     path('entidadPostulo/<int:pk>', entidadPostuloRetrieveUpdateDestroy.as_view(), name='entidadPostulo-detail'),
     path('avanceEntregableProducto/<int:pk>', avanceEntregableProductoRetrieveUpdateDestroy.as_view(), name='avanceEntregableProducto-detail'),
@@ -133,8 +142,11 @@ urlpatterns = [
     path('avanceProyecto/<int:pk>', avanceProyectoRetrieveUpdateDestroy.as_view(), name='avanceProyecto-detail'),
     path('entregableAdministrativoProyecto/<int:pk>', entregableAdministrativoProyectoRetrieveUpdateDestroy.as_view(), name='entregableAdministrativoProyecto-detail'),
     path('entregableAdministrativoProducto/<int:pk>', entregableAdministrativoProductoRetrieveUpdateDestroy.as_view(), name='entregableAdministrativoProducto-detail'),
+<<<<<<< HEAD
     path('configuracionEntregableProducto/<int:pk>', configuracionEntregableProductoRetrieveUpdateDestroy.as_view(), name='configuracionEntregableProducto-detail'),
     path('configuracionEntregableProyecto/<int:pk>', configuracionEntregableProyectoRetrieveUpdateDestroy.as_view(), name='configuracionEntregableProyecto-detail'),
+=======
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
     path('proyecto/<pk>', proyectoRetrieveUpdateDestroy.as_view(), name='proyecto-detail'),
     path('imagen', imagenList.as_view(), name='create-imagen-list'),
     path('imagen/<int:pk>', imagenRetrieveUpdateDestroy.as_view(), name='imagen-detail'),

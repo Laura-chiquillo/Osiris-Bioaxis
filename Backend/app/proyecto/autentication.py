@@ -16,8 +16,13 @@ import ast
 
 from .models import (Apropiacion, Articulos, Capitulos, Consultoria, Contenido,
                      Contrato, EntidadPostulo, EntregableAdministrativoProyecto, EntregableAdministrativoProducto, EstadoProyecto,
+<<<<<<< HEAD
                      Estudiantes, Eventos, Financiacion, Industrial, ConfiguracionEntregableProducto, ConfiguracionEntregableProyecto, 
                      Investigador, Libros, Licencia, ListaProducto, Maestria, AvanceEntregableProducto, AvanceEntregableProyecto,
+=======
+                     Estudiantes, Eventos, Financiacion, Industrial,
+                     Investigador, Libros, Licencia, ListaProducto, Maestria,
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
                      PregFinalizadoyCurso, Producto, Proyecto, Reconocimientos,
                      Software, Transacciones, UbicacionProyecto, ParticipantesExternos, EstadoProducto,
                      CategoriaMinciencias,CuartilEsperado,TipoEventos)
@@ -182,26 +187,38 @@ class CrearProyecto(APIView):
         proyecto = Proyecto.objects.create(**proyecto_data)  # Crea el objeto Proyecto con los datos relacionados
 
         # vinculación coinvestigadores
+<<<<<<< HEAD
         coinvestigadores_base =request.data.get('coinvestigadores')
         coinvestigadores_proceso = str(coinvestigadores_base).split(',')
 
         coinvestigadores_ids = coinvestigadores_proceso
+=======
+        coinvestigadores_ids = request.data.get('coinvestigadores')
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
         coinvestigadores = Investigador.objects.filter(correo__in=coinvestigadores_ids)
         proyecto.coinvestigador.set(coinvestigadores)  # Asigna los coinvestigadores al proyecto usando set()     
         
         # vinculación estudiantes
+<<<<<<< HEAD
         estudiantes_base =request.data.get('estudiantes')
         estudiantes_proceso = str(estudiantes_base).split(',')
         
         estudiantes_ids = estudiantes_proceso
+=======
+        estudiantes_ids = request.data.get('estudiantes')
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
         estudiantes = Estudiantes.objects.filter(numeroDocumento__in=estudiantes_ids)
         proyecto.estudiantes.set(estudiantes)
         
         # vinculación participantesExternos
+<<<<<<< HEAD
         participantes_base =request.data.get('participantesExternos')
         participantes_proceso = str(participantes_base).split(',')
 
         participantesExternos_ids = participantes_proceso
+=======
+        participantesExternos_ids = request.data.get('participantesExternos')
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
         participantes_externos = ParticipantesExternos.objects.filter(numerodocumento__in=participantesExternos_ids)
         proyecto.participantesExternos.set(participantes_externos)
 
@@ -219,6 +236,7 @@ class CrearProyecto(APIView):
         list_producto = producto.get('listaProducto')
 
         coinvestiga_base =producto.get('coinvestigadoresProducto')
+<<<<<<< HEAD
         items_coinvestiga = str(coinvestiga_base).replace("['", "").replace("']", "").replace("'", "").replace(" ", "")
         coinvestiga_fin = items_coinvestiga.split(',')
         
@@ -231,6 +249,31 @@ class CrearProyecto(APIView):
         participantes_fin = items_participantes.split(',')
 
 
+=======
+        coinvestiga_proceso = []
+        for item in coinvestiga_base:
+            items = item.split(',')
+            remove_array = str(items).replace("['", "").replace("']", "")
+            coinvestiga_proceso.append(str(remove_array))
+        coinvestiga_fin =str(coinvestiga_proceso)
+        
+        estudiantes_base =producto.get('estudiantesProducto')
+        estudiantes_proceso = []
+        for item in estudiantes_base:
+            items = item.split(',')
+            remove_array = str(items).replace("['", "").replace("']", "")
+            estudiantes_proceso.append(str(remove_array))
+        estudiantes_fin =str(estudiantes_proceso)
+        
+        participantes_base =producto.get('participantesExternosProducto')
+        participantes_proceso = []
+        for item in participantes_base:
+            items = item.split(',')
+            remove_array = str(items).replace("['", "").replace("']", "")
+            participantes_proceso.append(str(remove_array))
+        participantes_fin =str(participantes_proceso)
+
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
         evento_data = list_producto.get('evento')
         evento = None
         if evento_data.get('fechainicio') != '':
@@ -442,7 +485,10 @@ class CrearProyecto(APIView):
             'porcentanjeAvanFinSemestre': producto.get('porcentanjeAvanFinSemestre'),
             'observaciones': producto.get('observaciones'),
             'estadoProducto': EstadoProducto.objects.get(pk=1),
+<<<<<<< HEAD
             'estadoProceso': 'Espera',
+=======
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
             'porcentajeComSemestral': producto.get('porcentajeComSemestral'),
             'porcentajeRealMensual': producto.get('porcentajeRealMensual'),
             'fecha':  make_aware(datetime.strptime(producto.get('fecha'), "%Y-%m-%d")),
@@ -697,7 +743,10 @@ class CrearNuevoProducto(APIView):
             'porcentanjeAvanFinSemestre': request.data.get('porcentanjeAvanFinSemestre'),
             'observaciones': request.data.get('observaciones'),
             'estadoProducto': EstadoProducto.objects.get(pk=1),
+<<<<<<< HEAD
             'estadoProceso': 'Espera',
+=======
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
             'porcentajeComSemestral': request.data.get('porcentajeComSemestral'),
             'porcentajeRealMensual': request.data.get('porcentajeRealMensual'),
             'fecha':  make_aware(datetime.strptime(request.data.get('fecha'), "%Y-%m-%d")),
@@ -709,6 +758,7 @@ class CrearNuevoProducto(APIView):
 
         producto = Producto.objects.create(**producto_data) 
         # vinculación coinvestigadores
+<<<<<<< HEAD
         coinvestigadores_base =request.data.get('coinvestigadoresProducto')
         coinvestigadores_proceso = str(coinvestigadores_base).split(',')
         coinvestigadores_ids = coinvestigadores_proceso
@@ -724,6 +774,17 @@ class CrearNuevoProducto(APIView):
         participantes_base =request.data.get('participantesExternosProducto')
         participantes_proceso = str(participantes_base).split(',')
         participantesExternos_ids = participantes_proceso
+=======
+        coinvestigadores_ids = request.data.get('coinvestigadoresProducto')
+        coinvestigadores = Investigador.objects.filter(correo__in=coinvestigadores_ids)
+        producto.coinvestigador.set(coinvestigadores)  # Asigna los coinvestigadores al proyecto usando set()     
+        # vinculación estudiantes
+        estudiantes_ids = request.data.get('estudiantesProducto')
+        estudiantes = Estudiantes.objects.filter(numeroDocumento__in=estudiantes_ids)
+        producto.estudiantes.set(estudiantes)
+        # vinculación participantesExternos
+        participantesExternos_ids = request.data.get('participantesExternosProducto')
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
         participantes_externos = ParticipantesExternos.objects.filter(numerodocumento__in=participantesExternos_ids)
         producto.participantesExternos.set(participantes_externos)
         

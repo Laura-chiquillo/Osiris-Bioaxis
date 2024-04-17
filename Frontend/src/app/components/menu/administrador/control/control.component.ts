@@ -20,7 +20,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { Proyecto } from '../../modelo/proyectos';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+<<<<<<< HEAD
 import { DialogoTramiteComponent } from './dialogo-tramite/dialogo-tramite.component';
+=======
+import { DialogoTramiteEntregableAdministrativoComponent } from './dialogo-tramite-entregable-administrativo/dialogo-tramite-entregable-administrativo.component';
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
 import Swal from 'sweetalert2'
 import { DialogoConsultaEntregableAdministrativoComponent } from './dialogo-consulta-entregable-administrativo/dialogo-consulta-entregable-administrativo.component';
 @Component({
@@ -55,6 +59,17 @@ export class ControlComponent {
   dataSourceProducto: MatTableDataSource<any>;
   expandedElement: any | null;
 
+<<<<<<< HEAD
+=======
+
+  estadosProceso: string[] = [
+    'Aprobado',
+    'Rechazado',
+    'Corregir',
+    'Espera'
+  ];
+
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
   constructor(
     private investigadorService: InvestigadorService, 
     private searchService: SearchService,
@@ -71,8 +86,11 @@ export class ControlComponent {
     this.obtenerUsuarios();
     this.obtenerProyectos();
     this.obtenerProductos();
+<<<<<<< HEAD
     this.obtenerEstadosProyecto();
     this.obtenerEstadosProducto();
+=======
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
     this.searchService.getSearchQuery().subscribe(query => {
       this.dataSource.filter = query.trim().toLowerCase();
       this.dataSourceProyecto.filter = query.trim().toLowerCase();
@@ -128,8 +146,14 @@ export class ControlComponent {
 
   obtenerProductos() {
     this.proyectoyproductoService.getProductos().subscribe(
+<<<<<<< HEAD
       (producto) => {        
         const dataSort = producto.sort((a, b) => (a.id < b.id ? -1 : 1))
+=======
+      (producto) => {
+        console.log('obtenerProductos => ',producto)
+        const dataSort = producto.sort((a, b) => (a.codigo < b.codigo ? -1 : 1))
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
         this.dataSourceProducto.data = dataSort;
       },
       (error) => {
@@ -171,7 +195,11 @@ export class ControlComponent {
   }
 
   cambiarEstadoProyecto(data: any,proyecto: Proyecto): void {
+<<<<<<< HEAD
     proyecto.estado = data;
+=======
+    proyecto.estadoProceso = data;
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
     this.proyectoyproductoService.actualizarProyecto(proyecto).subscribe(
       () => {
         this._snackBar.open('Registro actualizado correctamente', 'Estado',{
@@ -187,7 +215,11 @@ export class ControlComponent {
   }
 
   cambiarEstadoProducto(data: any,producto: any): void {
+<<<<<<< HEAD
     producto.estadoProducto = data;
+=======
+    producto.estadoProceso = data;
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
     this.proyectoyproductoService.actualizarProducto(producto).subscribe(
       () => {
         this._snackBar.open('Registro actualizado correctamente', 'Estado',{
@@ -202,15 +234,26 @@ export class ControlComponent {
     );
   }
 
+<<<<<<< HEAD
   openDialogoTramite(data: any, tipo:string): void {
     const dialogRef = this.dialog.open(DialogoTramiteComponent, {
       data: {
         title: 'Tramitar '+tipo,
+=======
+  openDialogEntregableAdministrativo(data: any, tipo:string): void {
+    const dialogRef = this.dialog.open(DialogoTramiteEntregableAdministrativoComponent, {
+      data: {
+        title: 'Entregable Administrativo',
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
         buttonTitle: 'CREAR',
         type:tipo,
         data:data,
       },
+<<<<<<< HEAD
       width: '15%',
+=======
+      width: '30%',
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
       disableClose: true,
       panelClass: 'custom-modalbox',
     });

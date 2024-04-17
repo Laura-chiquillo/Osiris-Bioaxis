@@ -343,6 +343,7 @@ class EntregableAdministrativoProducto(models.Model):
     producto_id = models.ForeignKey(Producto,null=False,blank=False,on_delete=models.CASCADE)
     class Meta:
         db_table = 'proyecto_EntregableAdministrativoProducto'
+<<<<<<< HEAD
         
 
 class ConfiguracionEntregableProducto(models.Model):
@@ -375,6 +376,8 @@ class AvanceEntregableProducto(models.Model):
         db_table = 'proyecto_AvanceEntregableProducto'
 
 
+=======
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
 
 #---------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------- Proyecto -----------------------
@@ -483,6 +486,7 @@ class EntregableAdministrativoProyecto(models.Model):
     proyecto_id = models.ForeignKey(Proyecto,null=False,blank=False,on_delete=models.CASCADE)
     class Meta:
         db_table = 'proyecto_EntregableAdministrativoProyecto'
+<<<<<<< HEAD
         
 class ConfiguracionEntregableProyecto(models.Model):
     id = models.AutoField(primary_key=True)
@@ -512,6 +516,8 @@ class AvanceEntregableProyecto(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
     class Meta:
         db_table = 'proyecto_AvanceEntregableProyecto'
+=======
+>>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
 
 #--------------------------Actividades o avances ----------
 class AvanceProyecto(models.Model):
