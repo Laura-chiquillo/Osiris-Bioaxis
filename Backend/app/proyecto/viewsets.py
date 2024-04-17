@@ -9,13 +9,8 @@ from rest_framework.response import Response
 
 from .models import (Apropiacion, Articulos, AvanceProyecto, Capitulos,
                      CategoriaMinciencias, Consultoria, Contenido, Contrato,
-<<<<<<< HEAD
                      CuartilEsperado, EntidadPostulo, AvanceEntregableProducto ,  AvanceEntregableProyecto ,EntregableAdministrativoProyecto, EntregableAdministrativoProducto,
                      EstadoProducto, EstadoProyecto, Estudiantes, Eventos, ConfiguracionEntregableProducto, ConfiguracionEntregableProyecto,
-=======
-                     CuartilEsperado, EntidadPostulo, EntregableAdministrativoProyecto, EntregableAdministrativoProducto,
-                     EstadoProducto, EstadoProyecto, Estudiantes, Eventos,
->>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
                      Financiacion, Grupoinvestigacion, Imagen, Industrial,
                      Investigador, Libros, Licencia, ListaProducto, Maestria,
                      ParticipantesExternos, Posgrado, PregFinalizadoyCurso,
@@ -25,15 +20,9 @@ from .serializer import (apropiacionSerializer, articulosSerializer,
                          avanceProyectoSerializer, capitulosSerializer,
                          categoriaMincienciasSerializer, consultoriaSerializer,
                          contenidoSerializer, contratoSerializer,
-<<<<<<< HEAD
                          cuartilEsperadoSerializer, entidadPostuloSerializer, avanceEntregableProductoSerializer, avanceEntregableProyectoSerializer, 
                          entregableAdministrativoProyectoSerializer,entregableAdministrativoProductoSerializer,
                          estadoProductoSerializer, estadoProyecotSerializer, configuracionEntregableProductoSerializer, configuracionEntregableProyectoSerializer,
-=======
-                         cuartilEsperadoSerializer, entidadPostuloSerializer,
-                         entregableAdministrativoProyectoSerializer,entregableAdministrativoProductoSerializer,
-                         estadoProductoSerializer, estadoProyecotSerializer,
->>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
                          estudiantesSerializer, eventosSerializer,
                          financiacionSerializer, grupoinvestigacionSerializer,
                          imagenSerializer, industrialSerializer,
@@ -262,11 +251,8 @@ class productoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def put(self, request, *args, **kwargs):
         obj = Producto.objects.get(pk=request.data.get('id'))
         obj.estadoProceso = request.data.get('estadoProceso')
-<<<<<<< HEAD
         obj.estadoProducto = EstadoProducto.objects.get(pk=request.data.get('estadoProducto'))
         obj.observacion = request.data.get('observacion')
-=======
->>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
         obj.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -340,7 +326,6 @@ class entregableAdministrativoProductoList(generics.ListCreateAPIView):
         serializer = entregableAdministrativoProductoSerializer(admin) 
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-<<<<<<< HEAD
 
 class configuracionEntregableProductoList(generics.ListCreateAPIView):
     queryset = ConfiguracionEntregableProducto.objects.all()
@@ -381,8 +366,6 @@ class configuracionEntregableProyectoList(generics.ListCreateAPIView):
 class configuracionEntregableProyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = ConfiguracionEntregableProyecto.objects.all()
     serializer_class =configuracionEntregableProyectoSerializer
-=======
->>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
 
 class estadoProyectoList(generics.ListCreateAPIView):
     queryset = EstadoProyecto.objects.all()
@@ -419,7 +402,6 @@ class entregableAdministrativoProyectoRetrieveUpdateDestroy(generics.RetrieveUpd
 class entregableAdministrativoProductoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = EntregableAdministrativoProducto.objects.all()
     serializer_class = entregableAdministrativoProductoSerializer
-<<<<<<< HEAD
     
 class avanceEntregableProductoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = AvanceEntregableProducto.objects.all()
@@ -428,8 +410,6 @@ class avanceEntregableProductoRetrieveUpdateDestroy(generics.RetrieveUpdateDestr
 class avanceEntregableProyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = AvanceEntregableProyecto.objects.all()
     serializer_class = avanceEntregableProyectoSerializer
-=======
->>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
 
 class proyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Proyecto.objects.all()
@@ -437,10 +417,7 @@ class proyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def put(self, request, *args, **kwargs):
         obj = Proyecto.objects.get(pk=request.data.get('codigo'))
         obj.estadoProceso = request.data.get('estadoProceso')
-<<<<<<< HEAD
         obj.estado = EstadoProyecto.objects.get(pk=request.data.get('estado'))
         obj.observacion = request.data.get('observacion')
-=======
->>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
         obj.save()
         return Response(status=status.HTTP_204_NO_CONTENT)

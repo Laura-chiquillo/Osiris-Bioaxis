@@ -158,7 +158,6 @@ export class ProyectoyproductoService {
   obtenerEntregableAdministrativoProducto(): Observable<any[]> {
     return this.http.get<any[]>(this.apiEntregableProducto);
   }
-<<<<<<< HEAD
 
 
   obtenerEstadosProyecto(): Observable<any[]> {
@@ -191,7 +190,5 @@ export class ProyectoyproductoService {
   obtenerEntregablesProyecto() {
     return this.http.get<any[]>(`${this.apiConfiguracionEntregableProyecto}`);
   }
-=======
->>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
 
 }

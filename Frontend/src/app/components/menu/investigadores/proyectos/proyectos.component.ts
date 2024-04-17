@@ -426,7 +426,6 @@ export class ProyectosComponent implements OnInit {
     this.obtenerEstudiantes();
     this.obtenerParticipantesExternos();
     this.obtenerEventos();
-<<<<<<< HEAD
   }
 
   openDialogoConfiguracionEntregable(data: any, tipo:string): void {
@@ -452,8 +451,6 @@ export class ProyectosComponent implements OnInit {
         
       } 
     });
-=======
->>>>>>> 8bd70567e23323eb2780f7fba66adc602428f485
   }
 
   estudiantesData: Estudiantes[] = [];
