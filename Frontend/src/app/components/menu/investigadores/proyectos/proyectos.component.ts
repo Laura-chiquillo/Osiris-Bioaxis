@@ -141,6 +141,8 @@ export class ProyectosComponent implements OnInit {
   expandedElement: any | null;
   proyectosData: any[] = [];
   productosData: any[] = [];
+  estadosProyectos: any[] = [];
+  estadosProductos: any[] = [];
 
 
   @ViewChild('investigatorInput')
@@ -440,6 +442,8 @@ export class ProyectosComponent implements OnInit {
     this.obtenerEventos();
     this.obtenerEntregableProyecto();
     this.obtenerEntregableProducto();
+    this.obtenerEstadosProyecto();
+    this.obtenerEstadosProducto();
   }
 
   obtenerEntregableProyecto(){
@@ -511,13 +515,14 @@ export class ProyectosComponent implements OnInit {
     });
   }
 
-  openDialogoConfiguracionAvance(data: any, tipo:string):void {
+  openDialogoConfiguracionAvance(origin: any,data: any, tipo:string):void {
     const dialogRef = this.dialog.open(DialogoAvanceEntregableComponent, {
       data: {
         title: `Avance ${data.descripcion}`,
         buttonTitle: 'Crear',
         type:tipo,
         data:data,
+        origin:origin,
         admin: false
       },
       width: '25%',
@@ -566,11 +571,15 @@ export class ProyectosComponent implements OnInit {
   }
 
   usuariosData: UsuarioSesion[] = [];
+  usuariosAdmin: any[] = [];
   obtenerUsuarios(){
     this.activeInvestigators = []; // Inicializa activeInvestigators como un array vacío
     this.selectedInvestigators = []; // Asegúrate de que selectedInvestigators esté vacío al principio
     this.investigatorService.getUsuarios().subscribe((data) => {   
-      
+      const usersAdmin = data.filter(u => u.rolinvestigador === 'Administrador');
+      usersAdmin.forEach(element => {
+        this.usuariosAdmin.push(element.numerodocumento);
+      });
       this.usuariosData = data.filter(x => x.correo !== this.usuarioSesion.correo);
       /*this.activeInvestigators = data.map((investigador) => ({
         correo: investigador.correo,
@@ -916,6 +925,25 @@ export class ProyectosComponent implements OnInit {
     console.log('proyecto:', this.firstFormGroup.value);
   }
 
+  notificar(asunto:string,remitente:any,destinatario:string[],mensaje:string):void {
+    destinatario.forEach(admin => {
+      const notificacion = {
+        asunto: asunto,
+        remitente: remitente,
+        destinatario: admin,
+        mensaje: mensaje
+      }
+      this.ProyectoyproductoService.notificar(notificacion).subscribe(
+        (resp: any) => {
+          console.log('Se ha registrado el proyecto exitosamente:', resp);
+        },
+        (error: any) => {
+          console.error('Error al registrar el proyecto:', error);
+        }
+      );
+    });
+  }
+
   guardarProyecto() {
     if (this.firstFormGroup.valid && this.secondFormGroup.valid) {
       const proyecto: Proyecto = {
@@ -1079,7 +1107,20 @@ export class ProyectosComponent implements OnInit {
           this.demo1TabIndex = 0;
           this.firstFormGroup.reset();
           this.secondFormGroup.reset();
-
+          this.notificar(
+            `Nuevo Proyecto ${resp.codigo}`,
+            resp.investigador,
+            this.usuariosAdmin,
+            `El proyecto ${resp.codigo} ha sido registrado con el estado ${resp.estadoProceso}`
+          );
+          if(resp.producto !== null){
+            this.notificar(
+              `Nuevo Producto ${resp.id}`,
+              resp.investigador,
+              this.usuariosAdmin,
+              `El producto ${resp.producto.id} ha sido registrado con el estado ${resp.estadoProceso}`
+            );
+          }
         },
         (error: any) => {
           console.error('Error al registrar el proyecto:', error);
@@ -1413,6 +1454,12 @@ thumbLabel6 = false;
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
               });
+              this.notificar(
+                `Nuevo Producto ${resp.id}`,
+                resp.investigador,
+                this.usuariosAdmin,
+                `El producto ${resp.id} ha sido registrado con el estado ${resp.estadoProceso}`
+              );
               this.productoFormGroup.reset();
               this.ngAfterViewInit();
               this.ngOnInit();
@@ -1442,6 +1489,28 @@ thumbLabel6 = false;
     x.select = !x.select;
   }
 
+  obtenerEstadosProyecto() {
+    this.ProyectoyproductoService.obtenerEstadosProyecto().subscribe(
+      (proyecto) => {
+        this.estadosProyectos = proyecto;
+      },
+      (error) => {
+        console.error('Error al obtener usuarios:', error);
+      }
+    );
+  }
+
+  obtenerEstadosProducto() {
+    this.ProyectoyproductoService.obtenerEstadosProducto().subscribe(
+      (producto) => {
+        this.estadosProductos = producto;
+      },
+      (error) => {
+        console.error('Error al obtener usuarios:', error);
+      }
+    );
+  }
+
   //--------------------------------------------------------------------------------------
   //--------------------------------------------------------------------------------------
   //------------------------------------------TABLA -----------------------------------
@@ -1464,7 +1533,6 @@ thumbLabel6 = false;
       this.ProyectoyproductoService.getProductosDelUsuario(),
       this.ProyectoyproductoService.getProyectosDelUsuario()
     ]).subscribe(([productos, proyectos]) => {
-
       // Ajustar los datos de los productos para asegurarse de que tengan todas las propiedades definidas en la interfaz Producto
       const productosAjustados = productos.reverse().map(producto => ({
         ...producto,
@@ -1473,18 +1541,22 @@ thumbLabel6 = false;
         tituloProducto: producto.tituloProducto || '', // Asegurar que todas las propiedades definidas en la interfaz Producto estén presentes
         fecha: producto.fecha || '',
         estadoProducto: producto.estadoProceso || '',
-        etapa:producto.etapa|| '',
+        etapa: this.estadosProductos.find(p => p.id === producto.estadoProducto).estado,
         tipologiaProducto: producto.tipologiaProducto || '',
+        observacion: producto.observacion,
+        investigador: producto.investigador,
       }));
       
       // Convertir los datos de proyectos a la misma estructura que productos
       const proyectosAjustados = proyectos.reverse().map(proyecto => ({
         tituloProducto: proyecto.titulo,
-        etapa: proyecto.etapa,
+        etapa: this.estadosProductos.find(p => p.id === proyecto.estado).estado,
         id: proyecto.codigo,
         fecha: proyecto.fecha,
         estadoProceso: proyecto.estadoProceso,
         tipo: 'Proyecto',
+        observacion: proyecto.observacion,
+        investigador: proyecto.investigador,
         // Añadir las demás propiedades según sea necesario
       }));
     
