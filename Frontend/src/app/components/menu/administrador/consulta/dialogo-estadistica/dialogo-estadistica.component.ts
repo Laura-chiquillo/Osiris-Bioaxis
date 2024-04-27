@@ -59,8 +59,8 @@ export class DialogoEstadisticaComponent implements OnInit {
         break; 
       } 
       default: {        
-        this.data.forEach((element: { estado: any; }) => {
-          labelData.push(element.estado);
+        this.data.forEach((element: { rolinvestigador: any; }) => {
+          labelData.push(element.rolinvestigador);
         });
         break; 
       } 
@@ -94,7 +94,16 @@ export class DialogoEstadisticaComponent implements OnInit {
               return ` ${label}: ${value} (${percentage})`;
             }
           }
-        }
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        },
       }]
     };
     this.chartGeneral = new Chart("chartGeneral", {
