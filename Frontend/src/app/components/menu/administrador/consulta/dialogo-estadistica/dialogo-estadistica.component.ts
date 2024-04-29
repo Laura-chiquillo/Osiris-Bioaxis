@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatRippleModule } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import Chart, { ChartType } from 'chart.js/auto';
 
@@ -13,6 +14,7 @@ import Chart, { ChartType } from 'chart.js/auto';
     MatButtonModule,
     MatDialogModule,
     CommonModule,
+    MatRippleModule
   ],
 })
 export class DialogoEstadisticaComponent implements OnInit {
@@ -21,6 +23,13 @@ export class DialogoEstadisticaComponent implements OnInit {
   data!: any;
   detail!: boolean;
   public chartGeneral!: Chart;
+
+  centered = false;
+  disabled = false;
+  unbounded = false;
+
+  radius!: number;
+  color!: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public dialogData: {
@@ -59,8 +68,8 @@ export class DialogoEstadisticaComponent implements OnInit {
         break; 
       } 
       default: {        
-        this.data.forEach((element: { rolinvestigador: any; }) => {
-          labelData.push(element.rolinvestigador);
+        this.data.forEach((element: { estado: any; }) => {
+          labelData.push(element.estado);
         });
         break; 
       } 
