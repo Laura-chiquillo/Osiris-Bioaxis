@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
 import { Investigador } from '../modelo/investigador';
 import { AutenticacionService } from '../services/autenticacion';
 import { InvestigadorService } from '../services/registroInvestigador';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-navbar',
@@ -15,11 +15,11 @@ export class NavbarComponent {
   constructor(private router: Router, private InvestigadorService: InvestigadorService, private formBuilder: FormBuilder,
     private autenticacionService: AutenticacionService) {
     this.registroForm = this.formBuilder.group({
-      nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
-      apellidos: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
-      correo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@unbosque\.edu\.c$/)]],
+      nombre: ['', [Validators.required]],
+      apellidos: ['', [Validators.required]],
+      correo: ['', [Validators.required, Validators.email]],
       tipodocumento: ['', [Validators.required]],
-      numerodocumento: ['', [Validators.pattern(/^[0-9]+$/)]],
+      numerodocumento: ['', [Validators.required]],
       contrasena: ['', [Validators.required, Validators.minLength(8)]],
       confirmarContrasena: ['', [Validators.required]],
     });
@@ -28,7 +28,6 @@ export class NavbarComponent {
       contrasena: ['', [Validators.required, Validators.minLength(8)]]
     });
   }
-
 
   // login
   loginForm: FormGroup;
@@ -58,7 +57,7 @@ export class NavbarComponent {
           if (rolInvestigador === 'Investigador') {
             if (estado) {
               // Si el investigador está activo, redirigir a la URL del perfil del investigador
-              window.location.href = 'https://osirisybioaxis-31ea9bf3d8f8.herokuapp.com/investigadores/perfil';
+              window.location.href = 'http://localhost:4200/investigadores/perfil';
             } else {
               // Si el investigador está inactivo
               console.log('El investigador no está activo');
@@ -72,7 +71,7 @@ export class NavbarComponent {
             }
           } else if (rolInvestigador === 'Administrador') {
             // Si es un administrador, redirigir a la URL del perfil del administrador
-            window.location.href = 'https://osirisybioaxis-31ea9bf3d8f8.herokuapp.com/administrador/perfil';
+            window.location.href = 'http://localhost:4200/administrador/perfil';
           } else {
             // Manejar otros roles si es necesario
             console.log("Rol estudiante")
@@ -80,12 +79,7 @@ export class NavbarComponent {
         },
         (error) => {
           console.error('Error al iniciar sesión:', error);
-          Swal.fire({
-            title: 'ERROR!!!',
-            text: 'Credenciales invalidas',
-            icon: 'warning',
-            confirmButtonText: 'Aceptar'
-          });
+          // Manejar el error de inicio de sesión, por ejemplo, mostrar un mensaje al usuario
         }
       );
     }
@@ -140,6 +134,7 @@ export class NavbarComponent {
 
   public registroForm: FormGroup;
   
+  private emailPattern: any = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   typedocument: string[] = ['CC', 'TI', 'CE', 'RC', 'PA'];
 
   
