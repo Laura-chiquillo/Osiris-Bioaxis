@@ -13,11 +13,195 @@ table {
     width: 100%;
 }
 
-.titulo{
-    display: flex;
-    justify-content: space-evenly; /* Distribuye los elementos a lo largo del contenedor */
-    margin-top: 60px;
-  }
+.titulo {
+  display: flex;
+  gap: 1rem; /* Espacio entre cada input-container */
+  align-items: flex-end; /* Alinea los elementos al final para que estén alineados verticalmente */
+  justify-content: center; /* Centra los inputs en el contenedor */
+}
+
+.custom-input-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 300px; /* Permite que los contenedores se reduzcan y crezcan, con un tamaño base de 300px */
+  max-width: 300px; /* Ancho máximo para los contenedores */
+}
+
+.custom-input-container label {
+  margin-bottom: 0.5rem; /* Espacio entre el label y el input */
+}
+
+.custom-input-container input,
+.custom-chip-list input[matInput] {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 100%; /* Para que el input ocupe todo el ancho del contenedor */
+  box-sizing: border-box; /* Incluye el padding y border dentro del ancho total del input */
+}
+
+.custom-chip-list {
+  width: 100%; /* Asegura que el contenedor de los chips también ocupe todo el ancho disponible */
+}
+
+.custom-input-container input[matInput]:focus,
+.custom-chip-list input[matInput]:focus {
+  border-color: #3f51b5; /* Cambia el color del borde al enfocar */
+  background-color: #fff; /* Cambia el color de fondo al enfocar */
+}
+
+/* Ajustes adicionales para la lista de chips */
+mat-chip-row {
+  margin: 5px;
+}
+
+mat-chip-row button mat-icon {
+  font-size: 16px;
+  color: #ff5252; /* Cambia el color del icono de eliminación */
+}
+
+input[matChipInputFor] {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  outline: none;
+  transition: border-color 0.3s;
+  width: 100%; /* Asegura que el input ocupe todo el ancho disponible dentro del contenedor */
+}
+
+input[matChipInputFor]:focus {
+  border-color: #3f51b5; /* Cambia el color del borde al enfocar */
+  background-color: #fff; /* Cambia el color de fondo al enfocar */
+}
+.custom-input-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Para que cada contenedor de entrada ocupe un espacio igual */
+  max-width: 300px; /* Ancho máximo para los contenedores */
+}
+
+.custom-input-container label {
+  margin-bottom: 0.5rem; /* Espacio entre el label y el input */
+}
+
+.custom-input-container input,
+.custom-input-container mat-select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 100%; /* Para que el input ocupe todo el ancho del contenedor */
+  box-sizing: border-box; /* Incluye el padding y border dentro del ancho total del input */
+}
+
+.custom-input-container input:focus,
+.custom-input-container mat-select:focus {
+  border-color: #3f51b5; /* Cambia el color del borde al enfocar */
+  background-color: #fff; /* Cambia el color de fondo al enfocar */
+}
+.custom-input-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Para que cada contenedor de entrada ocupe un espacio igual */
+  max-width: 300px; /* Ancho máximo para los contenedores */
+}
+
+.custom-input-container label {
+  margin-bottom: 0.5rem; /* Espacio entre el label y el input */
+}
+
+.custom-input-container input,
+.custom-input-container mat-datepicker-toggle button {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 100%; /* Para que el input ocupe todo el ancho del contenedor */
+  box-sizing: border-box; /* Incluye el padding y border dentro del ancho total del input */
+}
+
+.custom-input-container input:focus,
+.custom-input-container mat-datepicker-toggle button:focus {
+  border-color: #3f51b5; /* Cambia el color del borde al enfocar */
+  background-color: #fff; /* Cambia el color de fondo al enfocar */
+}
+
+.custom-input-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Para que cada contenedor de entrada ocupe un espacio igual */
+  max-width: 300px; /* Ancho máximo para los contenedores */
+}
+
+.custom-input-container label {
+  margin-bottom: 0.5rem; /* Espacio entre el label y el input */
+}
+
+.custom-input-container input,
+.custom-input-container mat-select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 100%; /* Para que el input ocupe todo el ancho del contenedor */
+  box-sizing: border-box; /* Incluye el padding y border dentro del ancho total del input */
+}
+
+.custom-input-container input:focus,
+.custom-input-container mat-select:focus {
+  border-color: #3f51b5; /* Cambia el color del borde al enfocar */
+  background-color: #fff; /* Cambia el color de fondo al enfocar */
+}
+.custom-input-container {
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Asegura que los elementos absolutos sean relativos a este contenedor */
+}
+
+.custom-input-container input,
+.custom-input-container mat-datepicker-toggle button {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.custom-input-container mat-datepicker-toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px; /* Ajusta el espaciado del lado derecho según sea necesario */
+  transform: translateY(-25%);
+}
+
+.container {
+  display: flex;
+  align-items: center; /* Alinea verticalmente los elementos */
+}
+
+.custom-input-container {
+  flex: 1; /* Ocupa todo el espacio disponible */
+}
+
+.example-button-container {
+  margin-left: 10px; /* Ajusta según sea necesario */
+  margin-top: -65px;
+}
+
+/* Estilo personalizado para los botones de alternancia */
+::ng-deep .mat-button-toggle {
+  border-radius: 20px; /* Ajusta el radio de borde para hacerlos más redondeados */
+  background-color: #e0e0e0; /* Color de fondo */
+  color: #333; /* Color del texto */
+  margin: 5px; /* Margen entre botones */
+}
+
+/* Estilo para el botón de alternancia activo */
+::ng-deep .mat-button-toggle.mat-button-toggle-checked {
+  background-color: #3f51b5; /* Color de fondo cuando está activo */
+  color: white; /* Color del texto cuando está activo */
+}
+
+/* Estilo para el botón de alternancia hover */
+::ng-deep .mat-button-toggle:hover:not(.mat-button-toggle-checked) {
+  background-color: #cfd8dc; /* Color de fondo cuando se pasa el ratón sobre él */
+  color: #333; /* Color del texto cuando se pasa el ratón sobre él */
+}
+
   
   .titulo2{
     display: flex;
@@ -30,18 +214,12 @@ table {
     margin-top: 8px;
   }
   
-  .mat-mdc-form-field {
-    margin-top: 16px;
-  }
   .reg {
     display: flex;
     justify-content: center;
     margin-left: 70px;
   }
   
-  .form-field-spacing {
-    margin-right: 30px; /* Ajusta este valor según el espacio deseado entre los mat-form-field */
-  }
   .example-chip-list {
     width: 100%;
   }
@@ -57,23 +235,120 @@ table {
     margin-left: 200px; /* Ajusta este valor según sea necesario */
   }
   
-  .resumenArt mat-form-field {
-    max-width: 600px; /* Agrega esta línea para establecer el ancho máximo */
-  }
-  
-  .resumenArt mat-form-field input {
-    height: 100px; /* Ajusta la altura según sea necesario */
-    white-space: pre-wrap;
-    overflow-wrap: break-word; /* Utiliza overflow-wrap en lugar de word-wrap */
-    overflow-y: auto; /* Permite desplazamiento vertical cuando sea necesario */
-  }
   
   .anchoGuardar{
     width: 150px;
   }
-  .mat-mdc-radio-button ~ .mat-mdc-radio-button {
-    margin-left: 16px;
+
+  .custom-input-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
   }
+  
+  .custom-input-container label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
+  .custom-input-container input[matInput] {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  .custom-input-container input[matInput]:focus {
+    border-color: #3f51b5; /* Cambia el color del borde al enfocar */
+    background-color: #fff; /* Cambia el color de fondo al enfocar */
+  }
+  .custom-chip-list-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .custom-chip-list-container label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
+  .example-chip-list {
+    width: 100%;
+  }
+  
+  mat-chip-row {
+    margin: 5px;
+  }
+  
+  mat-chip-row button mat-icon {
+    font-size: 16px;
+    color: #ff5252; /* Cambia el color del icono de eliminación */
+  }
+  
+  input[matChipInputFor] {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    outline: none;
+    transition: border-color 0.3s;
+    width: calc(100% - 40px); /* Asegura que el input no ocupe todo el ancho */
+  }
+  
+  input[matChipInputFor]:focus {
+    border-color: #3f51b5; /* Cambia el color del borde al enfocar */
+    background-color: #fff; /* Cambia el color de fondo al enfocar */
+  }
+  
+  .mat-form-field {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .custom-input-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .custom-input-container label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
+  .custom-input-container mat-select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+  }
+  
+  .custom-input-container mat-select::ng-deep .mat-select-trigger {
+    padding: 10px;
+  }
+  
+  .custom-input-container mat-option {
+    padding: 10px;
+  }
+  
+  .custom-input-container mat-select:focus,
+  .custom-input-container mat-select.mat-select-focused {
+    border-color: #3f51b5; /* Cambia el color del borde al enfocar */
+    background-color: #fff; /* Cambia el color de fondo al enfocar */
+  }
+      
   
 .example-chip-list {
   width: 250px; /* Establece la anchura deseada */

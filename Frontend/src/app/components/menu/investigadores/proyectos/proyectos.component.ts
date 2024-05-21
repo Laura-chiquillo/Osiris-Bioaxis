@@ -9,7 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {
   FormBuilder,
   FormControl,
@@ -80,6 +80,7 @@ import { DialogoDetalleComponent } from '../../administrador/control/dialogo-det
     MatPaginatorModule,
     MatButtonModule,
     MatStepperModule,
+    MatButtonToggleModule,
     MatNativeDateModule,
     MatDatepickerModule,
     FormsModule,
@@ -151,6 +152,8 @@ export class ProyectosComponent implements OnInit {
   @ViewChild('investigatorInput')
   investigatorInput!: ElementRef<HTMLInputElement>;
 
+  selectedOption: string;
+
   constructor(
     private ProyectoyproductoService: ProyectoyproductoService,
     private formBuilder: FormBuilder,
@@ -164,7 +167,6 @@ export class ProyectosComponent implements OnInit {
   ) {
     this.firstFormGroup = this.formBuilder.group({
       codigo: [''],
-      fecha: [''],
       titulo: [''],
       investigador: [''],
       unidadAcademica: [''],
@@ -215,9 +217,8 @@ export class ProyectosComponent implements OnInit {
         pendiente: [''],
         clasificacion: [''],
       }),
-    });
-    this.secondFormGroup = this.formBuilder.group({
-      id: [''],
+      producto: this.formBuilder.group({
+        id: [''],
       tituloProducto: [''],
       rolProducto: [''],
       investigador: [''],
@@ -324,6 +325,10 @@ export class ProyectosComponent implements OnInit {
       estudiantesProducto: [''],
       participantesExternosProducto: [''],
       coinvestigadoresProducto: [''],
+      })
+    });
+    this.secondFormGroup = this.formBuilder.group({
+      
     });
     this.productoFormGroup = this.formBuilder.group({
       id: [''],
@@ -434,6 +439,12 @@ export class ProyectosComponent implements OnInit {
       participantesExternosProducto: [''],
       coinvestigadoresProducto: [''],
     });
+    this.selectedOption  = '';
+  }
+
+  //seleccionar en proyecto
+  onSelectionChange2(event: any) {
+    this.selectedOption = event.value;
   }
 
   ngOnInit(): void {
@@ -942,7 +953,6 @@ export class ProyectosComponent implements OnInit {
     if (this.firstFormGroup.valid && this.secondFormGroup.valid) {
       const proyecto: Proyecto = {
         codigo: this.firstFormGroup.get('codigo')?.value,
-        fecha: moment(this.firstFormGroup.get('fecha')?.value).format('YYYY-MM-DD'),
         titulo: this.firstFormGroup.get('titulo')?.value,
         investigador: this.firstFormGroup.get('investigador')?.value,
         unidadAcademica: this.firstFormGroup.get('unidadAcademica')?.value,

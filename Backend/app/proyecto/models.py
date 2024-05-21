@@ -413,7 +413,6 @@ class EstadoProyecto(models.Model):
 
 class Proyecto(models.Model):
     codigo = models.CharField(max_length=50, primary_key=True)
-    fecha = models.DateTimeField()
     titulo = models.CharField(max_length=500)
     investigador = models.CharField(max_length=50)
     unidadAcademica =  models.CharField(max_length=50)
@@ -421,14 +420,14 @@ class Proyecto(models.Model):
     coinvestigador = models.ManyToManyField(Investigador)
     area = models.CharField(max_length=50)
     porcentajeEjecucionCorte = models.IntegerField()
-    entidadPostulo = models.ForeignKey(EntidadPostulo,null=False,blank=False,on_delete=models.CASCADE)
-    financiacion = models.ForeignKey(Financiacion,null=False,blank=False,on_delete=models.CASCADE)
+    entidadPostulo = models.ForeignKey(EntidadPostulo,null=True,blank=True,on_delete=models.CASCADE)
+    financiacion = models.ForeignKey(Financiacion,null=True,blank=True,on_delete=models.CASCADE)
     grupoInvestigacionPro =  models.CharField(max_length=50)
     porcentajeEjecucionFinCorte = models.IntegerField()
     porcentajeAvance = models.IntegerField()
     observacion = models.CharField(max_length=5000,default='')
     Soporte = models.FileField(upload_to ='uploadsProducto/',max_length=1000, blank=True)
-    transacciones = models.ForeignKey(Transacciones,null=False,blank=False,on_delete=models.CASCADE)
+    transacciones = models.ForeignKey(Transacciones,null=True,blank=True,on_delete=models.CASCADE)
     origen = [
         ("nacional", "nacional"),
         ("internacional", "internacional"),

@@ -142,7 +142,6 @@ class CrearProyecto(APIView):
 
         proyecto_data = {
             'codigo': request.data.get('codigo'),
-            'fecha': make_aware(datetime.strptime(request.data.get('fecha'), "%Y-%m-%d")),
             'titulo': request.data.get('titulo'),
             'investigador': request.data.get('investigador'),
             'area': request.data.get('area'),
