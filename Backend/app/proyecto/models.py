@@ -317,7 +317,6 @@ class Producto(models.Model):
     estadoProducto = models.ForeignKey(EstadoProducto,null=False,blank=False,on_delete=models.CASCADE)
     porcentajeComSemestral = models.IntegerField()
     porcentajeRealMensual = models.IntegerField()
-    fecha = models.DateTimeField(default=datetime.datetime.now)
     origen = models.CharField(max_length=5000)
     observacion = models.CharField(max_length=5000,default='')
     Soporte = models.FileField(upload_to ='uploadsProducto/',max_length=1000, blank=True)
@@ -390,7 +389,7 @@ class Financiacion(models.Model):
 
 class Transacciones(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fecha = models.DateTimeField()
+    fecha = models.DateTimeField(null=True, blank=True)
     acta = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=50)
     class Meta:

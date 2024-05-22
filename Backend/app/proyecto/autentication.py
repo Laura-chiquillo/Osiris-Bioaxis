@@ -98,34 +98,87 @@ class CrearProyecto(APIView):
             producto =  json.loads(request.data.get('producto'))
             producto_id = producto.get('id')        
 
-        entidadPostulo_data= json.loads(request.data.get('entidadPostulo'))
-        entidadPostulo_nombreIntitucion = entidadPostulo_data.get('nombreInstitucion')
-        entidadPostulo_nombreGrupo = entidadPostulo_data.get('nombreGrupo')
-        entidadPostulo,_=EntidadPostulo.objects.get_or_create(
-            id=EntidadPostulo.objects.count()+1,
-            nombreInstitucion=entidadPostulo_nombreIntitucion,
-            nombreGrupo=entidadPostulo_nombreGrupo
-        )
-        
-        financiacion_data = json.loads(request.data.get('financiacion'))
-        financiacion_valorPropuestoFin = financiacion_data.get('valorPropuestoFin')
-        financiacion_valorEjecutadoFin = financiacion_data.get('valorEjecutadoFin')
-        financiacion,_=Financiacion.objects.get_or_create(
-            id=Financiacion.objects.count()+1,
-            valorPropuestoFin=financiacion_valorPropuestoFin,
-            valorEjecutadoFin=financiacion_valorEjecutadoFin
-        )
+        # Entidad Postulo
+        entidadPostulo_data = json.loads(request.data.get('entidadPostulo', '{}'))
+        entidadPostulo = None
 
-        transacciones_data = json.loads(request.data.get('transacciones'))
-        transacciones_fecha=transacciones_data.get('fecha_transacciones')
-        transacciones_acta=transacciones_data.get('acta')
-        transacciones_descripcion=transacciones_data.get('descripcion')
-        transacciones,_=Transacciones.objects.get_or_create(
-            id=Transacciones.objects.count()+1,
-            fecha=transacciones_fecha,
-            acta=transacciones_acta,
-            descripcion=transacciones_descripcion
-        )
+        if entidadPostulo_data:
+            entidadPostulo_nombreInstitucion = entidadPostulo_data.get('nombreInstitucion')
+            entidadPostulo_nombreGrupo = entidadPostulo_data.get('nombreGrupo')
+
+            # Verificar si al menos uno de los campos está presente
+            if entidadPostulo_nombreInstitucion or entidadPostulo_nombreGrupo:
+                # Si al menos uno de los campos está presente, crear la instancia de EntidadPostulo
+                entidadPostulo, _ = EntidadPostulo.objects.get_or_create(
+                    id=EntidadPostulo.objects.count() + 1,
+                    defaults={
+                        'nombreInstitucion': entidadPostulo_nombreInstitucion,
+                        'nombreGrupo': entidadPostulo_nombreGrupo
+                    }
+                )
+            else:
+                # Si ninguno de los campos está presente, no se crea la instancia de EntidadPostulo
+                # Puedes manejar esto según tus necesidades
+                print("No se proporcionaron datos suficientes para crear una instancia de EntidadPostulo")
+        else:
+            # Si no hay datos de entidadPostulo, no se crea la instancia de EntidadPostulo
+            print("No hay datos de entidadPostulo en la solicitud")
+
+        # Financiacion
+        financiacion_data = json.loads(request.data.get('financiacion', '{}'))
+        financiacion = None
+
+        if financiacion_data:
+            financiacion_valorPropuestoFin = financiacion_data.get('valorPropuestoFin')
+            financiacion_valorEjecutadoFin = financiacion_data.get('valorEjecutadoFin')
+
+            # Verificar si al menos uno de los campos está presente
+            if financiacion_valorPropuestoFin or financiacion_valorEjecutadoFin:
+                # Si al menos uno de los campos está presente, crear la instancia de Financiacion
+                financiacion, _ = Financiacion.objects.get_or_create(
+                    id=Financiacion.objects.count() + 1,
+                    defaults={
+                        'valorPropuestoFin': financiacion_valorPropuestoFin,
+                        'valorEjecutadoFin': financiacion_valorEjecutadoFin
+                    }
+                )
+            else:
+                # Si ninguno de los campos está presente, no se crea la instancia de Financiacion
+                # Puedes manejar esto según tus necesidades
+                print("No se proporcionaron datos suficientes para crear una instancia de Financiacion")
+        else:
+            # Si no hay datos de financiacion, no se crea la instancia de Financiacion
+            print("No hay datos de financiacion en la solicitud")
+
+        
+        
+        transacciones_data = json.loads(request.data.get('transacciones', '{}'))
+        transacciones = None
+
+        if transacciones_data:
+            transacciones_fecha = transacciones_data.get('fecha_transacciones')
+            transacciones_acta = transacciones_data.get('acta')
+            transacciones_descripcion = transacciones_data.get('descripcion')
+            
+            # Verificar si la fecha está presente
+            if transacciones_fecha:
+                # Si la fecha está presente, crear la instancia de Transacciones
+                transacciones, _ = Transacciones.objects.get_or_create(
+                    id=Transacciones.objects.count() + 1,
+                    defaults={
+                        'fecha': transacciones_fecha,
+                        'acta': transacciones_acta,
+                        'descripcion': transacciones_descripcion
+                    }
+                )
+            else:
+                # Si la fecha no está presente, no se crea la instancia de Transacciones
+                # Puedes manejar esto según tus necesidades, como mostrar un mensaje de error o tomar otra acción
+                print("La fecha de transacciones no está presente en los datos")
+        else:
+            # Si no hay datos de transacciones, no se crea la instancia de Transacciones
+            print("No hay datos de transacciones en la solicitud")
+
 
         ubicacionProyecto_data = json.loads(request.data.get('ubicacionProyecto'))
         ubicacionProyecto_instalacion= ubicacionProyecto_data.get('instalacion')
@@ -431,7 +484,6 @@ class CrearProyecto(APIView):
             'estadoProceso': 'Espera',
             'porcentajeComSemestral': producto.get('porcentajeComSemestral'),
             'porcentajeRealMensual': producto.get('porcentajeRealMensual'),
-            'fecha':  make_aware(datetime.strptime(producto.get('fecha'), "%Y-%m-%d")),
             'origen': producto.get('origen'),
             'categoriaMinciencias': CategoriaMinciencias.objects.get(pk=1),
             'cuartilEsperado': CuartilEsperado.objects.get(pk=1),
@@ -686,7 +738,6 @@ class CrearNuevoProducto(APIView):
             'estadoProceso': 'Espera',
             'porcentajeComSemestral': request.data.get('porcentajeComSemestral'),
             'porcentajeRealMensual': request.data.get('porcentajeRealMensual'),
-            'fecha':  make_aware(datetime.strptime(request.data.get('fecha'), "%Y-%m-%d")),
             'origen': request.data.get('origen'),
             'categoriaMinciencias': CategoriaMinciencias.objects.get(pk=1),
             'cuartilEsperado': CuartilEsperado.objects.get(pk=1),
@@ -732,7 +783,7 @@ class MostrarInvestigadores(APIView):
             
             proyectos_data = [{
                 'codigo': proyecto.codigo,
-                'fecha': proyecto.fecha,
+                'fecha': proyecto.created_at,
                 'titulo': proyecto.titulo,
                 # otros campos del proyecto si los hay
             } for proyecto in proyectos]
@@ -790,7 +841,7 @@ class MostrarProductos(APIView):
                 'titulo_producto': producto.tituloProducto,
                 'publicacion': producto.publicacion,
                 'estado_producto': producto.estadoProducto,
-                'fecha': producto.fecha,
+                'fecha': producto.created_at,
                 #'soporte': producto.Soporte,
                 'observaciones': producto.observaciones,
                 'porcentanjeAvanFinSemestre': producto.porcentanjeAvanFinSemestre,
