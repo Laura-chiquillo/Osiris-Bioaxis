@@ -35,7 +35,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatRadioModule } from '@angular/material/radio';
@@ -61,53 +61,47 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { DialogoAvanceEntregableComponent } from './dialogo-avance-entregable/dialogo-avance-entregable.component';
 import { DialogoDetalleComponent } from '../../administrador/control/dialogo-detalle/dialogo-detalle.component';
 
-@Component({
-  selector: 'app-proyectos',
-  templateUrl: './proyectos.component.html',
-  styleUrls: ['./proyectos.component.css'],
-  standalone: true,
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
-  imports: [
-    MatTabsModule,
-    MatSelectModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatButtonModule,
-    MatStepperModule,
-    MatButtonToggleModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatChipsModule,
-    MatIconModule,
-    MatAutocompleteModule,
-    ReactiveFormsModule,
-    AsyncPipe,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-    MatCheckboxModule,
-    MatSliderModule,
-    MatRadioModule,
-    CommonModule,
-    HttpClientModule,
-    MatButtonModule, 
-    MatDialogModule, 
-    DialogoCreacionEstudiantesComponent,
-    MatTooltipModule
-  ],
-})
+@Component({ selector: 'app-proyectos',
+    templateUrl: './proyectos.component.html',
+    styleUrls: ['./proyectos.component.css'],
+    standalone: true,
+    animations: [
+        trigger('detailExpand', [
+            state('collapsed', style({ height: '0px', minHeight: '0' })),
+            state('expanded', style({ height: '*' })),
+            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+        ]),
+    ], imports: [MatTabsModule,
+        MatSelectModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatButtonModule,
+        MatStepperModule,
+        MatButtonToggleModule,
+        MatNativeDateModule,
+        MatDatepickerModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatChipsModule,
+        MatIconModule,
+        MatAutocompleteModule,
+        ReactiveFormsModule,
+        AsyncPipe,
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        MatCheckboxModule,
+        MatSliderModule,
+        MatRadioModule,
+        CommonModule,
+        MatButtonModule,
+        MatDialogModule,
+        DialogoCreacionEstudiantesComponent,
+        MatTooltipModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class ProyectosComponent implements OnInit {
   //mostrar los coinvestigadores que hay
   separatorKeysCodes: number[] = [13, 188];
