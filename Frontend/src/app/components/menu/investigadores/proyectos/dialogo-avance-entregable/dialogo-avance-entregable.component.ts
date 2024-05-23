@@ -39,7 +39,7 @@ import { AutenticacionService } from '../../../services/autenticacion';
         FormsModule,
         AsyncPipe,
         MatListModule,
-        MatTooltipModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        MatTooltipModule],  }) //providers: [provideHttpClient(withInterceptorsFromDi())]
 export class DialogoAvanceEntregableComponent implements OnInit {
 
   buttonTitle!: string;

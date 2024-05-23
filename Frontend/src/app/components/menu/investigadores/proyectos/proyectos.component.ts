@@ -101,7 +101,7 @@ import { DialogoDetalleComponent } from '../../administrador/control/dialogo-det
         MatButtonModule,
         MatDialogModule,
         DialogoCreacionEstudiantesComponent,
-        MatTooltipModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        MatTooltipModule],  })//providers: [provideHttpClient(withInterceptorsFromDi())]
 export class ProyectosComponent implements OnInit {
   //mostrar los coinvestigadores que hay
   separatorKeysCodes: number[] = [13, 188];
