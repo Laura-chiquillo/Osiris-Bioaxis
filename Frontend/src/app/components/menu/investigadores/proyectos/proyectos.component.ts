@@ -1543,7 +1543,7 @@ thumbLabel6 = false;
   //--------------------------------------------------------------------------------------
   //--------------------------------------------------------------------------------------
  
-  displayedColumns: string[] = ['tipo', 'titulo', 'fecha', 'estado', 'etapa', 'acciones', 'expand'];
+  displayedColumns: string[] = ['tipo', 'titulo', 'estado', 'etapa', 'acciones', 'expand'];
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
   dataSource = new MatTableDataSource<any>([]);
   
