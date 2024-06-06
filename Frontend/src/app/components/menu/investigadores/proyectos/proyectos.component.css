@@ -202,7 +202,16 @@ input[matChipInputFor]:focus {
   color: #333; /* Color del texto cuando se pasa el ratón sobre él */
 }
 
-  
+/* Estilo para campos de entrada con error */
+input.ng-invalid {
+  border-color: red; /* Cambiar el borde a rojo */
+}
+
+/* Estilo para mensajes de error */
+.error-message {
+  color: red; /* Cambiar el color del texto a rojo */
+}
+
   .titulo2{
     display: flex;
     justify-content: space-evenly; /* Distribuye los elementos a lo largo del contenedor */

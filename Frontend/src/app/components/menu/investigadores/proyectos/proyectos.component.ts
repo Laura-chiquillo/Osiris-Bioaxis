@@ -15,7 +15,8 @@ import {
   FormControl,
   FormGroup,
   FormsModule,
-  ReactiveFormsModule
+  ReactiveFormsModule,
+  Validators
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -171,13 +172,14 @@ export class ProyectosComponent implements OnInit {
       porcentajeEjecucionCorte: [0],
       entidadPostulo: this.formBuilder.group({
         id: [''],
-        nombreInstitucion: [''],
-        nombreGrupo: [''],
+        nombreInstitucion: ['',[ Validators.pattern(/^[a-zA-Z\s]*$/)]],
+        nombreGrupo: ['',[ Validators.pattern(/^[a-zA-Z\s]*$/)]],
       }),
       financiacion: this.formBuilder.group({
         id: [''],
-        valorPropuestoFin: [''],
-        valorEjecutadoFin: [''],
+        valorPropuestoFin: ['', [ Validators.pattern(/^\d+$/)]],
+        valorEjecutadoFin: ['', [ Validators.pattern(/^\d+$/)]],
+
       }),
       grupoInvestigacionPro: [''],
       porcentajeEjecucionFinCorte: [0],
@@ -186,7 +188,7 @@ export class ProyectosComponent implements OnInit {
       transacciones: this.formBuilder.group({
         id: [''],
         fecha_transacciones: [''],
-        acta: [''],
+        acta: ['',this.selectedFiletransaccion],
         descripcion: [''],
       }),
       origen: [''],
@@ -755,6 +757,13 @@ export class ProyectosComponent implements OnInit {
     this.selectedFileProducto = event.target.files[0] as File;
   }
 
+  //subir archivo de transacciones
+  selectedFiletransaccion: File = null!;
+
+  onFileSelected3(event: any) {
+    this.selectedFiletransaccion = event.target.files[0] as File;
+  }
+
   //mostrar productos en nuevo proyecto
   mostrarInputs: boolean = false;
 
@@ -933,6 +942,7 @@ export class ProyectosComponent implements OnInit {
 
   guardarProyecto() {
     if (this.firstFormGroup.valid) {
+      console.log( "datos tomados:",this.firstFormGroup.value)
       const proyecto: Proyecto = {
         codigo: this.firstFormGroup.get('codigo')?.value,
         titulo: this.firstFormGroup.get('titulo')?.value,
@@ -954,6 +964,12 @@ export class ProyectosComponent implements OnInit {
         soporte: this.selectedFileProyecto,
         soporteProducto: this.selectedFileProduct,
         transacciones: this.firstFormGroup.get('transacciones')?.value,
+        actatransacciones: this.selectedFiletransaccion,
+        //transacciones: {
+          //fecha: this.firstFormGroup.get('transacciones.fecha_transacciones')?.value,
+          //acta: this.selectedFiletransaccion,
+          //descripcion: this.firstFormGroup.get('transacciones.descripcion')?.value,
+        //},
         origen: this.firstFormGroup.get('origen')?.value,
         convocatoria: this.firstFormGroup.get('convocatoria')?.value,
         ubicacionProyecto: this.firstFormGroup.get('ubicacionProyecto')?.value,
@@ -1073,7 +1089,7 @@ export class ProyectosComponent implements OnInit {
             coinvestigadoresProducto:  this.firstFormGroup.value.producto.coinvestigadoresProducto,
           }        
       };
-
+      console.log("datos de proyeeeecto",proyecto);
       proyecto.estadoProyecto = "Espera";
       proyecto.investigador = this.usuarioSesion.numerodocumento;
 
@@ -1098,6 +1114,7 @@ export class ProyectosComponent implements OnInit {
             `El proyecto ${resp.codigo} ha sido registrado con el estado ${resp.estadoProceso}`
           );
           if(resp.producto !== null){
+            
             this.notificar(
               `Nuevo Producto ${resp.id}`,
               resp.investigador,

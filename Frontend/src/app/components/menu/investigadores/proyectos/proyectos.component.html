@@ -193,11 +193,11 @@
             </div>
             
             <div class="custom-input-container">
-              <label for="codigo">Linea de investigación</label>
-              <input matInput id="lineaInvestigacion" placeholder="Ingrese la linea de investigación" required formControlName="lineaInvestigacion">
+              <label for="codigo">Línea de investigación</label>
+              <input matInput id="lineaInvestigacion" placeholder="Ingrese la línea de investigación" required formControlName="lineaInvestigacion">
             </div>
             <div class="custom-input-container">
-            <p>Soporte</p>
+              <label for="coinvestigadoresProducto">Soporte</label>
             <input formControlName="soporteProyecto" type="file" (change)="onFileSelected($event)" />
           </div>
           </div>
@@ -242,11 +242,9 @@
             </div>
           </div>
           <div class="titulo">
-            <p>Estudiantes</p>
-          </div>
-          <div class="titulo">
             <div class="custom-input-container form-field-spacing" appearance="fill">
-              <mat-select formControlName="estudiantesProyecto" multiple>
+              <label for="estudiantesProducto">Estudiantes</label>
+              <mat-select  placeholder="Añadir estudiante" formControlName="estudiantesProyecto" multiple>
                 <mat-option *ngFor="let data of estudiantesData" [value]="data.numeroDocumento">
                   {{data.numeroDocumento}} - {{data.nombres}} {{data.apellidos}}
                 </mat-option>
@@ -265,11 +263,9 @@
             
           </div>
           <div class="titulo">
-            <p>Participantes Externos</p>
-          </div>
-          <div class="titulo">
             <div class="custom-input-container form-field-spacing" appearance="fill">
-              <mat-select formControlName="participantesExternosProyecto" multiple>
+              <label for="estudiantesProducto">Participantes Externos</label>
+              <mat-select placeholder="Añadir participante externo" formControlName="participantesExternosProyecto" multiple>
                 <mat-option *ngFor="let data of participanteExternoData" [value]="data.numerodocumento">
                   {{data.numerodocumento}} - {{data.nombre}} {{data.apellidos}}
                 </mat-option>
@@ -323,35 +319,45 @@
             <h3 style="text-align: center;"> FINANCIACIÓN</h3>
             <span style="display:inline-block; width: 150px;"></span>
             <div formGroupName="financiacion">
-                <div class="titulo">
-                    <div class="custom-input-container">
-                        <label for="valorPropuestoFin">Valor Propuesto</label>
-                        <input matInput id="valorPropuestoFin" placeholder="Ingrese el valor" formControlName="valorPropuestoFin">
-                    </div>
-                    <div class="custom-input-container">
-                        <label for="valorEjecutadoFin">Valor Ejecutado</label>
-                        <input matInput id="valorEjecutadoFin" placeholder="Ingrese el valor" formControlName="valorEjecutadoFin">
-                    </div>
-                </div>
-            </div>
+              <div class="titulo">
+                  <div class="custom-input-container">
+                      <label for="valorPropuestoFin">Valor Propuesto</label>
+                      <input matInput id="valorPropuestoFin" placeholder="Ingrese el valor" formControlName="valorPropuestoFin">
+                      <div *ngIf="firstFormGroup.get('financiacion.valorPropuestoFin')?.invalid && (firstFormGroup.get('financiacion.valorPropuestoFin')?.dirty || firstFormGroup.get('financiacion.valorPropuestoFin')?.touched)">
+                          <p class="error-message">Ingrese solo números.</p>
+                      </div>
+                  </div>
+                  <div class="custom-input-container">
+                      <label for="valorEjecutadoFin">Valor Ejecutado</label>
+                      <input matInput id="valorEjecutadoFin" placeholder="Ingrese el valor" formControlName="valorEjecutadoFin">
+                      <div *ngIf="firstFormGroup.get('financiacion.valorEjecutadoFin')?.invalid && (firstFormGroup.get('financiacion.valorEjecutadoFin')?.dirty || firstFormGroup.get('financiacion.valorEjecutadoFin')?.touched)">
+                          <p class="error-message">Ingrese solo números.</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          
         </div>
         
         <div *ngIf="selectedOption.includes('flour')">
           <span style="display:inline-block; width: 150px;"></span>
           <h3 style="text-align: center;"> ENTIDAD A LA CUAL SE POSTULO</h3>
           <span style="display:inline-block; width: 150px;"></span>
-            <div formGroupName="entidadPostulo">
-                <div class="titulo">
-                    <div class="custom-input-container">
-                        <label for="nombreInstitucion">Nombre de la institución</label>
-                        <input matInput id="nombreInstitucion" placeholder="Ingrese el nombre" formControlName="nombreInstitucion">
-                    </div>
-                    <div class="custom-input-container">
-                        <label for="nombreGrupo">Nombre del grupo</label>
-                        <input matInput id="nombreGrupo" placeholder="Ingrese el nombre" formControlName="nombreGrupo">
-                    </div>
-                </div>
+          <div formGroupName="entidadPostulo">
+            <div class="titulo">
+              <div class="custom-input-container">
+                <label for="nombreInstitucion">Nombre de la institución</label>
+                <input matInput id="nombreInstitucion" placeholder="Ingrese el nombre" formControlName="nombreInstitucion" [ngClass]="{ 'invalid-input': firstFormGroup.get('entidadPostulo.nombreInstitucion')?.invalid && (firstFormGroup.get('entidadPostulo.nombreInstitucion')?.dirty || firstFormGroup.get('entidadPostulo.nombreInstitucion')?.touched) }">
+                <div *ngIf="firstFormGroup.get('entidadPostulo.nombreInstitucion')?.invalid && firstFormGroup.get('entidadPostulo.nombreInstitucion')?.dirty" class="error-message">Por favor, ingrese solo letras.</div>
+              </div>
+              <div class="custom-input-container">
+                <label for="nombreGrupo">Nombre del grupo</label>
+                <input matInput id="nombreGrupo" placeholder="Ingrese el nombre" formControlName="nombreGrupo" [ngClass]="{ 'invalid-input': firstFormGroup.get('entidadPostulo.nombreGrupo')?.invalid && (firstFormGroup.get('entidadPostulo.nombreGrupo')?.dirty || firstFormGroup.get('entidadPostulo.nombreGrupo')?.touched) }">
+                <div *ngIf="firstFormGroup.get('entidadPostulo.nombreGrupo')?.invalid && firstFormGroup.get('entidadPostulo.nombreGrupo')?.dirty" class="error-message">Por favor, ingrese solo letras.</div>
+              </div>
             </div>
+          </div>
+          
         </div>
         
         <div *ngIf="selectedOption.includes('sugar')">
@@ -360,16 +366,16 @@
           <span style="display:inline-block; width: 150px;"></span>
             <div formGroupName="transacciones">
                 <div class="titulo">
-                    <div class="custom-input-container form-field-spacing" appearance="fill">
-                        <label for="fecha_transacciones">Fecha</label>
-                        <input matInput [matDatepicker]="picker2" formControlName="fecha_transacciones">
-                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                        <mat-datepicker #picker2></mat-datepicker>
-                    </div>
-                    <div class="custom-input-container form-field-spacing" appearance="fill">
-                        <label for="acta">Acta</label>
-                        <input matInput formControlName="acta" autocomplete="off" placeholder="Acta">
-                    </div>
+                  <div class="custom-input-container form-field-spacing" appearance="fill">
+                    <label for="fecha_transacciones">Fecha</label>
+                    <input matInput [matDatepicker]="picker2" formControlName="fecha_transacciones">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                  </div>
+                    <div class="custom-input-container">
+                      <label for="coinvestigadoresProducto">Acta</label>
+                    <input formControlName="acta" type="file" (change)="onFileSelected($event)" />
+                  </div>
                     <div class="custom-input-container form-field-spacing" appearance="fill">
                         <label for="descripcion">Descripción</label>
                         <input type="text" matInput formControlName="descripcion" autocomplete="off" placeholder="Descripción">
@@ -386,40 +392,60 @@
                 <div class="titulo">
                   <div class="custom-input-container">
                     <label for="codigo">Código del producto</label>
-                    <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="id">
+                    <input matInput id="codigo" placeholder="Ingrese el código"  formControlName="id">
                   </div> 
                   <div class="custom-input-container">
                     <label for="codigo">Título</label>
-                    <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="tituloProducto">
+                    <input matInput id="codigo" placeholder="Ingrese el título"  formControlName="tituloProducto">
                   </div>
                   <div class="custom-input-container">
-                    <label for="codigo">Origen</label>
-                    <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="origen">
-                  </div> 
+                    <label for="origenValue">Origen</label>
+                    <mat-select id="origenValue" placeholder="Seleccione el origen" formControlName="origen">
+                      <mat-option *ngFor="let data of origenData" [value]="data.value">
+                        {{data.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                  </div>
                 </div>
                 <div class="titulo">
                   <div class="custom-input-container">
                     <label for="codigo">Publicación</label>
-                    <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="publicacion">
+                    <input matInput id="codigo" placeholder="Ingrese el medio de publicación"  formControlName="publicacion">
                   </div> 
                   <div class="custom-input-container">
                     <label for="codigo">Estado inicio semestre</label>
-                    <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="estadoProdIniSemestre">
+                    <input matInput id="codigo" placeholder="Ingrese el estado inicio de semestre"  formControlName="estadoProdIniSemestre">
                   </div> 
                   <div class="custom-input-container">
                     <label for="codigo">Observaciones</label>
-                    <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="observaciones">
+                    <input matInput id="codigo" placeholder="Ingrese la observación"  formControlName="observaciones">
                   </div> 
                 </div>     
                 <div class="titulo">
                   <div class="custom-input-container">
-                    <label for="coinvestigadoresProducto">Coinvestigadores</label>
+                    <label for="investigatorInput">Coinvestigadores</label>
                     <div class="custom-chip-list">
-                      <mat-select id="coinvestigadoresProducto" formControlName="coinvestigadoresProducto" multiple>
-                        <mat-option *ngFor="let data of usuariosData" [value]="data.correo">
-                          {{data.correo}}
+                      <mat-chip-grid formControlName="coinvestigadoresProducto" #chipGrid aria-label="Active Investigators">
+                        <mat-chip-row
+                          *ngFor="let investigator of activeInvestigators; let i = index; trackBy: trackByFn"
+                          (removed)="remove(investigator)">
+                          {{ investigator.correo }}
+                          <button matChipRemove
+                            [attr.aria-label]="'remove ' + investigator.correo"
+                            (click)="removeCoinvestigador(investigator)">
+                            <mat-icon>cancel</mat-icon>
+                          </button>
+                        </mat-chip-row>
+                      </mat-chip-grid>
+                      <input matInput placeholder="Añadir coinvestigador" #investigatorInput [formControl]="investigatorCtrl"
+                        [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)" />
+                      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                        <mat-option *ngFor="let investigator of filteredInvestigators | async; trackBy: trackByFn"
+                          [value]="investigator">
+                          {{ displayInvestigator(investigator) }}
                         </mat-option>
-                      </mat-select>
+                      </mat-autocomplete>
                     </div>
                   </div>
                   <div class="custom-input-container">
@@ -469,7 +495,7 @@
                 <div class="titulo">
                   <div class="custom-input-container form-field-spacing" appearance="fill">
                     <label for="estudiantesProducto">Estudiantes</label>
-                    <mat-select id="estudiantesProducto" formControlName="estudiantesProducto" multiple>
+                    <mat-select id="estudiantesProducto" placeholder="Añadir estudiantes" formControlName="estudiantesProducto" multiple>
                       <mat-option *ngFor="let data of estudiantesData" [value]="data.numeroDocumento">
                         {{data.numeroDocumento}} - {{data.nombres}} {{data.apellidos}}
                       </mat-option>
@@ -488,7 +514,7 @@
                 <div class="titulo">
                   <div class="custom-input-container form-field-spacing" appearance="fill">
                     <label for="participantesExternosProducto">Participantes Externos</label>
-                    <mat-select id="participantesExternosProducto" formControlName="participantesExternosProducto" multiple>
+                    <mat-select id="participantesExternosProducto" placeholder="Añadir participante externo" formControlName="participantesExternosProducto" multiple>
                       <mat-option *ngFor="let data of participanteExternoData" [value]="data.numerodocumento">
                         {{data.numerodocumento}} - {{data.nombre}} {{data.apellidos}}
                       </mat-option>

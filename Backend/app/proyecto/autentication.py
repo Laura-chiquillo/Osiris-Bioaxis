@@ -151,34 +151,21 @@ class CrearProyecto(APIView):
             print("No hay datos de financiacion en la solicitud")
 
         
-        
-        transacciones_data = json.loads(request.data.get('transacciones', '{}'))
+   
+         # Transacciones
         transacciones = None
-
-        if transacciones_data:
-            transacciones_fecha = transacciones_data.get('fecha_transacciones')
-            transacciones_acta = transacciones_data.get('acta')
-            transacciones_descripcion = transacciones_data.get('descripcion')
-            
-            # Verificar si la fecha está presente
-            if transacciones_fecha:
-                # Si la fecha está presente, crear la instancia de Transacciones
-                transacciones, _ = Transacciones.objects.get_or_create(
-                    id=Transacciones.objects.count() + 1,
-                    defaults={
-                        'fecha': transacciones_fecha,
-                        'acta': transacciones_acta,
-                        'descripcion': transacciones_descripcion
-                    }
-                )
-            else:
-                # Si la fecha no está presente, no se crea la instancia de Transacciones
-                # Puedes manejar esto según tus necesidades, como mostrar un mensaje de error o tomar otra acción
-                print("La fecha de transacciones no está presente en los datos")
-        else:
-            # Si no hay datos de transacciones, no se crea la instancia de Transacciones
-            print("No hay datos de transacciones en la solicitud")
-
+        transacciones_data = json.loads(request.data.get('transacciones'))
+        transacciones_fecha=transacciones_data.get('fecha_transacciones')
+        transacciones_acta = request.FILES.get('acta')
+        transacciones_descripcion=transacciones_data.get('descripcion')
+        print("Acta:", transacciones_acta)
+        transacciones,_=Transacciones.objects.get_or_create(
+            id=Transacciones.objects.count()+1,
+            fecha=transacciones_fecha,
+            acta=transacciones_acta,
+            descripcion=transacciones_descripcion
+        )
+        transacciones.save()
 
         ubicacionProyecto_data = json.loads(request.data.get('ubicacionProyecto'))
         ubicacionProyecto_instalacion= ubicacionProyecto_data.get('instalacion')
@@ -220,6 +207,7 @@ class CrearProyecto(APIView):
 
         proyecto = Proyecto.objects.create(**proyecto_data)  # Crea el objeto Proyecto con los datos relacionados
 
+        
         # vinculación coinvestigadores
         coinvestigadores_base =request.data.get('coinvestigadores')
         coinvestigadores_proceso = str(coinvestigadores_base).split(',')

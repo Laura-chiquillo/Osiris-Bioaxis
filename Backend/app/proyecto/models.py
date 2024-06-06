@@ -390,7 +390,7 @@ class Financiacion(models.Model):
 class Transacciones(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     fecha = models.DateTimeField(null=True, blank=True)
-    acta = models.CharField(max_length=50)
+    acta = models.FileField(upload_to ='uploadsProducto/',max_length=1000, blank=True)
     descripcion = models.CharField(max_length=50)
     class Meta:
         db_table = 'proyecto_Transacciones'
