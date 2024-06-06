@@ -37,7 +37,7 @@ export class ConsultasComponent {
 
   //proyectos y productos
   dataSource = new MatTableDataSource<any>([]);
-  displayedColumns: string[] = ['tipo','titulo', 'investigador', 'fecha','updated_at','created_at', 'estado','acciones'];
+  displayedColumns: string[] = ['tipo','titulo', 'investigador','updated_at','created_at', 'estado','acciones'];
   //investigadores
   dataSource2 = new MatTableDataSource<any>([]);
   displayedColumns2: string[] = ['numerodocumento', 'nombres','correo','created_at','grupo', 'detalles'];
@@ -70,7 +70,6 @@ export class ConsultasComponent {
         ...producto,
         tipo: 'Producto',
         tituloProducto: producto.tituloProducto || '', // Asegurar que todas las propiedades definidas en la interfaz Producto estén presentes
-        fecha: producto.fecha || '',
         estadoProducto: producto.estado_producto || '',
         tipologiaProducto: producto.tipologiaProducto || '',
         updated_at: producto.updated_at,
@@ -82,7 +81,6 @@ export class ConsultasComponent {
         ...proyecto,
         tituloProducto: proyecto.titulo,
         etapa: proyecto.etapa,
-        fecha: proyecto.fecha,
         tipo: 'Proyecto',
         updated_at: proyecto.updated_at,
         created_at: proyecto.created_at,

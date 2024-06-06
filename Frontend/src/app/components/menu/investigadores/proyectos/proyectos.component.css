@@ -13,6 +13,11 @@ table {
     width: 100%;
 }
 
+.mat-mdc-icon-button.mat-accent {
+  --mdc-icon-button-icon-color: #6aaba0;
+  --mat-icon-button-state-layer-color: #ffd740;
+  --mat-icon-button-ripple-color: rgba(255, 215, 64, 0.1);
+}
 .titulo {
   display: flex;
   gap: 1rem; /* Espacio entre cada input-container */
