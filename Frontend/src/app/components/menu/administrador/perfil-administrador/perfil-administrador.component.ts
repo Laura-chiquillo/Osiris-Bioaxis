@@ -52,31 +52,57 @@ export class PerfilAdministradorComponent  implements OnInit {
     private autenticacionService: AutenticacionService, 
     private investigadorService: InvestigadorService,
     private formBuilder: FormBuilder,
-  ) { }
+  ) { 
+   this.firstFormGroup = this.formBuilder.group({
+  numerodocumento: [{value: this.userData?.numerodocumento || '', disabled: true }, [Validators.required]],
+  nombre: [{value: this.userData?.nombre || '', disabled: this.inputDeshabilitado}, [Validators.required]],
+  apellidos: [{value: this.userData?.apellidos || '', disabled: this.inputDeshabilitado },[Validators.required]],
+  correo: [{value: this.userData?.correo || '', disabled: this.inputDeshabilitado },[Validators.required]],
+  tipodocumento: [{value: this.userData?.tipodocumento || '', disabled: this.inputDeshabilitado }, [Validators.required]],
+  escalofonodocente: [{value: this.userData?.escalofonodocente || '', disabled: this.inputDeshabilitado },[Validators.required]],
+  horariosestrictos: [{value: this.userData?.horasestricto || '', disabled: this.inputDeshabilitado},[Validators.required]],
+  horariosformacion: [{value: this.userData?.horasformacion || '', disabled: this.inputDeshabilitado},[Validators.required]],
+  lineainvestigacion: [{value: this.userData?.lineainvestigacion || '', disabled: this.inputDeshabilitado},[Validators.required]],
+  unidadacademica: [{value: this.userData?.unidadAcademica || '', disabled: this.inputDeshabilitado},[Validators.required]],
+});
 
-  ngOnInit(): void {
-    this.obtenerDatosUsuarioSesion();
-    this.investigadorService.getUsuarioDetail(this.usuarioSesion.numerodocumento).subscribe(
-      (data) => {
-        this.userData = data;
-        this.firstFormGroup = this.formBuilder.group({
-          numerodocumento: [{value: this.userData?.numerodocumento, disabled: true }, [Validators.required]],
-          nombre: [{value: this.userData.nombre, disabled: this.inputDeshabilitado}, [Validators.required]],
-          apellidos: [{value: this.userData.apellidos, disabled: this.inputDeshabilitado },[Validators.required]],
-          correo: [{value: this.userData?.correo, disabled: this.inputDeshabilitado },[Validators.required]],
-          tipodocumento: [{value: this.userData?.tipodocumento, disabled: this.inputDeshabilitado }, [Validators.required]],
-          escalofonodocente: [{value: this.userData?.escalofonodocente, disabled: this.inputDeshabilitado },[Validators.required]],
-          horariosestrictos: [{value: this.userData?.horasestricto, disabled: this.inputDeshabilitado},[Validators.required]],
-          horariosformacion: [{value: this.userData?.horasformacion, disabled: this.inputDeshabilitado},[Validators.required]],
-          lineainvestigacion: [{value: this.userData?.lineainvestigacion, disabled: this.inputDeshabilitado},[Validators.required]],
-          unidadacademica: [{value: this.userData?.unidadAcademica, disabled: this.inputDeshabilitado},[Validators.required]],
-        });
-      },
-      (error) => {
-        console.error('Error al obtener usuarios:', error);
-      }
-    );
   }
+
+ ngOnInit(): void {
+  this.obtenerDatosUsuarioSesion();
+  this.investigadorService.getUsuarioDetail(this.usuarioSesion.numerodocumento).subscribe(
+    (data) => {
+      this.userData = data;
+      if (this.userData) {
+        this.firstFormGroup.setValue({
+          numerodocumento: this.userData?.numerodocumento || '',
+          nombre: this.userData.nombre || '',
+          apellidos: this.userData.apellidos || '',
+          correo: this.userData?.correo || '',
+          tipodocumento: this.userData?.tipodocumento || '',
+          escalofonodocente: this.userData?.escalofonodocente || '',
+          horariosestrictos: this.userData?.horasestricto || '',
+          horariosformacion: this.userData?.horasformacion || '',
+          lineainvestigacion: this.userData?.lineainvestigacion || '',
+          unidadacademica: this.userData?.unidadAcademica || ''
+        });
+  
+        if (this.inputDeshabilitado) {
+          this.firstFormGroup.disable();
+        } else {
+          this.firstFormGroup.enable();
+          this.firstFormGroup.controls['numerodocumento'].disable();
+        }
+      } else {
+        console.error('userData es undefined o null');
+      }
+    },
+    (error) => {
+      console.error('Error al obtener usuarios:', error);
+    }
+  );
+}
+
 
   obtenerDatosUsuarioSesion(){
     this.usuarioSesion = this.autenticacionService.obtenerDatosUsuario();

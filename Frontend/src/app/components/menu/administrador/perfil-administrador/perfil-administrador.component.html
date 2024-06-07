@@ -7,14 +7,18 @@
     <!-- Información Personal -->
     <h2>Información Personal</h2>
     <div class="personal-info">
+        
         <mat-form-field class="">
-            <input matInput [disabled]="true" formControlName="dd">
+            <mat-label>Numero de documento</mat-label>
+            <input matInput formControlName="numerodocumento">
         </mat-form-field>
-        <mat-form-field class="">
-            <input matInput [disabled]="true" formControlName="ss">
-        </mat-form-field>
-        <mat-form-field class="">
-            <input matInput [disabled]="true" formControlName="dd">
+        <mat-form-field>
+            <mat-label>Tipo de documento</mat-label>
+            <mat-select panelClass="matRole" [value]="userData?.tipodocumento" formControlName="tipodocumento">
+                <mat-option *ngFor="let data of tipodpcumento" [value]="data">
+                    {{data}}
+                </mat-option>
+            </mat-select>
         </mat-form-field>
         <mat-form-field class="">
             <mat-label>Nombres</mat-label>
@@ -23,18 +27,6 @@
         <mat-form-field class="">
             <mat-label>Apellidos</mat-label>
             <input matInput formControlName="apellidos">
-        </mat-form-field>
-        <mat-form-field >
-            <mat-label>Tipo de documento</mat-label>
-            <mat-select panelClass="matRole" [value]="userData.tipodocumento" formControlName="tipodocumento">
-                <mat-option *ngFor="let data of tipodpcumento" [value]="data">
-                    {{data}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field class="">
-            <mat-label>Numero de documento</mat-label>
-            <input matInput formControlName="numerodocumento">
         </mat-form-field>
         <mat-form-field class="">
             <mat-label>Correo</mat-label>
