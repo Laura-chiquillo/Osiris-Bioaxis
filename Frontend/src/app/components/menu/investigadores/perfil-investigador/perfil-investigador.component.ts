@@ -95,6 +95,7 @@ export class PerfilInvestigadorComponent implements OnInit {
             this.firstFormGroup.disable();
           } else {
             this.firstFormGroup.enable();
+            this.firstFormGroup.controls['numerodocumento'].disable();
           }
         } else {
           console.error('userData es undefined o null');
