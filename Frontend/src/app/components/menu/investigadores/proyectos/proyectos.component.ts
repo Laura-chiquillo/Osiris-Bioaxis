@@ -1602,46 +1602,7 @@ thumbLabel6 = false;
     console.log("Editar")
   }
   
-  accionDos(element: any) {
-    console.log('Elemento seleccionado:', element);
-
-    let dialogRef: MatDialogRef<any> | undefined;
-
-    if (element.tipo === 'Producto') {
-      dialogRef = this.dialog.open(DialogContentExampleDialog, {
-        data: element
-      });
-    } else if (element.tipo === 'Proyecto') {
-      dialogRef = this.dialog.open(DialogContentExampleDialog2, {
-        data: element
-      });
-    }
-
-    if (dialogRef) {
-      dialogRef.afterClosed().subscribe(result => {
-        console.log(`Dialog result: ${result}`);
-      });
-    }
-  }  
+  
 }
 
 
-@Component({
-  selector: 'dialog-content-example-dialog',
-  templateUrl: 'dialog-content-example-dialog.html',
-  standalone: true,
-  imports: [MatDialogModule, MatButtonModule], // No es necesario importar aquí
-})
-export class DialogContentExampleDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
-}
-
-@Component({
-  selector: 'dialog-content-example-dialog2', // Cambiado el selector
-  templateUrl: 'dialog-content-example-dialog2.html',
-  standalone: true,
-  imports: [MatDialogModule, MatButtonModule], // No es necesario importar aquí
-})
-export class DialogContentExampleDialog2 {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {} // Añadido la inyección de datos
-}
