@@ -38,35 +38,32 @@ import { MatIconModule } from '@angular/material/icon';
 export class PerfilInvestigadorComponent implements OnInit {
   userData: any;
   firstFormGroup: any;
-  tipodpcumento: string[] = [
-    'CC',
-    'TI',
-    'CE',
-    'RC',
-    'PA'
-  ];
-  inputDeshabilitado: boolean = true;
-  imagenURL: string = 'https://ps.w.org/simple-user-avatar/assets/icon-256x256.png';
-  urlDeLaImagen: string = this.imagenURL;
+  tipodpcumento: string[] = ['CC', 'TI', 'CE', 'RC', 'PA'];
+  inputDeshabilitado = true;
+  imagenUrl: string | ArrayBuffer | null = null;
+  selectedFile: File | null = null;
   usuarioSesion!: UsuarioSesion;
+  pregradoData: any[] = [];
+  posgradoData: any[] = [];
 
   constructor(
-    private autenticacionService: AutenticacionService, 
+    private autenticacionService: AutenticacionService,
     private investigadorService: InvestigadorService,
     private formBuilder: FormBuilder,
     public dialog: MatDialog
-  ) { 
+  ) {
     this.firstFormGroup = this.formBuilder.group({
-      numerodocumento: [{value: '', disabled: true}, Validators.required],
-      nombre: [{value: '', disabled: this.inputDeshabilitado}, Validators.required],
-      apellidos: [{value: '', disabled: this.inputDeshabilitado}, Validators.required],
-      correo: [{value: '', disabled: this.inputDeshabilitado}, Validators.required],
-      tipodocumento: [{value: '', disabled: this.inputDeshabilitado}, Validators.required],
-      escalofonodocente: [{value: '', disabled: this.inputDeshabilitado}, Validators.required],
-      horariosestrictos: [{value: '', disabled: this.inputDeshabilitado}, Validators.required],
-      horariosformacion: [{value: '', disabled: this.inputDeshabilitado}, Validators.required],
-      lineainvestigacion: [{value: '', disabled: this.inputDeshabilitado}, Validators.required],
-      unidadacademica: [{value: '', disabled: this.inputDeshabilitado}, Validators.required]
+      numerodocumento: [{ value: '', disabled: true }, Validators.required],
+      nombre: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      apellidos: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      correo: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      tipodocumento: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      escalofonodocente: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      horariosestrictos: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      horariosformacion: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      lineainvestigacion: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      unidadacademica: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      imagen: [{ value: '', disabled: this.inputDeshabilitado }]
     });
   }
 
@@ -88,9 +85,11 @@ export class PerfilInvestigadorComponent implements OnInit {
             horariosestrictos: this.userData?.horasestricto || '',
             horariosformacion: this.userData?.horasformacion || '',
             lineainvestigacion: this.userData?.lineainvestigacion || '',
-            unidadacademica: this.userData?.unidadAcademica || ''
+            unidadacademica: this.userData?.unidadAcademica || '',
+            imagen: this.userData.imagen?.imagen || ''
           });
-  
+          this.imagenUrl = this.userData.imagen?.imagen;
+
           if (this.inputDeshabilitado) {
             this.firstFormGroup.disable();
           } else {
@@ -106,16 +105,30 @@ export class PerfilInvestigadorComponent implements OnInit {
       }
     );
   }
-  
 
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      this.selectedFile = file; // Asigna el archivo seleccionado a selectedFile
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagenUrl = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
-  obtenerDatosUsuarioSesion(){
+  triggerFileInput(): void {
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    fileInput.click();
+  }
+
+  obtenerDatosUsuarioSesion() {
     this.usuarioSesion = this.autenticacionService.obtenerDatosUsuario();
   }
 
-  pregradoData: any[] = []; 
-  posgradoData: any[] = []; 
-  obtenerPregrado(){
+  obtenerPregrado() {
     this.investigadorService.obtenerPregrado().subscribe(
       (data) => {
         this.pregradoData = data.filter((x: { Investigador_id: string; }) => x.Investigador_id == this.usuarioSesion.numerodocumento);
@@ -125,7 +138,8 @@ export class PerfilInvestigadorComponent implements OnInit {
       }
     );
   }
-  obtenerPosgrado(){
+
+  obtenerPosgrado() {
     this.investigadorService.obtenerPosgrado().subscribe(
       (data) => {
         this.posgradoData = data.filter((x: { Investigador_id: string; }) => x.Investigador_id == this.usuarioSesion.numerodocumento);
@@ -134,37 +148,6 @@ export class PerfilInvestigadorComponent implements OnInit {
         console.error('Error al obtener usuarios:', error);
       }
     );
-  }
-
-  get numerodocumento() {
-    return this.firstFormGroup.get('numerodocumento');
-  }
-  get nombre() {
-    return this.firstFormGroup.get('nombre');
-  }
-  get apellidos() {
-    return this.firstFormGroup.get('apellidos');
-  }
-  get correo() {
-    return this.firstFormGroup.get('correo');
-  }
-  get tipodocumento() {
-    return this.firstFormGroup.get('tipodocumento');
-  }
-  get escalofonodocente() {
-    return this.firstFormGroup.get('escalofonodocente');
-  }
-  get horariosestrictos() {
-    return this.firstFormGroup.get('horariosestrictos');
-  }
-  get horariosformacion() {
-    return this.firstFormGroup.get('horariosformacion');
-  }
-  get lineainvestigacion() {
-    return this.firstFormGroup.get('lineainvestigacion');
-  }
-  get unidadacademica() {
-    return this.firstFormGroup.get('unidadacademica');
   }
 
   activarInput() {
@@ -177,35 +160,17 @@ export class PerfilInvestigadorComponent implements OnInit {
     this.ngOnInit();
   }
 
-  openDialogoDetalle(tipo:string): void {
-    const dialogRef = this.dialog.open(DialogoCargaEstudiosComponent, {
-      data: {
-        title: 'Nuevo '+tipo,
-        type:tipo,
-        numerodocumento: this.usuarioSesion.numerodocumento,
-      },
-      disableClose: true,
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        Swal.fire({
-          title: 'Registro Exitoso !!!',
-          text: 'Se ha registrado el registro de estudio',
-          icon: 'success',
-          confirmButtonText: 'Aceptar'
-        });
-        console.log('result',result);
-      } 
-    });
-  }
-
   guardarDatos() {
     if (this.firstFormGroup.valid) {
       const tramiteGeneral = this.firstFormGroup.value;
       tramiteGeneral.numerodocumento = this.usuarioSesion.numerodocumento;
-      console.log(' guardarDatos => ',tramiteGeneral);
+  
+      if (this.selectedFile) {
+        tramiteGeneral.imagen = this.selectedFile;
+      }
+  
       this.investigadorService.actualizarInvestigador(tramiteGeneral).subscribe(
-        (resp) => {
+        () => {
           Swal.fire({
             title: 'Registro Exitoso !!!',
             text: 'Se ha editado el perfil',
@@ -213,10 +178,9 @@ export class PerfilInvestigadorComponent implements OnInit {
             confirmButtonText: 'Aceptar'
           });
           this.inputDeshabilitado = true;
-          this.ngOnInit();
         },
         (error) => {
-          console.error('Error al notificar:', error);
+          console.error('Error al actualizar el investigador:', error);
         }
       );
     }

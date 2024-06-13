@@ -35,7 +35,7 @@ class Investigador(models.Model):
     correo = models.CharField(max_length=50)
     nombre = models.CharField(max_length=50)
     estado = models.BooleanField(default=False)
-    imagen = models.ForeignKey(Imagen,null=False,blank=False,on_delete=models.CASCADE)
+    imagen = models.ForeignKey(Imagen, null=True, blank=True, on_delete=models.CASCADE)
     apellidos = models.CharField(max_length=50)
     tipodpcumento = [
         ('CC', 'Cédula de ciudadanía'),

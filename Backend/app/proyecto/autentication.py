@@ -13,17 +13,19 @@ import json
 from datetime import datetime
 from django.utils.timezone import make_aware
 import ast
+import base64
+from django.core.files.base import ContentFile
 
-from .models import (Apropiacion, Articulos, Capitulos, Consultoria, Contenido,
+from .models import (Apropiacion, Articulos, Capitulos, Consultoria, Contenido,Imagen,
                      Contrato, EntidadPostulo, EstadoProyecto,
                      Estudiantes, Eventos, Financiacion, Industrial, ConfiguracionEntregableProducto, ConfiguracionEntregableProyecto, 
                      Investigador, Libros, Licencia, ListaProducto, Maestria, AvanceEntregableProducto, AvanceEntregableProyecto,
                      PregFinalizadoyCurso, Producto, Proyecto, Reconocimientos,
                      Software, Transacciones, UbicacionProyecto, ParticipantesExternos, EstadoProducto,
                      CategoriaMinciencias,CuartilEsperado,TipoEventos)
-from .serializer import (investigadorSerializer, productoSerializer,
+from .serializer import (investigadorSerializer, productoSerializer,imagenSerializer,
                          proyectoSerializer)
-
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class CustomAuthToken(APIView):
     def post(self, request, *args, **kwargs):
@@ -68,21 +70,42 @@ class CustomAuthToken(APIView):
         }
         return Response({'token': access_token, 'user_data': user_data}, status=status.HTTP_200_OK)
 
+
 class ActualizarDatosUsuario(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
     def put(self, request, *args, **kwargs):
         try:
             usuario = Investigador.objects.get(numerodocumento=request.data.get('numerodocumento'))
         except Investigador.DoesNotExist:
             return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+        # Obtener la imagen del request.FILES
+        imagen_data = request.FILES.get('imagen')
+        if imagen_data:
+            try:
+                # Generar el nuevo ID de imagen
+                nueva_imagen_id = Imagen.objects.count() + 1
+                
+                # Guardar la nueva imagen con el nuevo ID
+                nueva_imagen = Imagen.objects.create(id=nueva_imagen_id, imagen=imagen_data)
+                
+                # Asignar la nueva imagen al usuario
+                usuario.imagen = nueva_imagen
+                usuario.save()  # Guardar el usuario con la nueva imagen
+
+            except Exception as e:
+                return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Procesar el resto de los datos del Investigador
         serializer = investigadorSerializer(usuario, data=request.data, partial=True)
-
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
 
 class CrearProyecto(APIView):
 

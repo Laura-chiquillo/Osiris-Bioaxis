@@ -1,13 +1,20 @@
-<div class="circular-image">
-    <img [src]="urlDeLaImagen" alt="Imagen" class="rounded-image" />
+<div class="container">
+    <div class="image-container">
+        <div class="circular-image" *ngIf="imagenUrl">
+            <img [src]="imagenUrl" alt="Imagen del Investigador">
+        </div>
+        <div class="upload-button">
+            <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden>
+            <button *ngIf="!inputDeshabilitado" type="button" (click)="triggerFileInput()">+</button>
+        </div>
+    </div>
 </div>
 
 <form class="example-form" [formGroup]="firstFormGroup">
- 
     <!-- Información Personal -->
     <h2>Información Personal</h2>
     <div class="personal-info">
-        <mat-form-field class="">
+        <mat-form-field>
             <mat-label>Numero de documento</mat-label>
             <input matInput formControlName="numerodocumento">
         </mat-form-field>
@@ -18,16 +25,16 @@
                     {{data}}
                 </mat-option>
             </mat-select>
-        </mat-form-field>        
-        <mat-form-field class="">
+        </mat-form-field>
+        <mat-form-field>
             <mat-label>Nombres</mat-label>
             <input matInput formControlName="nombre">
         </mat-form-field>
-        <mat-form-field class="">
+        <mat-form-field>
             <mat-label>Apellidos</mat-label>
             <input matInput formControlName="apellidos">
         </mat-form-field>
-        <mat-form-field class="">
+        <mat-form-field>
             <mat-label>Correo</mat-label>
             <input matInput formControlName="correo">
         </mat-form-field>
@@ -36,23 +43,23 @@
     <!-- Información Académica -->
     <h2>Información Académica</h2>
     <div class="academic-info">
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
             <mat-label>Escalofon Docente</mat-label>
             <input matInput formControlName="escalofonodocente">
         </mat-form-field>
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
             <mat-label>Horarios Estricto</mat-label>
             <input matInput formControlName="horariosestrictos">
         </mat-form-field>
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
             <mat-label>Horarios Formación</mat-label>
             <input matInput formControlName="horariosformacion">
         </mat-form-field>
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
             <mat-label>Línea Investigación</mat-label>
             <input matInput formControlName="lineainvestigacion">
         </mat-form-field>
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
             <mat-label>Unidad Academica</mat-label>
             <input matInput formControlName="unidadacademica">
         </mat-form-field>
@@ -60,33 +67,10 @@
 
     <!-- Botones -->
     <div class="button-group">
-        <button *ngIf="!inputDeshabilitado" class="boton-estilizado" (click)="guardarDatos()" [disabled]="firstFormGroup.invalid">Guardar</button>
         <button *ngIf="inputDeshabilitado" class="boton-estilizado" (click)="activarInput()">Editar Perfil</button>
-        &nbsp;<button *ngIf="!inputDeshabilitado" class="boton-estilizado" (click)="desactivarInput()">Cancelar</button>
     </div>
-    <br>
-    <h2>Información Profesional</h2>
-    <div class="academic-info">
-        <div *ngIf="pregradoData.length">
-            <h3><mat-icon style="margin: 0px 0px -6px 0px; color:burlywood">star</mat-icon> Pregados</h3>
-            <ul>
-                <li *ngFor="let data of pregradoData">
-                    <strong>{{data.titulo}}</strong> en {{data.institucion}} - {{data.fecha}}
-                </li>
-            </ul>
-        </div>
-        <div *ngIf="posgradoData.length">
-            <h3><mat-icon style="margin: 0px 0px -6px 0px; color:coral">grade</mat-icon> Posgrados</h3>
-            <ul>
-                <li *ngFor="let data of posgradoData">
-                    <strong>{{data.titulo}}</strong> en {{data.institucion}} ({{data.tipo}}) - {{data.fecha}}
-                </li>
-            </ul>
-        </div>
+    <div class="button-group">
+        <button *ngIf="!inputDeshabilitado" class="boton-estilizado" (click)="guardarDatos()" [disabled]="firstFormGroup.invalid">Guardar</button>
+        <button *ngIf="!inputDeshabilitado" class="boton-estilizado" (click)="desactivarInput()">Cancelar</button>
     </div>
-    <br>&nbsp;
-    <button class="boton-estilizado" (click)="openDialogoDetalle('Pregrado')">Cargar Pregrado</button>&nbsp;
-    <button class="boton-estilizado" (click)="openDialogoDetalle('Posgrado')">Cargar Posgrado</button>
-    <div class="academic-info"><br><br></div>
-
 </form>

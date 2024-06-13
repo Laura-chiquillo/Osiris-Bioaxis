@@ -96,7 +96,6 @@ class ubicacionList(generics.ListCreateAPIView):
 class investigadorRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Investigador.objects.all()
     serializer_class = investigadorSerializer
-    
     def put(self, request, *args, **kwargs):
         obj = Investigador.objects.get(pk=request.data.get('numerodocumento'))
         obj.apellidos = request.data.get('apellidos')

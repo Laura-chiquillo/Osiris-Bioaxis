@@ -12,16 +12,26 @@ from .models import (Apropiacion, Articulos, AvanceProyecto, Notificaciones, Cap
 
 #------------------------ investigador ------------------------
 
-class investigadorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Investigador
-        fields = '__all__'
-
 class imagenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Imagen
         fields = '__all__'
         
+class investigadorSerializer(serializers.ModelSerializer):
+    imagen = imagenSerializer() 
+    class Meta:
+        model = Investigador
+        fields = '__all__'
+    def create(self, validated_data):
+        imagen_data = validated_data.pop('imagen', None)  # Extraer los datos de la imagen si los hay
+        investigador = Investigador.objects.create(**validated_data)
+        
+        # Si hay datos de imagen, crea la imagen
+        if imagen_data:
+            Imagen.objects.create(investigador=investigador, **imagen_data)
+        
+        return investigador
+    
 class ubicacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ubicacion
