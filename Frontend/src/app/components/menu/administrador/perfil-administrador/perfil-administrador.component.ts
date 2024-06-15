@@ -44,8 +44,8 @@ export class PerfilAdministradorComponent  implements OnInit {
     'PA'
   ];
   inputDeshabilitado: boolean = true;
-  imagenURL: string = 'https://ps.w.org/simple-user-avatar/assets/icon-256x256.png';
-  urlDeLaImagen: string = this.imagenURL;
+  imagenUrl: string | ArrayBuffer | null = null;
+  selectedFile: File | null = null;
   usuarioSesion!: UsuarioSesion;
 
   constructor(
@@ -53,18 +53,19 @@ export class PerfilAdministradorComponent  implements OnInit {
     private investigadorService: InvestigadorService,
     private formBuilder: FormBuilder,
   ) { 
-   this.firstFormGroup = this.formBuilder.group({
-  numerodocumento: [{value: this.userData?.numerodocumento || '', disabled: true }, [Validators.required]],
-  nombre: [{value: this.userData?.nombre || '', disabled: this.inputDeshabilitado}, [Validators.required]],
-  apellidos: [{value: this.userData?.apellidos || '', disabled: this.inputDeshabilitado },[Validators.required]],
-  correo: [{value: this.userData?.correo || '', disabled: this.inputDeshabilitado },[Validators.required]],
-  tipodocumento: [{value: this.userData?.tipodocumento || '', disabled: this.inputDeshabilitado }, [Validators.required]],
-  escalofonodocente: [{value: this.userData?.escalofonodocente || '', disabled: this.inputDeshabilitado },[Validators.required]],
-  horariosestrictos: [{value: this.userData?.horasestricto || '', disabled: this.inputDeshabilitado},[Validators.required]],
-  horariosformacion: [{value: this.userData?.horasformacion || '', disabled: this.inputDeshabilitado},[Validators.required]],
-  lineainvestigacion: [{value: this.userData?.lineainvestigacion || '', disabled: this.inputDeshabilitado},[Validators.required]],
-  unidadacademica: [{value: this.userData?.unidadAcademica || '', disabled: this.inputDeshabilitado},[Validators.required]],
-});
+    this.firstFormGroup = this.formBuilder.group({
+      numerodocumento: [{ value: '', disabled: true }, Validators.required],
+      nombre: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      apellidos: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      correo: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      tipodocumento: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      escalofonodocente: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      horasestricto: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      horasformacion: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      lineainvestigacion: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      unidadAcademica: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      imagen: [{ value: '', disabled: this.inputDeshabilitado }]
+    });
 
   }
 
@@ -81,12 +82,14 @@ export class PerfilAdministradorComponent  implements OnInit {
           correo: this.userData?.correo || '',
           tipodocumento: this.userData?.tipodocumento || '',
           escalofonodocente: this.userData?.escalofonodocente || '',
-          horariosestrictos: this.userData?.horasestricto || '',
-          horariosformacion: this.userData?.horasformacion || '',
+          horasestricto: this.userData?.horasestricto || '',
+          horasformacion: this.userData?.horasformacion || '',
           lineainvestigacion: this.userData?.lineainvestigacion || '',
-          unidadacademica: this.userData?.unidadAcademica || ''
+          unidadAcademica: this.userData?.unidadAcademica || '',
+          imagen: this.userData.imagen?.imagen || ''
         });
-  
+        this.imagenUrl = this.userData.imagen?.imagen;
+
         if (this.inputDeshabilitado) {
           this.firstFormGroup.disable();
         } else {
@@ -103,7 +106,22 @@ export class PerfilAdministradorComponent  implements OnInit {
   );
 }
 
-
+onFileSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    this.selectedFile = file; // Asigna el archivo seleccionado a selectedFile
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagenUrl = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+triggerFileInput(): void {
+  const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+  fileInput.click();
+}
   obtenerDatosUsuarioSesion(){
     this.usuarioSesion = this.autenticacionService.obtenerDatosUsuario();
   }
@@ -126,17 +144,17 @@ export class PerfilAdministradorComponent  implements OnInit {
   get escalofonodocente() {
     return this.firstFormGroup.get('escalofonodocente');
   }
-  get horariosestrictos() {
-    return this.firstFormGroup.get('horariosestrictos');
+  get horasestricto() {
+    return this.firstFormGroup.get('horasestricto');
   }
-  get horariosformacion() {
-    return this.firstFormGroup.get('horariosformacion');
+  get horasformacion() {
+    return this.firstFormGroup.get('horasformacion');
   }
   get lineainvestigacion() {
     return this.firstFormGroup.get('lineainvestigacion');
   }
-  get unidadacademica() {
-    return this.firstFormGroup.get('unidadacademica');
+  get unidadAcademica() {
+    return this.firstFormGroup.get('unidadAcademica');
   }
 
   activarInput() {
@@ -153,9 +171,13 @@ export class PerfilAdministradorComponent  implements OnInit {
     if (this.firstFormGroup.valid) {
       const tramiteGeneral = this.firstFormGroup.value;
       tramiteGeneral.numerodocumento = this.usuarioSesion.numerodocumento;
+  
+      if (this.selectedFile) {
+        tramiteGeneral.imagen = this.selectedFile;
+      }
       console.log(' guardarDatos => ',tramiteGeneral);
       this.investigadorService.actualizarInvestigador(tramiteGeneral).subscribe(
-        (resp) => {
+        () => {
           Swal.fire({
             title: 'Registro Exitoso !!!',
             text: 'Se ha editado el perfil',
@@ -163,10 +185,10 @@ export class PerfilAdministradorComponent  implements OnInit {
             confirmButtonText: 'Aceptar'
           });
           this.inputDeshabilitado = true;
-          this.ngOnInit();
+          this.firstFormGroup.disable();
         },
         (error) => {
-          console.error('Error al notificar:', error);
+          console.error('Error al actualizar el investigador:', error);
         }
       );
     }

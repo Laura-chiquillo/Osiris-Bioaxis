@@ -59,10 +59,10 @@ export class PerfilInvestigadorComponent implements OnInit {
       correo: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
       tipodocumento: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
       escalofonodocente: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      horariosestrictos: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      horariosformacion: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      horasestricto: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      horasformacion: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
       lineainvestigacion: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      unidadacademica: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      unidadAcademica: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
       imagen: [{ value: '', disabled: this.inputDeshabilitado }]
     });
   }
@@ -82,10 +82,10 @@ export class PerfilInvestigadorComponent implements OnInit {
             correo: this.userData?.correo || '',
             tipodocumento: this.userData?.tipodocumento || '',
             escalofonodocente: this.userData?.escalofonodocente || '',
-            horariosestrictos: this.userData?.horasestricto || '',
-            horariosformacion: this.userData?.horasformacion || '',
+            horasestricto: this.userData?.horasestricto || '',
+            horasformacion: this.userData?.horasformacion || '',
             lineainvestigacion: this.userData?.lineainvestigacion || '',
-            unidadacademica: this.userData?.unidadAcademica || '',
+            unidadAcademica: this.userData?.unidadAcademica || '',
             imagen: this.userData.imagen?.imagen || ''
           });
           this.imagenUrl = this.userData.imagen?.imagen;
@@ -127,8 +127,8 @@ export class PerfilInvestigadorComponent implements OnInit {
   obtenerDatosUsuarioSesion() {
     this.usuarioSesion = this.autenticacionService.obtenerDatosUsuario();
   }
-
-  obtenerPregrado() {
+ 
+  obtenerPregrado(){
     this.investigadorService.obtenerPregrado().subscribe(
       (data) => {
         this.pregradoData = data.filter((x: { Investigador_id: string; }) => x.Investigador_id == this.usuarioSesion.numerodocumento);
@@ -138,8 +138,7 @@ export class PerfilInvestigadorComponent implements OnInit {
       }
     );
   }
-
-  obtenerPosgrado() {
+  obtenerPosgrado(){
     this.investigadorService.obtenerPosgrado().subscribe(
       (data) => {
         this.posgradoData = data.filter((x: { Investigador_id: string; }) => x.Investigador_id == this.usuarioSesion.numerodocumento);
@@ -149,6 +148,60 @@ export class PerfilInvestigadorComponent implements OnInit {
       }
     );
   }
+
+  get numerodocumento() {
+    return this.firstFormGroup.get('numerodocumento');
+  }
+  get nombre() {
+    return this.firstFormGroup.get('nombre');
+  }
+  get apellidos() {
+    return this.firstFormGroup.get('apellidos');
+  }
+  get correo() {
+    return this.firstFormGroup.get('correo');
+  }
+  get tipodocumento() {
+    return this.firstFormGroup.get('tipodocumento');
+  }
+  get escalofonodocente() {
+    return this.firstFormGroup.get('escalofonodocente');
+  }
+  get horasestricto() {
+    return this.firstFormGroup.get('horasestricto');
+  }
+  get horasformacion() {
+    return this.firstFormGroup.get('horasformacion');
+  }
+  get lineainvestigacion() {
+    return this.firstFormGroup.get('lineainvestigacion');
+  }
+  get unidadAcademica() {
+    return this.firstFormGroup.get('unidadAcademica');
+  }
+
+  openDialogoDetalle(tipo:string): void {
+    const dialogRef = this.dialog.open(DialogoCargaEstudiosComponent, {
+      data: {
+        title: 'Nuevo '+tipo,
+        type:tipo,
+        numerodocumento: this.usuarioSesion.numerodocumento,
+      },
+      disableClose: true,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        Swal.fire({
+          title: 'Registro Exitoso !!!',
+          text: 'Se ha registrado el registro de estudio',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        });
+        console.log('result',result);
+      } 
+    });
+  }
+
 
   activarInput() {
     this.inputDeshabilitado = false;
@@ -168,7 +221,7 @@ export class PerfilInvestigadorComponent implements OnInit {
       if (this.selectedFile) {
         tramiteGeneral.imagen = this.selectedFile;
       }
-  
+      console.log(' guardarDatos => ',tramiteGeneral);
       this.investigadorService.actualizarInvestigador(tramiteGeneral).subscribe(
         () => {
           Swal.fire({
@@ -178,6 +231,7 @@ export class PerfilInvestigadorComponent implements OnInit {
             confirmButtonText: 'Aceptar'
           });
           this.inputDeshabilitado = true;
+          this.firstFormGroup.disable();
         },
         (error) => {
           console.error('Error al actualizar el investigador:', error);

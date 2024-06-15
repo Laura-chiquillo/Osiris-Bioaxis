@@ -75,12 +75,14 @@ class ActualizarDatosUsuario(APIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def put(self, request, *args, **kwargs):
+        print("Datos recibidos en request.data:")
+        print(request.data)
+        
         try:
             usuario = Investigador.objects.get(numerodocumento=request.data.get('numerodocumento'))
         except Investigador.DoesNotExist:
             return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
         # Obtener la imagen del request.FILES
         imagen_data = request.FILES.get('imagen')

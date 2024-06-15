@@ -1,14 +1,20 @@
-<div class="circular-image">
-    <img [src]="urlDeLaImagen" alt="Imagen" class="rounded-image" />
+<div class="container">
+    <div class="image-container">
+        <div class="circular-image" *ngIf="imagenUrl">
+            <img [src]="imagenUrl" alt="Imagen del Investigador">
+        </div>
+        <div class="upload-button">
+            <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden>
+            <button *ngIf="!inputDeshabilitado" type="button" (click)="triggerFileInput()">+</button>
+        </div>
+    </div>
 </div>
 
 <form class="example-form" [formGroup]="firstFormGroup">
- 
     <!-- Información Personal -->
     <h2>Información Personal</h2>
     <div class="personal-info">
-        
-        <mat-form-field class="">
+        <mat-form-field>
             <mat-label>Numero de documento</mat-label>
             <input matInput formControlName="numerodocumento">
         </mat-form-field>
@@ -20,15 +26,15 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field class="">
+        <mat-form-field>
             <mat-label>Nombres</mat-label>
             <input matInput formControlName="nombre">
         </mat-form-field>
-        <mat-form-field class="">
+        <mat-form-field>
             <mat-label>Apellidos</mat-label>
             <input matInput formControlName="apellidos">
         </mat-form-field>
-        <mat-form-field class="">
+        <mat-form-field>
             <mat-label>Correo</mat-label>
             <input matInput formControlName="correo">
         </mat-form-field>
@@ -37,32 +43,35 @@
     <!-- Información Académica -->
     <h2>Información Académica</h2>
     <div class="academic-info">
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
             <mat-label>Escalofon Docente</mat-label>
             <input matInput formControlName="escalofonodocente">
         </mat-form-field>
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
             <mat-label>Horarios Estricto</mat-label>
-            <input matInput formControlName="horariosestrictos">
+            <input matInput formControlName="horasestricto">
         </mat-form-field>
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
             <mat-label>Horarios Formación</mat-label>
-            <input matInput formControlName="horariosformacion">
+            <input matInput formControlName="horasformacion">
         </mat-form-field>
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
             <mat-label>Línea Investigación</mat-label>
             <input matInput formControlName="lineainvestigacion">
         </mat-form-field>
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
             <mat-label>Unidad Academica</mat-label>
-            <input matInput formControlName="unidadacademica">
+            <input matInput formControlName="unidadAcademica">
         </mat-form-field>
     </div>
 
     <!-- Botones -->
     <div class="button-group">
-        <button *ngIf="!inputDeshabilitado" class="boton-estilizado" (click)="guardarDatos()" [disabled]="firstFormGroup.invalid">Guardar</button>
         <button *ngIf="inputDeshabilitado" class="boton-estilizado" (click)="activarInput()">Editar Perfil</button>
-        &nbsp;<button *ngIf="!inputDeshabilitado" class="boton-estilizado" (click)="desactivarInput()">Cancelar</button>
     </div>
+    <div class="button-grou">
+        <button *ngIf="!inputDeshabilitado" class="boton-estilizado" (click)="guardarDatos()" [disabled]="firstFormGroup.invalid">Guardar</button>
+        <button *ngIf="!inputDeshabilitado" class="boton-estilizado" (click)="desactivarInput()">Cancelar</button>
+    </div>
+
 </form>

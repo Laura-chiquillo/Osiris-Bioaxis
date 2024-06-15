@@ -1,4 +1,3 @@
-
 .circular-image {
   width: 150px;
   height: 150px;
@@ -28,7 +27,7 @@
 .button-group{
   position: absolute;
   top: calc(20% + 115px); /* Desplazamiento vertical debajo de la imagen */
-  left: calc(10% - 270px); /* Desplazamiento horizontal ligeramente a la izquierda */
+  left: calc(10% - 230px); /* Desplazamiento horizontal ligeramente a la izquierda */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,7 +35,7 @@
 .button-grou{
   position: absolute;
   top: calc(20% + 115px); /* Desplazamiento vertical debajo de la imagen */
-  left: calc(10% - 290px); /* Desplazamiento horizontal ligeramente a la izquierda */
+  left: calc(10% - 260px); /* Desplazamiento horizontal ligeramente a la izquierda */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -59,14 +58,17 @@
 .upload-button button:hover {
   background-color: #0056b3;
 }
-
+.image-container{
+  transform: translateX(+12%) translateY(90px);
+}
 .example-form {
   min-width: 20%; /* Ajusta el ancho mínimo */
   max-width: 40%; /* Ajusta el ancho máximo */
   width: 90%; /* Ajusta el ancho */
   position: absolute;
-  top: 10%; /* Ajustado para alinearlo verticalmente */
-  left: 24%; /* Ajustado para alinearlo horizontalmente */
+  top: 20%; /* Ajustado para alinearlo verticalmente */
+  left: 50%; /* Centrado horizontal */
+  transform: translateX(+20%); /* Centrado horizontal usando transform */
   height: 50vh; /* Ajusta la altura en relación con el viewport */
   max-width: 50%; /* Ajusta el ancho máximo */
 }
@@ -126,4 +128,43 @@ input {
   background-color: dimgrey;
 }
 
+@media only screen and (max-width: 868px) {
+  .container {
+    position: relative;
+    z-index: 2;
+    width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 20px; /* Reducir el espacio entre el contenedor y el formulario */
+    margin-top: -80px; /* Subir un poco más el contenedor */
+  }
+  .example-form {
+    min-width: 20%; /* Ajusta el ancho mínimo */
+    max-width: 40%; /* Ajusta el ancho máximo */
+    width: 90%; /* Ajusta el ancho */
+    position: absolute;
+    top: 40%; /* Ajustado para alinearlo verticalmente */
+    left: 10%; /* Centrado horizontal */
+    transform: translateX(+20%); /* Centrado horizontal usando transform */
+    height: 50vh; /* Ajusta la altura en relación con el viewport */
+    max-width: 50%; /* Ajusta el ancho máximo */
+    margin-top: 30px;
+  }
+  .button-group{
+    position: absolute;
+    top: calc(20% - 120px); /* Desplazamiento vertical debajo de la imagen */
+    left: calc(10% + 15px); /* Desplazamiento horizontal ligeramente a la izquierda */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .button-grou{
+    position: absolute;
+    top: calc(20% - 115px); /* Desplazamiento vertical debajo de la imagen */
+    left: calc(10% - 5px); /* Desplazamiento horizontal ligeramente a la izquierda */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
 
