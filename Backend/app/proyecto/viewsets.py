@@ -56,11 +56,15 @@ from .serializer import (apropiacionSerializer, articulosSerializer,
 class investigadorList(generics.ListCreateAPIView):
     queryset = Investigador.objects.all()
     serializer_class = investigadorSerializer
-    
+
+   # Método que se llama cuando se crea un nuevo objeto Investigador
     def perform_create(self, serializer):
-        Investigador = serializer.save()
-        send_registration_email(Investigador)
-    
+        # Guarda el nuevo objeto Investigador en la base de datos
+        investigador = serializer.save()
+        
+        # Envía un correo de registro exitoso al investigador
+        send_registration_email(investigador)
+        
 class imagenList(generics.ListCreateAPIView):
     queryset = Imagen.objects.all()
     serializer_class = imagenSerializer
