@@ -5,9 +5,23 @@ from urllib import response
 from .utils import send_registration_email
 
 from django.forms import ValidationError
-from rest_framework import generics, status
+from rest_framework import generics, status, serializers
 from rest_framework.response import Response
 from rest_framework.parsers import FileUploadParser
+
+
+from django.core.cache import cache
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode
+from django.shortcuts import render
+import logging
+from django.core.mail import send_mail
+from django.urls import reverse
+from rest_framework.viewsets import ViewSet
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.tokens import default_token_generator
+from .tokens_Inves import InvestigadorTokenGenerator
+
 
 from .models import (Apropiacion, Articulos, AvanceProyecto, Notificaciones, Capitulos,
                      CategoriaMinciencias, Consultoria, Contenido, Contrato,
@@ -563,3 +577,103 @@ class proyectoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             productoSerializer(obj)
         obj.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+#--
+logger = logging.getLogger(__name__)
+
+token_generator = InvestigadorTokenGenerator()
+class ResetPasswordSerializer(serializers.Serializer):
+    correo = serializers.EmailField()
+    # Método de validación que verifica si el correo existe en la base de datos.
+    def validate_correo(self, value):
+        investigador = Investigador.objects.filter(correo=value).first()
+        if not investigador:
+            raise serializers.ValidationError('No se encontró un usuario con ese correo electrónico.')
+        return value
+
+class ResetPasswordViewSet(ViewSet):
+    serializer_class = ResetPasswordSerializer
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        #Se obtiene el correo electronico proporcionado en la solicitud 
+        correo = serializer.validated_data['correo']
+        # Busca en la base de datos un usuario que tenga el correo electrónico proporcionado
+        investigador = Investigador.objects.filter(correo=correo).first()
+        # Si no se encuentra ese correo electrónico, se devuelve un mensaje de error indicando que el correo electrónico no está registrado.
+        if not investigador:
+            return Response({'error': 'El correo electrónico no está registrado.'}, status=status.HTTP_400_BAD_REQUEST)
+        #Se genera un código temporal único que permite restablecer la contraseña y
+        #se guarda en la memoria temporal del servidor (caché) durante un día (86400 segundos)
+        token_temporal = token_generator.make_token(investigador)
+        cache.set(token_temporal, correo, timeout=86400)
+        #Se crea una dirección que puede visitar para restablecer su contraseña.
+        # Esta URL contiene el código temporal generado
+        reset_password_form_url = request.build_absolute_uri(reverse('reset-password-form', kwargs={'token_temporal': token_temporal}))
+        #Se envia la plantilla de correo
+        email_body = render_to_string('reset_password_email.html', {
+            'investigador': investigador,
+            'reset_password_form_url': reset_password_form_url,
+        })
+        #Se envía el correo electrónico al usuario.
+        #Si ocurre algún problema durante el envío, se devuelve un mensaje de error
+        try:
+            send_mail('Restablecer Contraseña', email_body, 'osirisbioaxis@gmail.com', [investigador.correo], html_message=email_body)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({'success': True}, status=status.HTTP_200_OK)
+
+class ResetPasswordConfirmViewSet(ViewSet):
+    def create(self, request):
+        #Se obtienen los datos enviados en la solicitud
+        token_temporal = request.data.get('token') #el token recibido por correo electrónico
+        nueva_contraseña = request.data.get('nueva_contraseña') 
+        confirmar_contraseña = request.data.get('confirmar_contraseña')
+        #Se registranlos datos recibidos para seguimiento y depuración
+        #Esto ayuda a monitorear lo que sucede en el sistema
+        logger.debug(f"Token temporal recibido: {token_temporal}")
+        logger.debug(f"Nueva contraseña recibida: {nueva_contraseña}")
+        logger.debug(f"Confirmación de contraseña recibida: {confirmar_contraseña}")
+        #Se verifica si alguno de los datos necesarios no está presente en la solicitud.
+        if not token_temporal or not nueva_contraseña or not confirmar_contraseña:
+            logger.error("Datos faltantes o inválidos.")
+            return Response({'error': 'Datos faltantes o inválidos.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Verificar el token temporal
+        # identifica al usuario que solicitó el cambio de contraseña
+        correo = cache.get(token_temporal)
+        if not correo:
+            logger.error("Token inválido o expirado.")
+            return Response({'error': 'Token inválido o expirado.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        #Si no se encuentra ningún usuario con ese correo electrónico en la base de datos, 
+        # se devuelve un error indicando que el usuario no está encontrado
+        try:
+            investigador = Investigador.objects.get(correo=correo)
+        except Investigador.DoesNotExist:
+            logger.warning("Usuario no encontrado.")
+            return Response({'error': 'Usuario no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+
+        #Verifica si la nueva_contraseña y confirmar_contraseña coinciden.
+        if nueva_contraseña != confirmar_contraseña:
+            logger.warning("Las contraseñas no coinciden.")
+            return Response({'error': 'Las contraseñas no coinciden.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        #Si todas las verificaciones son exitosas, se actualiza la contraseña en la base de datos
+        # la función make_password para cifrar la nueva contraseña antes de guardarla.
+        investigador.contrasena = make_password(nueva_contraseña)
+        investigador.save()
+
+        # Eliminar el token temporal de la caché
+        cache.delete(token_temporal)
+        logger.info("Contraseña cambiada correctamente.")
+
+        return Response({'success': True}, status=status.HTTP_200_OK)
+
+class ResetPasswordFormViewSet(ViewSet):
+    #Este método se activa cuando se realiza una solicitud GET para obtener 
+    # y mostrar el formulario de restablecimiento de contraseña.
+    def retrieve(self, request, token_temporal, format=None):
+        context = {'token_temporal': token_temporal}
+        return render(request, 'reset_password_form.html', context)
