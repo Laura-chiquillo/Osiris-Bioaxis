@@ -18,7 +18,7 @@ class imagenSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class investigadorSerializer(serializers.ModelSerializer):
-    imagen = imagenSerializer()
+    imagen = imagenSerializer(read_only=True)
     class Meta:
         model = Investigador
         fields = '__all__'
