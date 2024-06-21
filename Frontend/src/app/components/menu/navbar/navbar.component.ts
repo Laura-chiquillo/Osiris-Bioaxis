@@ -258,6 +258,7 @@ export class NavbarComponent {
     }
   }
   }
+   // Muestra un mensaje de éxito usando MatSnackBar
   showSuccessMessage() {
     this.snackBar.open('Registro exitoso. Espera a que se active tu cuenta.', 'Cerrar', {
       duration: 5000,
