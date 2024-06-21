@@ -82,8 +82,8 @@ export class PerfilAdministradorComponent  implements OnInit {
           correo: this.userData?.correo || '',
           tipodocumento: this.userData?.tipodocumento || '',
           escalofonodocente: this.userData?.escalofonodocente || '',
-          horasestricto: this.userData?.horasestricto || '',
-          horasformacion: this.userData?.horasformacion || '',
+          horasestricto: this.userData?.horasestricto || '0',
+          horasformacion: this.userData?.horasformacion || '0',
           lineainvestigacion: this.userData?.lineainvestigacion || '',
           unidadAcademica: this.userData?.unidadAcademica || '',
           imagen: this.userData.imagen?.imagen || ''

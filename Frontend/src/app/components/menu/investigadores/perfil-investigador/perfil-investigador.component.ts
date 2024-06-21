@@ -59,9 +59,8 @@ export class PerfilInvestigadorComponent implements OnInit {
       correo: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
       tipodocumento: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
       escalofonodocente: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      horasestricto: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      horasformacion: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      lineainvestigacion: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      horasestricto: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('^[0-9]*$')]],
+      horasformacion: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('^[0-9]*$')]],      lineainvestigacion: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
       unidadAcademica: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
       imagen: [{ value: '', disabled: this.inputDeshabilitado }]
     });
@@ -82,8 +81,8 @@ export class PerfilInvestigadorComponent implements OnInit {
             correo: this.userData?.correo || '',
             tipodocumento: this.userData?.tipodocumento || '',
             escalofonodocente: this.userData?.escalofonodocente || '',
-            horasestricto: this.userData?.horasestricto || '',
-            horasformacion: this.userData?.horasformacion || '',
+            horasestricto: this.userData?.horasestricto || '0',
+            horasformacion: this.userData?.horasformacion || '0',
             lineainvestigacion: this.userData?.lineainvestigacion || '',
             unidadAcademica: this.userData?.unidadAcademica || '',
             imagen: this.userData.imagen?.imagen || ''
@@ -205,12 +204,23 @@ export class PerfilInvestigadorComponent implements OnInit {
 
   activarInput() {
     this.inputDeshabilitado = false;
-    this.ngOnInit();
+    this.firstFormGroup.enable();
+    this.firstFormGroup.get('numerodocumento')?.disable();
   }
+  
+  
 
   desactivarInput() {
     this.inputDeshabilitado = true;
-    this.ngOnInit();
+    this.firstFormGroup.get('nombre')?.disable();
+    this.firstFormGroup.get('apellidos')?.disable();
+    this.firstFormGroup.get('correo')?.disable();
+    this.firstFormGroup.get('tipodocumento')?.disable();
+    this.firstFormGroup.get('escalofonodocente')?.disable();
+    this.firstFormGroup.get('horasestricto')?.disable();
+    this.firstFormGroup.get('horasformacion')?.disable();
+    this.firstFormGroup.get('lineainvestigacion')?.disable();
+    this.firstFormGroup.get('unidadAcademica')?.disable();
   }
 
   guardarDatos() {
@@ -230,8 +240,7 @@ export class PerfilInvestigadorComponent implements OnInit {
             icon: 'success',
             confirmButtonText: 'Aceptar'
           });
-          this.inputDeshabilitado = true;
-          this.firstFormGroup.disable();
+          this.desactivarInput();
         },
         (error) => {
           console.error('Error al actualizar el investigador:', error);
