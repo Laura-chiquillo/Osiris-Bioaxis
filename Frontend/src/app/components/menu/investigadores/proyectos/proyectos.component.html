@@ -104,8 +104,11 @@
             <div class="titulo">
               <div class="custom-input-container">
                 <label for="codigo">Código del proyecto</label>
-                <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="codigo">
-              </div>                                              
+                <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="codigo" (blur)="verificarCodigo()">
+                <div *ngIf="codigoExistente" style="color: red;">
+                  {{ mensajeError }}
+                </div>
+              </div>                                          
               <div class="custom-input-container">
                 <label for="codigo">Titulo</label>
                 <input matInput id="titulo" placeholder="Ingrese el titulo" required formControlName="titulo">
@@ -115,87 +118,88 @@
                 <input matInput id="grupoInvestigacionPro" placeholder="Grupo de investigación" required formControlName="grupoInvestigacionPro">
               </div>
            
-          </div>
-          <div class="titulo">
-            <div class="custom-input-container">
-              <label for="investigatorInput">Coinvestigadores</label>
-              <div class="custom-chip-list">
-                <mat-chip-grid formControlName="coinvestigadores" #chipGrid aria-label="Active Investigators">
-                  <mat-chip-row
-                    *ngFor="let investigator of activeInvestigators; let i = index; trackBy: trackByFn"
-                    (removed)="remove(investigator)">
-                    {{ investigator.correo }}
-                    <button matChipRemove
-                      [attr.aria-label]="'remove ' + investigator.correo"
-                      (click)="removeCoinvestigador(investigator)">
-                      <mat-icon>cancel</mat-icon>
-                    </button>
-                  </mat-chip-row>
-                </mat-chip-grid>
-                <input matInput placeholder="Añadir coinvestigador" #investigatorInput [formControl]="investigatorCtrl"
-                  [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
-                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)" />
-                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                  <mat-option *ngFor="let investigator of filteredInvestigators | async; trackBy: trackByFn"
-                    [value]="investigator">
-                    {{ displayInvestigator(investigator) }}
-                  </mat-option>
-                </mat-autocomplete>
+          
+            </div>
+            <div class="titulo">
+              <div class="custom-input-container">
+                <label for="investigatorInput">Coinvestigadores</label>
+                <div class="custom-chip-list">
+                  <mat-chip-grid formControlName="coinvestigadores" #chipGrid aria-label="Active Investigators">
+                    <mat-chip-row
+                      *ngFor="let investigator of activeInvestigators; let i = index; trackBy: trackByFn"
+                      (removed)="remove(investigator)">
+                      {{ investigator.correo }}
+                      <button matChipRemove
+                        [attr.aria-label]="'remove ' + investigator.correo"
+                        (click)="removeCoinvestigador(investigator)">
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip-row>
+                  </mat-chip-grid>
+                  <input matInput placeholder="Añadir coinvestigador" #investigatorInput [formControl]="investigatorCtrl"
+                    [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)" />
+                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                    <mat-option *ngFor="let investigator of filteredInvestigators | async; trackBy: trackByFn"
+                      [value]="investigator">
+                      {{ displayInvestigator(investigator) }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </div>
+              </div>
+            
+              <div class="custom-input-container">
+                <label for="unidadAcademica">Unidad académica</label>
+                <input matInput id="unidadAcademica" placeholder="Ingrese la unidad academica" required formControlName="unidadAcademica">
+              </div>
+            
+              <div class="custom-input-container">
+                <label for="area">Área</label>
+                <input matInput id="area" placeholder="Ingrese el área" required formControlName="area">
               </div>
             </div>
-          
-            <div class="custom-input-container">
-              <label for="unidadAcademica">Unidad académica</label>
-              <input matInput id="unidadAcademica" placeholder="Ingrese la unidad academica" required formControlName="unidadAcademica">
-            </div>
-          
-            <div class="custom-input-container">
-              <label for="area">Área</label>
-              <input matInput id="area" placeholder="Ingrese el área" required formControlName="area">
-            </div>
-          </div>
-          <div class="titulo">
-            <div class="custom-input-container">
-              <label for="origenValue">Origen</label>
-              <mat-select id="origenValue" placeholder="Seleccione el origen" formControlName="origen">
-                <mat-option *ngFor="let data of origenData" [value]="data.value">
-                  {{data.viewValue}}
-                </mat-option>
-              </mat-select>
-            </div>
-            <div class="custom-input-container">
-              <label for="nivelRiesgoValue">Nivel de riesgo</label>
-              <mat-select id="nivelRiesgoValue" placeholder="Seleccione el nivel de riesgo" formControlName="nivelRiesgoEtico">
-                <mat-option *ngFor="let data of nivelRiesgoEticoData" [value]="data.value">
-                  {{data.viewValue}}
-                </mat-option>
-              </mat-select>
-            </div>
-            <div class="custom-input-container">
-              <label for="modalidadValue">Modalidad</label>
-              <mat-select id="modalidadValue" placeholder="Seleccione la modalidad" formControlName="modalidadProyecto">
-                <mat-option *ngFor="let data of modalidadData" [value]="data.value">
-                  {{data.viewValue}}
-                </mat-option>
-              </mat-select>
-            </div>
+            <div class="titulo">
+              <div class="custom-input-container">
+                <label for="origenValue">Origen</label>
+                <mat-select id="origenValue" placeholder="Seleccione el origen" formControlName="origen">
+                  <mat-option *ngFor="let data of origenData" [value]="data.value">
+                    {{data.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </div>
+              <div class="custom-input-container">
+                <label for="nivelRiesgoValue">Nivel de riesgo</label>
+                <mat-select id="nivelRiesgoValue" placeholder="Seleccione el nivel de riesgo" formControlName="nivelRiesgoEtico">
+                  <mat-option *ngFor="let data of nivelRiesgoEticoData" [value]="data.value">
+                    {{data.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </div>
+              <div class="custom-input-container">
+                <label for="modalidadValue">Modalidad</label>
+                <mat-select id="modalidadValue" placeholder="Seleccione la modalidad" formControlName="modalidadProyecto">
+                  <mat-option *ngFor="let data of modalidadData" [value]="data.value">
+                    {{data.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </div>
 
-          </div>
-          <div class="titulo">
-            <div class="custom-input-container">
-              <label for="codigo">Convocatoria</label>
-              <input matInput id="convocatoria" placeholder="Ingrese la convocatoria" required formControlName="convocatoria">
             </div>
-            
-            <div class="custom-input-container">
-              <label for="codigo">Línea de investigación</label>
-              <input matInput id="lineaInvestigacion" placeholder="Ingrese la línea de investigación" required formControlName="lineaInvestigacion">
+            <div class="titulo">
+              <div class="custom-input-container">
+                <label for="codigo">Convocatoria</label>
+                <input matInput id="convocatoria" placeholder="Ingrese la convocatoria" required formControlName="convocatoria">
+              </div>
+              
+              <div class="custom-input-container">
+                <label for="codigo">Línea de investigación</label>
+                <input matInput id="lineaInvestigacion" placeholder="Ingrese la línea de investigación" required formControlName="lineaInvestigacion">
+              </div>
+              <div class="custom-input-container">
+                <label for="coinvestigadoresProducto">Soporte</label>
+              <input formControlName="soporteProyecto" type="file" (change)="onFileSelected($event)" />
             </div>
-            <div class="custom-input-container">
-              <label for="coinvestigadoresProducto">Soporte</label>
-            <input formControlName="soporteProyecto" type="file" (change)="onFileSelected($event)" />
-          </div>
-          </div>
+            </div>
           <!----Porcentajes-->
           <div class="titulo">
             <div class="percentage-container">
@@ -362,14 +366,14 @@
             <div formGroupName="transacciones">
                 <div class="titulo">
                   <div class="custom-input-container form-field-spacing" appearance="fill">
-                    <label for="fecha_transacciones">Fecha</label>
-                    <input matInput [matDatepicker]="picker2" formControlName="fecha_transacciones">
+                    <label for="fecha">Fecha</label>
+                    <input matInput [matDatepicker]="picker2" formControlName="fecha">
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker>
                   </div>
                     <div class="custom-input-container">
                       <label for="coinvestigadoresProducto">Acta</label>
-                    <input formControlName="acta" type="file" (change)="onFileSelected($event)" />
+                    <input formControlName="acta" type="file" (change)="onFileSelected3($event)" />
                   </div>
                     <div class="custom-input-container form-field-spacing" appearance="fill">
                         <label for="descripcion">Descripción</label>
@@ -386,9 +390,12 @@
             <div formGroupName="producto">
                 <div class="titulo">
                   <div class="custom-input-container">
-                    <label for="codigo">Código del producto</label>
-                    <input matInput id="codigo" placeholder="Ingrese el código"  formControlName="id">
-                  </div> 
+                    <label for="codigoProducto">Código del producto</label>
+                    <input matInput id="codigoProducto" placeholder="Ingrese el código" formControlName="id" (blur)="verificarId()">
+                    <div *ngIf="idExistente" style="color: red;">
+                      {{ mensajeErrorId }}
+                    </div>
+                  </div>
                   <div class="custom-input-container">
                     <label for="codigo">Título</label>
                     <input matInput id="codigo" placeholder="Ingrese el título"  formControlName="tituloProducto">
@@ -837,9 +844,12 @@
           <form [formGroup]="productoFormGroup">
             <div class="titulo">
               <div class="custom-input-container">
-                <label for="codigo">Codigo producto</label>
-                <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="id">
-              </div> 
+                <label for="codigoProducto">Código del producto</label>
+                <input matInput id="codigoProducto" placeholder="Ingrese el código"  required formControlName="id" (blur)="verificarIds()">
+                <div *ngIf="idExistente" style="color: red;">
+                  {{ mensajeErrorId }}
+                </div>
+              </div>
               <div class="custom-input-container">
                 <label for="codigo">Titulo</label>
                 <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="tituloProducto">
