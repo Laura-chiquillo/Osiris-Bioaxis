@@ -205,7 +205,6 @@ export interface Proyecto {
   porcentajeAvance?: number;
   soporte?: File;
   soporteProducto?: File;
-  actatransacciones?:File,
   transacciones?: transacciones;
   origen?: string;
   convocatoria?: string;

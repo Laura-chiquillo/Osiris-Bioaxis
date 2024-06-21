@@ -27,7 +27,7 @@ import { AsyncPipe } from '@angular/common';
 import {
   MatAutocompleteModule,
   MatAutocompleteSelectedEvent,
-} from '@angular/material/autocomplete';
+} from '@angular/material/autocomplete'; 
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -148,7 +148,10 @@ export class ProyectosComponent implements OnInit {
   investigatorInput!: ElementRef<HTMLInputElement>;
 
   selectedOption: string;
-
+  codigoExistente: boolean = false;
+  mensajeError: string = '';
+  idExistente: boolean = false;
+  mensajeErrorId: string = '';
   constructor(
     private ProyectoyproductoService: ProyectoyproductoService,
     private formBuilder: FormBuilder,
@@ -187,7 +190,7 @@ export class ProyectosComponent implements OnInit {
       soporte: ['',this.selectedFileProyecto],
       transacciones: this.formBuilder.group({
         id: [''],
-        fecha_transacciones: [''],
+        fecha: [''],
         acta: ['',this.selectedFiletransaccion],
         descripcion: [''],
       }),
@@ -432,6 +435,40 @@ export class ProyectosComponent implements OnInit {
     this.selectedOption  = '';
   }
 
+  //verificar si existe el codigo de proyecto y producto
+  verificarCodigo() {
+    const codigo = this.firstFormGroup.get('codigo')?.value;
+    if (codigo) {
+      this.ProyectoyproductoService.getProyectos().subscribe(proyectos => {
+        const existe = proyectos.some(proyecto => proyecto.codigo === codigo);
+        this.codigoExistente = existe;
+        this.mensajeError = existe ? `El código ${codigo} ya existe.` : '';
+      });
+    }
+  }
+
+  verificarId() {
+    const id = this.firstFormGroup.get('producto.id')?.value;
+    if (id) {
+      this.ProyectoyproductoService.getProductos().subscribe(productos => {
+        const existe = productos.some(producto => producto.id === id);
+        this.idExistente = existe;
+        this.mensajeErrorId = existe ? `El ID ${id} ya existe.` : '';
+      });
+    }
+  }
+
+  //verificar si existe el producto
+  verificarIds() {
+    const id = this.productoFormGroup.get('id')?.value;
+    if (id) {
+      this.ProyectoyproductoService.getProductos().subscribe(productos => {
+        const existe = productos.some(producto => producto.id === id);
+        this.idExistente = existe;
+        this.mensajeErrorId = existe ? `El ID ${id} ya existe.` : '';
+      });
+    }
+  }
   //seleccionar en proyecto
   onSelectionChange2(event: any) {
     this.selectedOption = event.value;
@@ -963,13 +1000,11 @@ export class ProyectosComponent implements OnInit {
         porcentajeAvance: this.firstFormGroup.get('porcentajeAvance')?.value,
         soporte: this.selectedFileProyecto,
         soporteProducto: this.selectedFileProduct,
-        transacciones: this.firstFormGroup.get('transacciones')?.value,
-        actatransacciones: this.selectedFiletransaccion,
-        //transacciones: {
-          //fecha: this.firstFormGroup.get('transacciones.fecha_transacciones')?.value,
-          //acta: this.selectedFiletransaccion,
-          //descripcion: this.firstFormGroup.get('transacciones.descripcion')?.value,
-        //},
+        transacciones: {
+          fecha: this.firstFormGroup.get('transacciones.fecha')?.value,
+          descripcion: this.firstFormGroup.get('transacciones.descripcion')?.value,
+          acta: this.selectedFiletransaccion
+        },
         origen: this.firstFormGroup.get('origen')?.value,
         convocatoria: this.firstFormGroup.get('convocatoria')?.value,
         ubicacionProyecto: this.firstFormGroup.get('ubicacionProyecto')?.value,
@@ -1143,6 +1178,7 @@ export class ProyectosComponent implements OnInit {
       });
     }
   }
+  
   getEstadoProyecto() {
     this.ProyectoyproductoService.getEstadoProyecto().subscribe(
       (resp: any) => {

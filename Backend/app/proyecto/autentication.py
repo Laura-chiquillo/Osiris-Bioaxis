@@ -176,22 +176,34 @@ class CrearProyecto(APIView):
             print("No hay datos de financiacion en la solicitud")
 
         
-   
-         # Transacciones
+        # Transacciones
+        transacciones_data = json.loads(request.data.get('transacciones', '{}'))
         transacciones = None
-        transacciones_data = json.loads(request.data.get('transacciones'))
-        transacciones_fecha=transacciones_data.get('fecha_transacciones')
-        transacciones_acta = request.FILES.get('acta')
-        transacciones_descripcion=transacciones_data.get('descripcion')
-        print("Acta:", transacciones_acta)
-        transacciones,_=Transacciones.objects.get_or_create(
-            id=Transacciones.objects.count()+1,
-            fecha=transacciones_fecha,
-            acta=transacciones_acta,
-            descripcion=transacciones_descripcion
-        )
-        transacciones.save()
 
+        if transacciones_data:
+            transacciones_fecha = transacciones_data.get('fecha')
+            transacciones_acta = request.FILES.get('acta')
+            transacciones_descripcion = transacciones_data.get('descripcion')
+
+            if transacciones_fecha or transacciones_acta or transacciones_descripcion:
+                transacciones, created = Transacciones.objects.get_or_create(
+                    id=Transacciones.objects.count() + 1,
+                    defaults={
+                        'fecha': transacciones_fecha,
+                        'descripcion': transacciones_descripcion
+                    }
+                )
+                if created and transacciones_acta:
+                    transacciones.acta = transacciones_acta
+                    transacciones.save()
+                elif transacciones_acta:
+                    transacciones.acta = transacciones_acta
+                    transacciones.save()
+
+        else:
+            print("No hay datos de transacciones en la solicitud")
+        
+        
         ubicacionProyecto_data = json.loads(request.data.get('ubicacionProyecto'))
         ubicacionProyecto_instalacion= ubicacionProyecto_data.get('instalacion')
         ubicacionProyecto_municipio=ubicacionProyecto_data.get('municipio')
