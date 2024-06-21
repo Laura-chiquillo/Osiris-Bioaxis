@@ -44,4 +44,21 @@ export class AutenticacionService {
         // o algún otro criterio para determinar si el usuario está autenticado
         return localStorage.getItem('userData') !== null;
       }
+      //Este método se usa cuando un usuario quiere restablecer su contraseña.
+      // Envía el correo electrónico del usuario al servidor para iniciar el proceso de restablecimiento.
+      resetPassword(correo: string) {
+        return this.http.post('http://localhost:8000/reset-password/', { correo });
+    }
+    //Este método se usa para confirmar el restablecimiento de la contraseña.
+    //Envía un código (que el usuario recibió por correo electrónico) y las nuevas contraseñas
+    // al servidor para finalizar el proceso de restablecimiento.
+    confirmResetPassword(token: string, nuevaContrasena: string, confirmarContrasena: string): Observable<any> {
+      const body = {
+          'token': token,
+          'nueva_contraseña': nuevaContrasena,
+          'confirmar_contraseña': confirmarContrasena
+      };
+      return this.http.post('http://localhost:8000/reset-password-confirm/', body);
+  }
+  
 }

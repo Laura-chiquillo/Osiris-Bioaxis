@@ -6,6 +6,8 @@ import { AutenticacionService } from '../services/autenticacion';
 import { InvestigadorService } from '../services/registroInvestigador';
 import Swal from 'sweetalert2'
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ResetPasswordDialogComponent } from './reset-password-dialog/reset-password-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class NavbarComponent {
   constructor(private router: Router, private InvestigadorService: InvestigadorService, private formBuilder: FormBuilder, private snackBar: MatSnackBar,
-    private autenticacionService: AutenticacionService) {
+    private autenticacionService: AutenticacionService,public dialog: MatDialog,) {
     this.registroForm = this.formBuilder.group({
       nombre: ['', [Validators.required]],
       apellidos: ['', [Validators.required]],
@@ -86,6 +88,10 @@ export class NavbarComponent {
     }
   }
   
+   //metodo que abre el digalogo que contiene el formulario de restablecer contraseña
+   openResetPasswordDialog() {
+    const dialogRef = this.dialog.open(ResetPasswordDialogComponent);
+  }
   
   // Método para decodificar el token (ejemplo, utilizando la función base64UrlDecode)
   decodeToken(token: string): any {

@@ -46,7 +46,8 @@ from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
                        transaccionesList, transaccionesRetrieveUpdateDestroy,
                        ubicacionList, ubicacionProyectoList,
                        ubicacionProyectoRetrieveUpdateDestroy,
-                       ubicacionRetrieveUpdateDestroy)
+                       ubicacionRetrieveUpdateDestroy, ResetPasswordViewSet,
+                       ResetPasswordConfirmViewSet, ResetPasswordFormViewSet)
 
 urlpatterns = [
     path('custom-token-auth/', CustomAuthToken.as_view(), name='custom_token_auth'),
@@ -133,4 +134,7 @@ urlpatterns = [
     path('proyecto/<pk>', proyectoRetrieveUpdateDestroy.as_view(), name='proyecto-detail'),
     path('imagen', imagenList.as_view(), name='create-imagen-list'),
     path('imagen/<int:pk>', imagenRetrieveUpdateDestroy.as_view(), name='imagen-detail'),
+    path('reset-password/', ResetPasswordViewSet.as_view({'post': 'create'}), name='reset-password'),#URL para iniciar el proceso de restablecimiento de contraseña.
+    path('reset-password-confirm/<str:token_temporal>/', ResetPasswordFormViewSet.as_view({'get': 'retrieve'}), name='reset-password-form'),#URL para mostrar el formulario de restablecimiento de contraseña basado en un token temporal.
+    path('reset-password-confirm/', ResetPasswordConfirmViewSet.as_view({'post': 'create'}), name='reset-password-confirm'),#URL para confirmar el restablecimiento de contraseña después de ingresar la nueva contraseña y el token temporal.
 ]
