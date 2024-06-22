@@ -55,18 +55,17 @@ export class PerfilAdministradorComponent  implements OnInit {
   ) { 
     this.firstFormGroup = this.formBuilder.group({
       numerodocumento: [{ value: '', disabled: true }, Validators.required],
-      nombre: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      apellidos: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      correo: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      nombre: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('[A-Za-z ]+')]],
+      apellidos: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('[A-Za-z ]+')]],
+      correo: [{ value: '', disabled: this.inputDeshabilitado },[ Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@unbosque\.edu\.co')]],
       tipodocumento: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      escalofonodocente: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      horasestricto: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      horasformacion: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      lineainvestigacion: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      unidadAcademica: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      escalofonodocente: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('[A-Za-z ]+')]],
+      horasestricto: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('^[0-9]*$')]],
+      horasformacion: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('^[0-9]*$')]],
+      lineainvestigacion: [{ value: '', disabled: this.inputDeshabilitado },[Validators.required, Validators.pattern('[A-Za-z ]+')]],
+      unidadAcademica: [{ value: '', disabled: this.inputDeshabilitado },[Validators.required, Validators.pattern('[A-Za-z ]+')]],
       imagen: [{ value: '', disabled: this.inputDeshabilitado }]
-    });
-
+    });  
   }
 
  ngOnInit(): void {

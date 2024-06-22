@@ -67,15 +67,15 @@ export class DialogoCargaEstudiosComponent implements OnInit {
 
     if(this.type === 'Pregrado'){
       this.firstFormGroup = this.formBuilder.group({
-        titulo: ['', [Validators.required]],
+        titulo: ['', [Validators.required, Validators.pattern('[A-Za-z ]+')]],
         fecha: ['', [Validators.required]],
-        institucion: ['', [Validators.required]],
+        institucion: ['', [Validators.required, Validators.pattern('[A-Za-z ]+')]],
       });
     } else {
       this.secondFormGroup = this.formBuilder.group({
-        titulo2: ['', [Validators.required]],
+        titulo2: ['', [Validators.required, Validators.pattern('[A-Za-z ]+')]],
         fecha2: ['', [Validators.required]],
-        institucion2: ['', [Validators.required]],
+        institucion2: ['', [Validators.required, Validators.pattern('[A-Za-z ]+')]],
         tipo2: ['', [Validators.required]],
       });
     }

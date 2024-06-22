@@ -5,9 +5,12 @@
         <div *ngIf="type === 'Pregrado'; else elseBlock">
             <form [formGroup]="firstFormGroup">
                 <div class="custom-input-container">
-                    <label for="titulo">Título</label>
-                    <input matInput id="titulo" placeholder="Ingrese el título" formControlName="titulo">
-                </div>
+                    <label for="nombre">Título</label>
+                    <input matInput type="text" id="titulo" placeholder="Ingrese el título" formControlName="titulo">
+                    <mat-error *ngIf="firstFormGroup.get('titulo').invalid">
+                        Por favor ingrese solo letras (sin números ni caracteres especiales).
+                    </mat-error>
+                </div> 
                 
                 <div class="custom-input-container">
                     <label for="fecha">Fecha</label>
@@ -15,11 +18,13 @@
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </div>
-                
                 <div class="custom-input-container">
-                    <label for="institucion">Institución</label>
-                    <input type="text" matInput id="institucion" placeholder="Ingrese la institución" formControlName="institucion">
-                </div>                
+                    <label for="nombre">Institución</label>
+                    <input matInput type="text" id="institucion" placeholder="Ingrese la institución" formControlName="institucion">
+                    <mat-error *ngIf="firstFormGroup.get('institucion').invalid">
+                        Por favor ingrese solo letras (sin números ni caracteres especiales).
+                    </mat-error>
+                </div>            
             </form>
         </div>
         <ng-template #elseBlock>
