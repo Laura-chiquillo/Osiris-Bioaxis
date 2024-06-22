@@ -55,18 +55,17 @@ export class PerfilAdministradorComponent  implements OnInit {
   ) { 
     this.firstFormGroup = this.formBuilder.group({
       numerodocumento: [{ value: '', disabled: true }, Validators.required],
-      nombre: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      apellidos: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      correo: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      nombre: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('[A-Za-z ]+')]],
+      apellidos: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('[A-Za-z ]+')]],
+      correo: [{ value: '', disabled: this.inputDeshabilitado },[ Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@unbosque\.edu\.co')]],
       tipodocumento: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      escalofonodocente: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      horasestricto: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      horasformacion: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      lineainvestigacion: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      unidadAcademica: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
+      escalofonodocente: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('[A-Za-z ]+')]],
+      horasestricto: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('^[0-9]*$')]],
+      horasformacion: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('^[0-9]*$')]],
+      lineainvestigacion: [{ value: '', disabled: this.inputDeshabilitado },[Validators.required, Validators.pattern('[A-Za-z ]+')]],
+      unidadAcademica: [{ value: '', disabled: this.inputDeshabilitado },[Validators.required, Validators.pattern('[A-Za-z ]+')]],
       imagen: [{ value: '', disabled: this.inputDeshabilitado }]
-    });
-
+    });  
   }
 
  ngOnInit(): void {
@@ -82,8 +81,8 @@ export class PerfilAdministradorComponent  implements OnInit {
           correo: this.userData?.correo || '',
           tipodocumento: this.userData?.tipodocumento || '',
           escalofonodocente: this.userData?.escalofonodocente || '',
-          horasestricto: this.userData?.horasestricto || '',
-          horasformacion: this.userData?.horasformacion || '',
+          horasestricto: this.userData?.horasestricto || '0',
+          horasformacion: this.userData?.horasformacion || '0',
           lineainvestigacion: this.userData?.lineainvestigacion || '',
           unidadAcademica: this.userData?.unidadAcademica || '',
           imagen: this.userData.imagen?.imagen || ''
@@ -110,10 +109,14 @@ onFileSelected(event: Event): void {
   const input = event.target as HTMLInputElement;
   if (input.files && input.files[0]) {
     const file = input.files[0];
+    if (!file.type.startsWith('image')) {
+      alert('Por favor, seleccione un archivo de imagen válido.');
+      return;
+    }
     this.selectedFile = file; // Asigna el archivo seleccionado a selectedFile
     const reader = new FileReader();
     reader.onload = () => {
-      this.imagenUrl = reader.result;
+      this.imagenUrl = reader.result as string;
     };
     reader.readAsDataURL(file);
   }
