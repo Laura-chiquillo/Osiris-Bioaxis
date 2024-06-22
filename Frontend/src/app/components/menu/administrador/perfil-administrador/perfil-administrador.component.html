@@ -4,9 +4,9 @@
             <img [src]="imagenUrl" alt="Imagen del Investigador">
         </div>
         <div class="upload-button">
-            <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden>
+            <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden accept="image/*">
             <button *ngIf="!inputDeshabilitado" type="button" (click)="triggerFileInput()">+</button>
-        </div>
+          </div>   
     </div>
 </div>
 

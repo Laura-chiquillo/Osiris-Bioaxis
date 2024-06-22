@@ -109,10 +109,14 @@ onFileSelected(event: Event): void {
   const input = event.target as HTMLInputElement;
   if (input.files && input.files[0]) {
     const file = input.files[0];
+    if (!file.type.startsWith('image')) {
+      alert('Por favor, seleccione un archivo de imagen válido.');
+      return;
+    }
     this.selectedFile = file; // Asigna el archivo seleccionado a selectedFile
     const reader = new FileReader();
     reader.onload = () => {
-      this.imagenUrl = reader.result;
+      this.imagenUrl = reader.result as string;
     };
     reader.readAsDataURL(file);
   }
