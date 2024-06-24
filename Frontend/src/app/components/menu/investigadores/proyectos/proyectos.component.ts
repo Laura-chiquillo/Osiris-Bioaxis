@@ -917,8 +917,8 @@ export class ProyectosComponent implements OnInit {
   get porcentajeAvance() {
     return this.firstFormGroup.get('porcentajeAvance');
   }
-  get soporteProyecto() {
-    return this.firstFormGroup.get('soporteProyecto');
+  get soporte() {
+    return this.firstFormGroup.get('soporte');
   }
   get transacciones() {
     return this.firstFormGroup.get('transacciones');

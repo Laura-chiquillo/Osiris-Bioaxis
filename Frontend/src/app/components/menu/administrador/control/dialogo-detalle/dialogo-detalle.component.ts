@@ -128,19 +128,18 @@ export class DialogoDetalleComponent implements OnInit {
         titulo: [this.data?.titulo,[Validators.required]],
         area: [this.data?.area,[Validators.required]],
         investigador: [{value: this.data?.investigador, disabled: this.isEdit ? true : false}, [Validators.required]],
-        coinvestigador: [this.data?.coinvestigador, [Validators.required]],
+        coinvestigador: [this.data?.coinvestigador],
         convocatoria: [this.data?.convocatoria,[Validators.required]],
         estado: [{value: this.data?.estado, disabled: this.isEdit ? true : false},[Validators.required]],
         estadoProceso: [{value: this.data?.estadoProceso, disabled: this.isEdit ? true : false},[Validators.required]],
-        estudiantesProyecto: [this.data?.estudiantes,[Validators.required]],
-        participantesExternos: [this.data?.participantesExternos,[Validators.required]],
-        fecha: [this.data?.fecha,[Validators.required]], 
+        estudiantesProyecto: [this.data?.estudiantes],
+        participantesExternos: [this.data?.participantesExternos],
         grupoInvestigacionPro: [this.data?.grupoInvestigacionPro,[Validators.required]],
         lineaInvestigacion: [this.data?.lineaInvestigacion,[Validators.required]],
         modalidad: [this.data?.modalidad,[Validators.required]],
         nivelRiesgoEtico: [this.data?.nivelRiesgoEtico,[Validators.required]],
         origen: [this.data?.origen,[Validators.required]],
-
+        unidadAcademica:[this.data?.unidadAcademica,[Validators.required]],
         porcentajeAvance: [this.data?.porcentajeAvance,[Validators.required]],
         porcentajeEjecucionCorte: [this.data?.porcentajeEjecucionCorte,[Validators.required]],
         porcentajeEjecucionFinCorte: [this.data?.porcentajeEjecucionFinCorte,[Validators.required]],
@@ -164,7 +163,6 @@ export class DialogoDetalleComponent implements OnInit {
         estadoProceso: [{value: this.data?.estadoProceso, disabled: this.isEdit ? true : false},[Validators.required]],
         estadoProducto: [{value: this.data?.estadoProducto, disabled: this.isEdit ? true : false},[Validators.required]],
         estudiantes: [this.data?.estudiantes,[Validators.required]],
-        fechaProducto: [this.data?.fecha,[Validators.required]],
         id: [{value: this.data?.id, disabled: this.isEdit ? true : false},[Validators.required]],
         investigadorProducto: [{value: this.data?.investigador, disabled: this.isEdit ? true : false},[Validators.required]],
         observaciones: [this.data?.observaciones,[Validators.required]],
@@ -213,11 +211,11 @@ export class DialogoDetalleComponent implements OnInit {
   get estudiantesProyecto() {
     return this.firstFormGroup.get('estudiantesProyecto');
   }
+  get unidadAcademica() {
+    return this.firstFormGroup.get('unidadAcademica');
+  }
   get participantesExternos() {
     return this.firstFormGroup.get('participantesExternos');
-  }
-  get fecha() {
-    return this.firstFormGroup.get('fecha');
   }
   get lineaInvestigacion() {
     return this.firstFormGroup.get('lineaInvestigacion');
@@ -250,9 +248,6 @@ export class DialogoDetalleComponent implements OnInit {
   }
   get estudiantes() {
     return this.secondFormGroup.get('estudiantes');
-  }
-  get fechaProducto() {
-    return this.secondFormGroup.get('fechaProducto');
   }
   get id() {
     return this.secondFormGroup.get('id');
