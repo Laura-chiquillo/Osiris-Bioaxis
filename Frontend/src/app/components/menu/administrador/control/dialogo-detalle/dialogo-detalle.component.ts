@@ -157,17 +157,22 @@ export class DialogoDetalleComponent implements OnInit {
       this.obtenerCuartilEsperado();
       this.obtenerEstadoProducto();
       this.secondFormGroup = this.formBuilder.group({
-        coinvestigador: [this.data?.coinvestigador,[Validators.required]],
+        coinvestigador: [this.data?.coinvestigador],
         categoriaMinciencias: [this.data?.categoriaMinciencias,[Validators.required]],
         cuartilEsperado: [this.data?.cuartilEsperado,[Validators.required]],
         estadoProceso: [{value: this.data?.estadoProceso, disabled: this.isEdit ? true : false},[Validators.required]],
         estadoProducto: [{value: this.data?.estadoProducto, disabled: this.isEdit ? true : false},[Validators.required]],
+<<<<<<< HEAD
         estudiantes: [this.data?.estudiantes,[Validators.required]],
+=======
+        estudiantes: [this.data?.estudiantes],
+        fechaProducto: [this.data?.fecha,[Validators.required]],
+>>>>>>> 656cd75828ec5dc58333fcef9c196c80fa9f26c3
         id: [{value: this.data?.id, disabled: this.isEdit ? true : false},[Validators.required]],
         investigadorProducto: [{value: this.data?.investigador, disabled: this.isEdit ? true : false},[Validators.required]],
         observaciones: [this.data?.observaciones,[Validators.required]],
         origenProyecto: [this.data?.origen,[Validators.required]],
-        participantesExternosProducto: [this.data?.participantesExternos,[Validators.required]],
+        participantesExternosProducto: [this.data?.participantesExternos],
         porcentajeComSemestral: [this.data?.porcentajeComSemestral,[Validators.required]],
         porcentajeRealMensual: [this.data?.porcentajeRealMensual,[Validators.required]],
         porcentanjeAvanFinSemestre: [this.data?.porcentanjeAvanFinSemestre,[Validators.required]],

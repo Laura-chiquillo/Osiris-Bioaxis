@@ -29,7 +29,7 @@ import { AutenticacionService } from '../../services/autenticacion';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { DialogoDetalleComponent } from './dialogo-detalle/dialogo-detalle.component';
 
-@Component({
+@Component({ 
   selector: 'app-control',
   templateUrl: './control.component.html',
   styleUrls: ['./control.component.css'],
