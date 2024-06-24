@@ -668,7 +668,7 @@ export class ProyectosComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        Swal.fire({
+        Swal.fire({ 
           title: 'Registro Exitoso !!!',
           text: 'Se ha registrado un nuevo participnate',
           icon: 'success',
@@ -1605,7 +1605,7 @@ thumbLabel6 = false;
         id:producto.id,
         tituloProducto: producto.tituloProducto || '', // Asegurar que todas las propiedades definidas en la interfaz Producto estén presentes
         fecha: producto.fecha || '',
-        estadoProducto: producto.estadoProceso || '',
+        estadoProducto: producto.estadoProceso || '', 
         etapa: this.estadosProductos.find(p => p.id === producto.estadoProducto).estado,
         tipologiaProducto: producto.tipologiaProducto || '',
         observacion: producto.observacion,
@@ -1616,7 +1616,7 @@ thumbLabel6 = false;
       const proyectosAjustados = proyectos.reverse().map(proyecto => ({
         ...proyecto,
         tituloProducto: proyecto.titulo,
-        etapa: this.estadosProductos.find(p => p.id === proyecto.estado).estado,
+        etapa: this.estadosProyectos.find(p => p.id === proyecto.estado).estado,
         id: proyecto.codigo,
         fecha: proyecto.fecha,
         estadoProceso: proyecto.estadoProceso,
