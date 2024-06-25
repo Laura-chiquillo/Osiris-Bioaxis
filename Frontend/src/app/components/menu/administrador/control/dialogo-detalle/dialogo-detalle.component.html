@@ -4,7 +4,7 @@
         <div *ngIf="type === 'Proyecto'; else elseBlock">
             <form [formGroup]="firstFormGroup">
                 <div class="table_component" role="region" tabindex="0">
-                    <table>
+                    <table class="tabla">
                         <tbody>
                             <!-- Información Básica -->
                             <tr>
@@ -121,6 +121,10 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th>Soporte</th>
+                                <td><a mat-button href="{{data.Soporte}}" target="_blank" color="primary">Descargar</a></td>
+                            </tr>
+                            <tr>
                                 <th>Área</th>
                                 <td>
                                     <mat-form-field appearance="fill">
@@ -129,7 +133,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>Unidad academica</th>
+                                <th>Unidad académica</th>
                                 <td>
                                     <mat-form-field appearance="fill">
                                         <input matInput placeholder="" required formControlName="unidadAcademica">
@@ -153,7 +157,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>Linea Investigación</th>
+                                <th>Línea Investigación</th>
                                 <td>
                                     <mat-form-field class="form-field-spacing" appearance="fill">
                                         <input matInput placeholder="" required formControlName="lineaInvestigacion">
@@ -173,7 +177,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>Nivel Riesgo Etico</th>
+                                <th>Nivel Riesgo Ético</th>
                                 <td>
                                     <mat-form-field class="form-field-spacing" appearance="fill">
                                         <mat-select panelClass="matRole" formControlName="nivelRiesgoEtico">
@@ -221,10 +225,6 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>Soporte</th>
-                                <td><a mat-button href="{{data.Soporte}}" target="_blank" color="primary">Descargar</a></td>
-                            </tr>
-                            <tr>
                                 <th>Producto Asociado</th>
                                 <td>
                                     {{data.producto == null ? 'no aplica' : data.producto }}
@@ -242,14 +242,14 @@
                             </tr>
                         </tbody>
                     </table>
-                    
+                     
                 </div>
             </form>
         </div>
         <ng-template #elseBlock>
             <form [formGroup]="secondFormGroup">
                 <div class="table_component" role="region" tabindex="0">
-                    <table>
+                    <table  class="tabla">
                         <tbody>
                             <tr>
                                 <th>Código ID</th>
@@ -268,12 +268,8 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>Publicación</th>
-                                <td>
-                                    <mat-form-field class="form-field-spacing" appearance="fill">
-                                        <input matInput placeholder="" required formControlName="publicacion">
-                                    </mat-form-field>
-                                </td>
+                                <th>Fecha Creación</th>
+                                <td>{{data.created_at | date:'medium'}}</td>
                             </tr>
                             <tr>
                                 <th>Investigador</th>
@@ -285,6 +281,12 @@
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2" style="text-align: center;">
+                                    <strong>Participantes</strong>
                                 </td>
                             </tr>
                             <tr>
@@ -300,15 +302,33 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>Cuartil Esperado</th>
+                                <th>Estudiantes</th>
                                 <td>
                                     <mat-form-field class="form-field-spacing" appearance="fill">
-                                        <mat-select panelClass="matRole" formControlName="cuartilEsperado">
-                                            <mat-option *ngFor="let data of cuartilEsperadoData" [value]="data.id">
-                                                {{data.cuartil}}
+                                        <mat-select panelClass="matRole" formControlName="estudiantes" multiple>
+                                            <mat-option *ngFor="let data of estudiantesData" [value]="data.numeroDocumento">
+                                                {{data.numeroDocumento}} - {{data.nombres}} {{data.apellidos}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Participantes Externos</th>
+                                <td>
+                                    <mat-form-field class="form-field-spacing" appearance="fill">
+                                        <mat-select panelClass="matRole" formControlName="participantesExternosProducto" multiple>
+                                            <mat-option *ngFor="let data of participanteExternoData" [value]="data.numerodocumento">
+                                                {{data.numerodocumento}} - {{data.nombre}} {{data.apellidos}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2" style="text-align: center;">
+                                    <strong>Estados</strong>
                                 </td>
                             </tr>
                             <tr>
@@ -335,19 +355,36 @@
                                     </mat-form-field>
                                 </td>
                             </tr>
+
                             <tr>
-                                <th>Estudiantes</th>
+                                <td colspan="2" style="text-align: center;">
+                                    <strong> Información </strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Soporte</th>
+                                <td><a mat-button href="{{data.Soporte}}" target="_blank" color="primary">Descargar</a></td>
+                            </tr>
+                            <tr>
+                                <th>Publicación</th>
                                 <td>
                                     <mat-form-field class="form-field-spacing" appearance="fill">
-                                        <mat-select panelClass="matRole" formControlName="estudiantes" multiple>
-                                            <mat-option *ngFor="let data of estudiantesData" [value]="data.numeroDocumento">
-                                                {{data.numeroDocumento}} - {{data.nombres}} {{data.apellidos}}
+                                        <input matInput placeholder="" required formControlName="publicacion">
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Cuartil Esperado</th>
+                                <td>
+                                    <mat-form-field class="form-field-spacing" appearance="fill">
+                                        <mat-select panelClass="matRole" formControlName="cuartilEsperado">
+                                            <mat-option *ngFor="let data of cuartilEsperadoData" [value]="data.id">
+                                                {{data.cuartil}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </td>
                             </tr>
-                    
                             <tr>
                                 <th>Observaciones</th>
                                 <td>
@@ -361,18 +398,6 @@
                                 <td>
                                     <mat-form-field class="form-field-spacing" appearance="fill">
                                         <input matInput placeholder="" required formControlName="origenProyecto">
-                                    </mat-form-field>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Participantes Externos</th>
-                                <td>
-                                    <mat-form-field class="form-field-spacing" appearance="fill">
-                                        <mat-select panelClass="matRole" formControlName="participantesExternosProducto" multiple>
-                                            <mat-option *ngFor="let data of participanteExternoData" [value]="data.numerodocumento">
-                                                {{data.numerodocumento}} - {{data.nombre}} {{data.apellidos}}
-                                            </mat-option>
-                                        </mat-select>
                                     </mat-form-field>
                                 </td>
                             </tr>
@@ -400,11 +425,6 @@
                                     </mat-form-field>
                                 </td>
                             </tr>
-                            
-                            <tr>
-                                <th>Soporte</th>
-                                <td><a mat-button href="{{data.Soporte}}" target="_blank" color="primary">Descargar</a></td>
-                            </tr>
                             <tr>
                                 <th>Observacion Admin</th>
                                 <td>
@@ -415,10 +435,7 @@
                                 <th>Fecha Actualización</th>
                                 <td>{{data.updated_at | date:'medium'}}</td>
                             </tr>
-                            <tr>
-                                <th>Fecha Creación</th>
-                                <td>{{data.created_at | date:'medium'}}</td>
-                            </tr>
+                            
                         </tbody>
                     </table>
                 </div>

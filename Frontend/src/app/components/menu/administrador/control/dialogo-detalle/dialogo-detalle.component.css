@@ -1,5 +1,11 @@
 .table_component {
     overflow: auto;
+    width: 800px;
+}
+
+.tabla {
+    overflow: auto;
+    width: 800px;
 }
 
 .table_component table {
@@ -10,21 +16,21 @@
     text-align: left;
 }
 
-.table_component th {
+.table_component th, .table_component td {
     border: 1px solid #dededf;
-    background-color: #eceff1;
-    color: #000000;
     padding: 5px;
 }
 
+.table_component th {
+    background-color: #eceff1;
+    color: #000000;
+}
+
 .table_component td {
-    border: 1px solid #dededf;
     background-color: #ffffff;
     color: #000000;
-    padding: 5px;
 }
 
 mat-form-field {
     width: 100%;
-  }
-  
+}
