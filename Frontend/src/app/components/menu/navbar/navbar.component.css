@@ -13,6 +13,14 @@ body {
   border-radius: 12px;
   overflow: hidden;
 }
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-left: 0; /* Ajusta este valor según sea necesario */
+  position: relative;
+  left: 0; /* Ajusta este valor para mover el checkbox hacia la izquierda o derecha */
+}
+
 
 .mat-tab-group {
   width: 100%;

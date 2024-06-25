@@ -146,7 +146,7 @@ export class DialogoDetalleComponent implements OnInit {
         modalidad: [this.data?.modalidad,[Validators.required]],
         nivelRiesgoEtico: [this.data?.nivelRiesgoEtico,[Validators.required]],
         origen: [this.data?.origen,[Validators.required]],
-
+        unidadAcademica:[this.data?.unidadAcademica,[Validators.required]],
         porcentajeAvance: [this.data?.porcentajeAvance,[Validators.required]],
         porcentajeEjecucionCorte: [this.data?.porcentajeEjecucionCorte,[Validators.required]],
         porcentajeEjecucionFinCorte: [this.data?.porcentajeEjecucionFinCorte,[Validators.required]],

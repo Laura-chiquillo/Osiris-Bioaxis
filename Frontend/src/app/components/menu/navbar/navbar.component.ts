@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ResetPasswordDialogComponent } from './reset-password-dialog/reset-password-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -136,6 +137,12 @@ export class NavbarComponent {
         console.error(error);
       }
     );
+  }
+
+  //ver contraseña
+  hidePassword = true;
+  togglePasswordVisibility(checked: boolean) {
+    this.hidePassword = !checked;
   }
 
   // registro
