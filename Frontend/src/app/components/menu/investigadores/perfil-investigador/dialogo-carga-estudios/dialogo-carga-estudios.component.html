@@ -30,9 +30,12 @@
         <ng-template #elseBlock>
             <form [formGroup]="secondFormGroup">
                 <div class="custom-input-container">
-                    <label for="titulo2">Título</label>
-                    <input matInput id="titulo2" placeholder="Ingrese el título" formControlName="titulo2">
-                </div>
+                    <label for="nombre">Título</label>
+                    <input matInput type="text" id="titulo2" placeholder="Ingrese el título" formControlName="titulo2">
+                    <mat-error *ngIf="secondFormGroup.get('titulo2').invalid">
+                        Por favor ingrese solo letras (sin números ni caracteres especiales).
+                    </mat-error>
+                </div> 
                 
                 <div class="custom-input-container">
                     <label for="fecha2">Fecha</label>
@@ -42,9 +45,12 @@
                 </div>
                 
                 <div class="custom-input-container">
-                    <label for="institucion2">Institución</label>
-                    <input type="text" matInput id="institucion2" placeholder="Ingrese la institución" formControlName="institucion2">
-                </div>
+                    <label for="nombre">Institución</label>
+                    <input matInput type="text" id="institucion2" placeholder="Ingrese la institución" formControlName="institucion2">
+                    <mat-error *ngIf="secondFormGroup.get('institucion2').invalid">
+                        Por favor ingrese solo letras (sin números ni caracteres especiales).
+                    </mat-error>
+                </div>  
                 
                 <div class="custom-input-container">
                     <label for="tipo2">Tipo</label>

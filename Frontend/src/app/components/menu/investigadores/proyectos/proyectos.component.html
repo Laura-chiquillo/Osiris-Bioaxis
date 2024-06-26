@@ -197,7 +197,7 @@
               </div>
               <div class="custom-input-container">
                 <label for="coinvestigadoresProducto">Soporte</label>
-              <input formControlName="soporteProyecto" type="file" (change)="onFileSelected($event)" />
+              <input formControlName="soporte" type="file" (change)="onFileSelected($event)" />
             </div>
             </div>
           <!----Porcentajes-->
@@ -306,7 +306,7 @@
             </div>
           </div>
           <div class="titulo">
-            <mat-button-toggle-group formControlName="ingredients" aria-label="Ingredients" multiple (change)="onSelectionChange2($event)">
+            <mat-button-toggle-group  aria-label="Ingredients" multiple (change)="onSelectionChange2($event)">
               <mat-button-toggle value="flour">Entidad a la cual se postulo</mat-button-toggle>
               <mat-button-toggle value="eggs">Financiación</mat-button-toggle>
               <mat-button-toggle value="sugar">Transacciones</mat-button-toggle>
