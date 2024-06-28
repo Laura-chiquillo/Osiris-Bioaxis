@@ -6,90 +6,89 @@
         <div class="upload-button">
             <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden accept="image/*">
             <button *ngIf="!inputDeshabilitado" type="button" (click)="triggerFileInput()">+</button>
-          </div>   
-    </div>
-</div>
+        </div>
+        <div class="button-group">
+            <button *ngIf="!inputDeshabilitado" class="boton-estilizado guardar" (click)="guardarDatos()" [disabled]="firstFormGroup.invalid">Guardar</button>
+            <button *ngIf="!inputDeshabilitado" class="boton-estilizado cancelar" (click)="desactivarInput()">Cancelar</button>
+        </div>
 
-
-<form class="example-form" [formGroup]="firstFormGroup">
-    <!-- Información Personal -->
-    <h2>Información Personal</h2>
-    <div class="personal-info">
-        <div class="custom-input-container">
-            <label for="numerodocumento">Número de documento</label>
-            <input matInput formControlName="numerodocumento">        
-        </div>
-        <div class="custom-input-container">
-            <label for="tipodocumento">Tipo de documento</label>
-            <mat-select panelClass="matRole" [value]="userData?.tipodocumento" formControlName="tipodocumento">
-                <mat-option *ngFor="let data of tipodpcumento" [value]="data">
-                    {{data}}
-                </mat-option>
-            </mat-select>
-        </div>
-        <div class="custom-input-container">
-            <label for="nombre">Nombres</label>
-            <input matInput type="text" id="nombre" placeholder="Ingrese su nombre" formControlName="nombre">
-            <mat-error *ngIf="firstFormGroup.get('nombre').invalid">
-                Por favor ingrese solo letras (sin números ni caracteres especiales).
-            </mat-error>
-        </div>      
-        <div class="custom-input-container">
-            <label for="apellidos">Apellidos</label>
-            <input matInput type="text" id="apellidos" placeholder="Ingrese sus apellidos" formControlName="apellidos">
-            <mat-error *ngIf="firstFormGroup.get('apellidos').hasError('pattern')">
-                Por favor ingrese solo letras y espacios (sin números ni caracteres especiales).
-            </mat-error> 
-        </div>
-        <div class="custom-input-container">
-            <label for="correo">Correo</label>
-            <input matInput type="email" id="correo" placeholder="Ingrese su correo" formControlName="correo">
-            <mat-error *ngIf="firstFormGroup.get('correo').hasError('pattern')">
-                Por favor ingrese un correo electrónico válido que termine en &#64;unbosque.edu.co.
-            </mat-error>
-        </div>               
+        <button *ngIf="inputDeshabilitado" class="boton-estilizado editar" (click)="activarInput()">Editar Perfil</button>
     </div>
 
-    <!-- Información Académica -->
-    <h2>Información Académica</h2>
-    <div class="academic-info">
-        <div class="custom-input-container">
-            <label for="escalofonodocente">Escalofon Docente</label>
-            <input matInput type="text" id="escalofonodocente" placeholder="Ingrese su escalafon docente" formControlName="escalofonodocente">
-            <mat-error *ngIf="firstFormGroup.get('escalofonodocente').hasError('pattern')">
-                Por favor ingrese solo letras y espacios (sin números ni caracteres especiales).
-            </mat-error>
+    <form class="example-form" [formGroup]="firstFormGroup">
+        <!-- Información Personal -->
+        <h2>Información Personal</h2>
+        <div class="personal-info">
+            <div class="custom-input-container">
+                <label for="tipodocumento">Tipo de documento</label>
+                <mat-select panelClass="matRole" [value]="userData?.tipodocumento" formControlName="tipodocumento">
+                    <mat-option *ngFor="let data of tipodpcumento" [value]="data">
+                        {{data}}
+                    </mat-option>
+                </mat-select>
+            </div>
+            <div class="custom-input-container">
+                <label for="numerodocumento">Número de documento</label>
+                <input matInput formControlName="numerodocumento">        
+            </div>
+            <div class="custom-input-container">
+                <label for="nombre">Nombres</label>
+                <input matInput type="text" id="nombre" placeholder="Ingrese su nombre" formControlName="nombre">
+                <mat-error *ngIf="firstFormGroup.get('nombre').invalid">
+                    Por favor ingrese solo letras (sin números ni caracteres especiales).
+                </mat-error>
+            </div>      
+            <div class="custom-input-container">
+                <label for="apellidos">Apellidos</label>
+                <input matInput type="text" id="apellidos" placeholder="Ingrese sus apellidos" formControlName="apellidos">
+                <mat-error *ngIf="firstFormGroup.get('apellidos').hasError('pattern')">
+                    Por favor ingrese solo letras y espacios (sin números ni caracteres especiales).
+                </mat-error> 
+            </div>
+            <div class="custom-input-container">
+                <label for="correo">Correo Institucional</label>
+                <input matInput type="email" id="correo" placeholder="Ingrese su correo" formControlName="correo">
+                <mat-error *ngIf="firstFormGroup.get('correo').hasError('pattern')">
+                    Por favor ingrese un correo electrónico válido que termine en &#64;unbosque.edu.co.
+                </mat-error>
+            </div>               
         </div>
-        <div class="custom-input-container">
-            <label for="horasestricto">Horarios Estricto</label>
-            <input matInput type="number" id="horasestricto" placeholder="Ingrese horas estricto" required formControlName="horasestricto" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-        </div>
-        <div class="custom-input-container">
-            <label for="horasformacion">Horarios Formación</label>
-            <input matInput type="number" id="horasformacion" placeholder="Ingrese horas de formación" required formControlName="horasformacion" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-        </div>
-        <div class="custom-input-container">
-            <label for="lineainvestigacion">Línea Investigación</label>
-            <input matInput type="text" id="lineainvestigacion" placeholder="Ingrese línea de investigación" formControlName="lineainvestigacion">
-            <mat-error *ngIf="firstFormGroup.get('lineainvestigacion').hasError('pattern')">
-                Por favor ingrese solo letras y espacios (sin números ni caracteres especiales).
-            </mat-error>
-        </div>
-        <div class="custom-input-container">
-            <label for="unidadAcademica">Unidad Académica</label>
-            <input matInput type="text" id="unidadAcademica" placeholder="Ingrese unidad académica" formControlName="unidadAcademica">
-            <mat-error *ngIf="firstFormGroup.get('unidadAcademica').hasError('pattern')">
-                Por favor ingrese solo letras y espacios (sin números ni caracteres especiales).
-            </mat-error>
-        </div>                
-    </div>
 
-    <!-- Botones -->
-    <div class="button-group">
-        <button *ngIf="inputDeshabilitado" class="boton-estilizado" (click)="activarInput()">Editar Perfil</button>
-    </div>
-    <div class="button-grou">
-        <button *ngIf="!inputDeshabilitado" class="boton-estilizado" (click)="guardarDatos()" [disabled]="firstFormGroup.invalid">Guardar</button>
-        <button *ngIf="!inputDeshabilitado" class="boton-estilizado" (click)="desactivarInput()">Cancelar</button>
-    </div>
-</form>
+        <!-- Información Académica -->
+        <h2>Información Académica</h2>
+        <div class="academic-info">
+            <div class="custom-input-container">
+                <label for="escalofonodocente">Escalafón Docente</label>
+                <input matInput type="text" id="escalofonodocente" placeholder="Ingrese su escalafón docente" formControlName="escalofonodocente">
+                <mat-error *ngIf="firstFormGroup.get('escalofonodocente').hasError('pattern')">
+                    Por favor ingrese solo letras y espacios (sin números ni caracteres especiales).
+                </mat-error>
+            </div>
+            <div class="custom-input-container">
+                <label for="horasestricto">Horas Estricto</label>
+                <input matInput type="number" id="horasestricto" placeholder="Ingrese horas estricto" required formControlName="horasestricto">
+            </div>
+            <div class="custom-input-container">
+                <label for="horasformacion">Horas Formación</label>
+                <input matInput type="number" id="horasformacion" placeholder="Ingrese horas de formación" required formControlName="horasformacion">
+            </div>
+            <div class="custom-input-container">
+                <label for="lineainvestigacion">Línea Investigación</label>
+                <input matInput type="text" id="lineainvestigacion" placeholder="Ingrese línea de investigación" formControlName="lineainvestigacion">
+                <mat-error *ngIf="firstFormGroup.get('lineainvestigacion').hasError('pattern')">
+                    Por favor ingrese solo letras y espacios (sin números ni caracteres especiales).
+                </mat-error>
+            </div>
+            <div class="custom-input-container">
+                <label for="unidadAcademica">Unidad Académica</label>
+                <input matInput type="text" id="unidadAcademica" placeholder="Ingrese unidad académica" formControlName="unidadAcademica">
+                <mat-error *ngIf="firstFormGroup.get('unidadAcademica').hasError('pattern')">
+                    Por favor ingrese solo letras y espacios (sin números ni caracteres especiales).
+                </mat-error>
+            </div>                
+        </div>
+
+        
+       
+    </form>
+</div> 

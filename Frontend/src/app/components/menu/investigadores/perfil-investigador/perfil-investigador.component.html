@@ -6,15 +6,21 @@
         <div class="upload-button">
             <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden accept="image/*">
             <button *ngIf="!inputDeshabilitado" type="button" (click)="triggerFileInput()">+</button>
-          </div>          
+        </div>
+        <div class="button-group">
+            <button *ngIf="!inputDeshabilitado" class="boton-estilizado guardar" (click)="guardarDatos()" [disabled]="firstFormGroup.invalid">Guardar</button>
+            <button *ngIf="!inputDeshabilitado" class="boton-estilizado cancelar" (click)="desactivarInput()">Cancelar</button>
+        </div>
+
+        <button *ngIf="inputDeshabilitado" class="boton-estilizado editar" (click)="activarInput()">Editar Perfil</button>
     </div>
-</div>
+
 
 <form class="example-form" [formGroup]="firstFormGroup">
     <!-- Información Personal -->
     <h2>Información Personal</h2>
     <div class="personal-info">
-        <div class="custom-input-container">
+        <div class="custom-input-container"> 
             <label for="numerodocumento">Número de documento</label>
             <input matInput formControlName="numerodocumento">        
         </div>
@@ -83,14 +89,6 @@
         </div>                
     </div>
 
-    <!-- Botones -->
-    <div class="button-group">
-        <button *ngIf="inputDeshabilitado" class="boton-estilizado" (click)="activarInput()">Editar Perfil</button>
-    </div>
-    <div class="button-grou">
-        <button *ngIf="!inputDeshabilitado" class="boton-estilizado" (click)="guardarDatos()" [disabled]="firstFormGroup.invalid">Guardar</button>
-        <button *ngIf="!inputDeshabilitado" class="boton-estilizado" (click)="desactivarInput()">Cancelar</button>
-    </div>
 
     <br>
     <h2>Información Profesional</h2>
@@ -113,7 +111,7 @@
         </div>
     </div>
     <br>&nbsp;
-    <button class="boton-estilizado" (click)="openDialogoDetalle('Pregrado')">Cargar Pregrado</button>&nbsp;
-    <button class="boton-estilizado" (click)="openDialogoDetalle('Posgrado')">Cargar Posgrado</button>
+    <button class="boton-estilizado pregrado" (click)="openDialogoDetalle('Pregrado')">Cargar Pregrado</button>&nbsp;
+    <button class="boton-estilizado posgrado" (click)="openDialogoDetalle('Posgrado')">Cargar Posgrado</button>
     <div class="academic-info"><br><br></div>
 </form>
