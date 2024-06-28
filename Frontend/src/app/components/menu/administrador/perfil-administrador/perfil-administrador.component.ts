@@ -6,14 +6,15 @@ import { CommonModule } from '@angular/common';
 import { AutenticacionService } from '../../services/autenticacion';
 import { InvestigadorService} from "../../services/registroInvestigador";
 import { MatSelectModule } from '@angular/material/select';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialog, } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { UsuarioSesion } from '../../modelo/usuario';
 import Swal from 'sweetalert2';
-
+import { MatIconModule } from '@angular/material/icon';
+import { CargaEstudiosComponent } from './carga-estudios/carga-estudios.component';
 @Component({
   selector: 'app-perfil-administrador',
   templateUrl: './perfil-administrador.component.html',
@@ -30,11 +31,12 @@ import Swal from 'sweetalert2';
     MatButtonModule,
     MatChipsModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatIconModule
   ],
 })
 export class PerfilAdministradorComponent  implements OnInit {
-  userData: any;
+  userData: any; 
   firstFormGroup: any;
   tipodpcumento: string[] = [
     'CC',
@@ -47,11 +49,14 @@ export class PerfilAdministradorComponent  implements OnInit {
   imagenUrl: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
   usuarioSesion!: UsuarioSesion;
+  pregradoData: any[] = [];
+  posgradoData: any[] = [];
 
   constructor(
     private autenticacionService: AutenticacionService, 
     private investigadorService: InvestigadorService,
     private formBuilder: FormBuilder,
+    public dialog: MatDialog,
   ) { 
     this.firstFormGroup = this.formBuilder.group({
       numerodocumento: [{ value: '', disabled: true }, Validators.required],
@@ -70,6 +75,8 @@ export class PerfilAdministradorComponent  implements OnInit {
 
  ngOnInit(): void {
   this.obtenerDatosUsuarioSesion();
+  this.obtenerPregrado();
+  this.obtenerPosgrado();
   this.investigadorService.getUsuarioDetail(this.usuarioSesion.numerodocumento).subscribe(
     (data) => {
       this.userData = data;
@@ -128,7 +135,26 @@ triggerFileInput(): void {
   obtenerDatosUsuarioSesion(){
     this.usuarioSesion = this.autenticacionService.obtenerDatosUsuario();
   }
-
+  obtenerPregrado(){
+    this.investigadorService.obtenerPregrado().subscribe(
+      (data) => {
+        this.pregradoData = data.filter((x: { Investigador_id: string; }) => x.Investigador_id == this.usuarioSesion.numerodocumento);
+      },
+      (error) => {
+        console.error('Error al obtener usuarios:', error);
+      }
+    );
+  }
+  obtenerPosgrado(){
+    this.investigadorService.obtenerPosgrado().subscribe(
+      (data) => {
+        this.posgradoData = data.filter((x: { Investigador_id: string; }) => x.Investigador_id == this.usuarioSesion.numerodocumento);
+      },
+      (error) => {
+        console.error('Error al obtener usuarios:', error);
+      }
+    );
+  }
   get numerodocumento() {
     return this.firstFormGroup.get('numerodocumento');
   }
@@ -159,6 +185,28 @@ triggerFileInput(): void {
   get unidadAcademica() {
     return this.firstFormGroup.get('unidadAcademica');
   }
+  openDialogoDetalle(tipo:string): void {
+    const dialogRef = this.dialog.open(CargaEstudiosComponent, {
+      data: {
+        title: 'Nuevo '+tipo,
+        type:tipo,
+        numerodocumento: this.usuarioSesion.numerodocumento,
+      },
+      disableClose: true,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        Swal.fire({
+          title: 'Registro Exitoso !!!',
+          text: 'Se ha registrado el registro de estudio',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        });
+        console.log('result',result);
+      } 
+    });
+  }
+
 
   activarInput() {
     this.inputDeshabilitado = false;

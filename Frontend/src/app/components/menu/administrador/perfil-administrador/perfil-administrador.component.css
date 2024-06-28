@@ -148,6 +148,22 @@ h2 {
   background-color: #673ab7;       /* Color de fondo al pasar el cursor */
 }
 
+.boton-estilizado.pregrado {
+  background-color: #6AABA0;       /* Color de fondo */
+  color: white;                    /* Color de texto */
+}
+
+.boton-estilizado.pregrado:hover {
+  background-color: #6AABA0;       /* Color de fondo al pasar el cursor */
+}
+.boton-estilizado.posgrado{
+  background-color: #6AABA0;       /* Color de fondo */
+  color: white;                    /* Color de texto */
+}
+
+.boton-estilizado.posgrado:hover {
+  background-color: #6AABA0;       /* Color de fondo al pasar el cursor */
+}
 /* Estilos para el grupo de botones */
 .button-group {
   display: flex;                   /* Mostrar en línea */

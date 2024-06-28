@@ -20,10 +20,6 @@
     <!-- Información Personal -->
     <h2>Información Personal</h2>
     <div class="personal-info">
-        <div class="custom-input-container"> 
-            <label for="numerodocumento">Número de documento</label>
-            <input matInput formControlName="numerodocumento">        
-        </div>
         <div class="custom-input-container">
             <label for="tipodocumento">Tipo de documento</label>
             <mat-select panelClass="matRole" [value]="userData?.tipodocumento" formControlName="tipodocumento">
@@ -31,6 +27,10 @@
                     {{data}}
                 </mat-option>
             </mat-select>
+        </div>
+        <div class="custom-input-container"> 
+            <label for="numerodocumento">Número de documento</label>
+            <input matInput formControlName="numerodocumento">        
         </div>
         <div class="custom-input-container">
             <label for="nombre">Nombres</label>
