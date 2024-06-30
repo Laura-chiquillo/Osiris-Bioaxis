@@ -54,7 +54,6 @@
         </div>
       </div>
     </mat-tab>
-
     <mat-tab label="Investigadores">
       <div class="tab-content">
         <mat-accordion>
@@ -70,6 +69,32 @@
                 </div>
               </mat-panel-title>
             </mat-expansion-panel-header>
+            
+            <!-- Contenido del panel -->
+            <div class="educacion">
+              <div class="educacion-column">
+                <h3 class="educacion-title">Pregrados</h3>
+                <ul class="educacion-list">
+                  <li *ngFor="let pregrado of getPregradosDeInvestigador(user.numerodocumento)">
+                    <strong>{{ pregrado.titulo }}</strong>
+                    <div>{{ pregrado.institucion }}</div>
+                    <div>{{ pregrado.fecha | date:'MMMM yyyy' }}</div>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="educacion-column">
+                <h3 class="educacion-title">Posgrados</h3>
+                <ul class="educacion-list">
+                  <li *ngFor="let posgrado of getPosgradosDeInvestigador(user.numerodocumento)">
+                    <strong>{{ posgrado.titulo }}</strong>
+                    <div>{{ posgrado.institucion }}</div>
+                    <div>{{ posgrado.tipo }}</div>
+                    <div>{{ posgrado.fecha | date:'MMMM yyyy' }} </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </mat-expansion-panel>
         </mat-accordion>
       </div>

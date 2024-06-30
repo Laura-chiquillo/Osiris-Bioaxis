@@ -16,6 +16,8 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  pregrados: any[] = [];
+  posgrados: any[] = [];
   constructor(private router: Router, private InvestigadorService: InvestigadorService, private formBuilder: FormBuilder, private snackBar: MatSnackBar,
     public dialog: MatDialog, private autenticacionService: AutenticacionService) {
     this.registroForm = this.formBuilder.group({
@@ -52,7 +54,6 @@ export class NavbarComponent {
           const token = response.token.numerodocumento;
           const rolInvestigador = response.token.rolinvestigador;
           const estado = response.token.estado;
-  
           const userData = response.user_data; // Datos del perfil del usuario
 
           localStorage.setItem('token', token);
@@ -85,7 +86,12 @@ export class NavbarComponent {
         },
         (error) => {
           console.error('Error al iniciar sesión:', error);
-          // Manejar el error de inicio de sesión, por ejemplo, mostrar un mensaje al usuario
+            Swal.fire({
+              title: 'Error de inicio de sesión',
+              text: 'Correo o contraseña incorrectos. Inténtalo de nuevo.',
+              icon: 'error',
+              confirmButtonText: 'Aceptar'
+          });
         }
       );
     }
@@ -124,10 +130,12 @@ export class NavbarComponent {
   // mostrar informacion de todos los investigadores
   users: any[] = [];
   ngOnInit(): void {
-    this.getUsuarios();
+    
+    this.cargarInvestigadores();
+    this.cargarPregrados();
+    this.cargarPosgrados();
   }
-
-  getUsuarios(): void {
+  cargarInvestigadores() {
     this.InvestigadorService.getUsuarios().subscribe(
       (usuarios: any[]) => {
         this.users = usuarios;
@@ -138,6 +146,40 @@ export class NavbarComponent {
       }
     );
   }
+
+  cargarPregrados() {
+    this.InvestigadorService.obtenerPregrado().subscribe(
+      (data: any[]) => {
+        this.pregrados = data;
+      },
+      error => {
+        console.error('Error al cargar los pregrados', error);
+      }
+    );
+  }
+
+  cargarPosgrados() {
+    this.InvestigadorService.obtenerPosgrado().subscribe(
+      (data: any[]) => {
+        this.posgrados = data;
+      },
+      error => {
+        console.error('Error al cargar los posgrados', error);
+      }
+    );
+  }
+
+  getPregradosDeInvestigador(investigadorId: string | undefined): any[] {
+    if (!investigadorId) return [];
+    return this.pregrados.filter(pregrado => pregrado.Investigador_id === investigadorId);
+  }
+
+  getPosgradosDeInvestigador(investigadorId: string | undefined): any[] {
+    if (!investigadorId) return [];
+    return this.posgrados.filter(posgrado => posgrado.Investigador_id === investigadorId);
+  }
+
+
 
   //ver contraseña
   hidePassword = true;
