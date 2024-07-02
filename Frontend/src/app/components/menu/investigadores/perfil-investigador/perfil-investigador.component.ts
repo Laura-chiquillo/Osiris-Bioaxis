@@ -105,7 +105,7 @@ export class PerfilInvestigadorComponent implements OnInit {
       }
     );
   }
-
+  defaultImageUrl: string = 'assets/img/imagen.jpg';
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {

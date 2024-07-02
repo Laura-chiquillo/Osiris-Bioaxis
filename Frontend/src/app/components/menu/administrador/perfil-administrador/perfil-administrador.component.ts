@@ -72,7 +72,6 @@ export class PerfilAdministradorComponent  implements OnInit {
       imagen: [{ value: '', disabled: this.inputDeshabilitado }]
     });  
   }
-
  ngOnInit(): void {
   this.obtenerDatosUsuarioSesion();
   this.obtenerPregrado();
@@ -111,6 +110,7 @@ export class PerfilAdministradorComponent  implements OnInit {
     }
   );
 }
+defaultImageUrl: string = 'assets/img/imagen.jpg';
 
 onFileSelected(event: Event): void {
   const input = event.target as HTMLInputElement;
