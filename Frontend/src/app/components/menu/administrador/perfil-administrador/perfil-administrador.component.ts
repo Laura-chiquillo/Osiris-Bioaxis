@@ -45,6 +45,16 @@ export class PerfilAdministradorComponent  implements OnInit {
     'RC',
     'PA'
   ];
+  lineainvestigacion1: string[] = [
+    'Ingeniería de software y sociedad',
+    'Ingeniería para la salud y el desarrollo biológico',
+    'Ingeniería y educación',
+    'Ingeniería para la sostenibilidad de sistemas naturales'];
+    unidadAcademica1: string [] =[
+      'Facultad de Ingeniería',
+      'Facultad de Ciencias',
+      'Facultad de Educación',
+    ];
   inputDeshabilitado: boolean = true;
   imagenUrl: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
@@ -67,8 +77,8 @@ export class PerfilAdministradorComponent  implements OnInit {
       escalofonodocente: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('[A-Za-z ]+')]],
       horasestricto: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('^[0-9]*$')]],
       horasformacion: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('^[0-9]*$')]],
-      lineainvestigacion: [{ value: '', disabled: this.inputDeshabilitado },[Validators.required, Validators.pattern('[A-Za-z ]+')]],
-      unidadAcademica: [{ value: '', disabled: this.inputDeshabilitado },[Validators.required, Validators.pattern('[A-Za-z ]+')]],
+      lineainvestigacion: [{ value: '', disabled: this.inputDeshabilitado },Validators.required],
+      unidadAcademica: [{ value: '', disabled: this.inputDeshabilitado },Validators.required],
       imagen: [{ value: '', disabled: this.inputDeshabilitado }]
     });  
   }
