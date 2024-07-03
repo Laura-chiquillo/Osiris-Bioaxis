@@ -7,7 +7,7 @@ import { InvestigadorService } from '../services/registroInvestigador';
 import Swal from 'sweetalert2'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ResetPasswordDialogComponent } from './reset-password-dialog/reset-password-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog'; 
 
 
 @Component({
@@ -266,16 +266,16 @@ export class NavbarComponent {
         tipodocumento: this.tipodocumento?.value,
         contrasena: this.contrasena?.value,
         numerodocumento: this.numerodocumento?.value,
-        horasestricto: 0, // Valor predeterminado o deja en blanco según necesites
-        horasformacion: 0, // Valor predeterminado o deja en blanco según necesites
-        unidadAcademica: "NA", // Valor predeterminado o deja en blanco según necesites
-        escalofonodocente: "NA", // Valor predeterminado o deja en blanco según necesites
-        rolinvestigador: "Investigador", // Valor predeterminado o deja en blanco según necesites
-        lineainvestigacion: "NA", // Valor predeterminado o deja en blanco según necesites
-        ies: "NA", // Valor predeterminado o deja en blanco según necesites
-        grupoinvestigacion: 1, // Valor predeterminado o deja en blanco según necesites
-        ubicacion: 1, // Valor predeterminado o deja en blanco según necesites
-        imagen: 1, // Valor predeterminado o deja en blanco según necesites
+        horasestricto: 0, 
+        horasformacion: 0, 
+        unidadAcademica: "NA",
+        escalofonodocente: "NA", 
+        rolinvestigador: "Investigador",
+        lineainvestigacion: "NA",
+        ies: "NA",
+        grupoinvestigacion: 1,
+        ubicacion: 1,
+        imagen: 1,
       };
       
       this.InvestigadorService.registrarInvestigador(investigador).subscribe(

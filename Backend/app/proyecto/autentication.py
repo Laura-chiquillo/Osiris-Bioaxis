@@ -29,10 +29,13 @@ from rest_framework.parsers import MultiPartParser, FormParser
 
 class CustomAuthToken(APIView):
     def post(self, request, *args, **kwargs):
+        
+        # Extrae el correo y la contraseña del cuerpo de la solicitud
         email = request.data.get('correo')
         password = request.data.get('contrasena')
 
         try:
+            # Intenta obtener al investigador con el correo proporcionado
             investigador = Investigador.objects.get(correo=email)
         except Investigador.DoesNotExist:
             print("Investigador no encontrado")
@@ -45,7 +48,7 @@ class CustomAuthToken(APIView):
             print("Contraseña almacenada en la base de datos:", investigador.contrasena)
             return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        # Generar tokens
+        # Genera tokens de acceso y refresco
         refresh = RefreshToken.for_user(investigador)
         access_token = {
             'refresh': str(refresh),
@@ -55,7 +58,7 @@ class CustomAuthToken(APIView):
             'estado': investigador.estado
         }
 
-        # Obtener y devolver datos del usuario
+        # Obtiene y organiza los datos del usuario para devolverlos en la respuesta
         user_data = {
             'nombre': investigador.nombre,
             'apellidos': investigador.apellidos,

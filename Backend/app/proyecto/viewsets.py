@@ -425,6 +425,7 @@ class notificacionesList(generics.ListCreateAPIView):
     serializer_class = notificacionesSerializer
     
     def post(self, request, *args, **kwargs):
+        # Preparar los datos de la nueva notificación
         notification_data = {
             'id': Notificaciones.objects.count() + 1,
             'asunto': request.data.get('asunto'),
@@ -432,7 +433,9 @@ class notificacionesList(generics.ListCreateAPIView):
             'destinatario': request.data.get('destinatario'),
             'mensaje': request.data.get('mensaje')
         }
+        # Crear la nueva notificación
         admin = Notificaciones.objects.create(**notification_data)
+        # Serializar la nueva notificación creada
         serializer = notificacionesSerializer(admin) 
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -442,6 +445,7 @@ class configuracionEntregableProductoList(generics.ListCreateAPIView):
     serializer_class = configuracionEntregableProductoSerializer
     
     def post(self, request, *args, **kwargs):
+        # Preparar los datos de la nueva configuración de entregable de producto
         admin_data = {
             'descripcion': request.data.get('descripcion'),
             'fecha': request.data.get('fecha'),
@@ -450,7 +454,9 @@ class configuracionEntregableProductoList(generics.ListCreateAPIView):
             'observacion': request.data.get('observacion'),
             'producto_id': Producto.objects.get(pk=request.data.get('producto_id_id')),
         }
+        # Crear la nueva configuración de entregable de producto
         admin = ConfiguracionEntregableProducto.objects.create(**admin_data)
+        # Serializar la nueva configuración creada
         serializer = configuracionEntregableProductoSerializer(admin) 
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -530,7 +536,9 @@ class notificacionesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
     serializer_class = notificacionesSerializer
     
     def put(self, request, *args, **kwargs):
+        # Obtener la notificación a actualizar usando el ID proporcionado en la solicitud
         obj = Notificaciones.objects.get(pk=request.data.get('id'))
+        # Actualizar el estado de la notificación a False
         obj.estado = False
         obj.save()
         return Response(status=status.HTTP_204_NO_CONTENT)

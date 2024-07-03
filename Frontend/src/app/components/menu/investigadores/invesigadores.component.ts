@@ -67,18 +67,38 @@ export class InvesigadoresComponent implements OnInit {
   }
 
   obtenerNotificaciones() {
+    /**
+     * Obtiene las notificaciones del servicio y las filtra para el usuario actual.
+     * 
+     * Filtra las notificaciones activas y las ordena por ID en orden descendente.
+     * También filtra todas las notificaciones del usuario para el historial y las ordena.
+     */
     this.investigadorService.getNotifications().subscribe(
       (data) => {
-        this.notificaciones = data.filter(x => x.destinatario === this.usuarioSesion.numerodocumento && x.estado).sort((a, b) => (Number(a.id) > Number(b.id) ? -1 : 1));
-        this.notificacionesHistorial = data.filter(x => x.destinatario === this.usuarioSesion.numerodocumento).sort((a, b) => (Number(a.id) > Number(b.id) ? -1 : 1));
+        // Filtra las notificaciones activas del usuario y las ordena por ID en orden descendente
+        this.notificaciones = data
+          .filter(x => x.destinatario === this.usuarioSesion.numerodocumento && x.estado)
+          .sort((a, b) => (Number(a.id) > Number(b.id) ? -1 : 1));
+        
+        // Filtra todas las notificaciones del usuario para el historial y las ordena por ID en orden descendente
+        this.notificacionesHistorial = data
+          .filter(x => x.destinatario === this.usuarioSesion.numerodocumento)
+          .sort((a, b) => (Number(a.id) > Number(b.id) ? -1 : 1));
       },
       (error) => {
+        // Manejo de errores al obtener las notificaciones
         console.error('Error al obtener notificaciones:', error);
       }
     );
   }
-
+  
   openDialogoNotificaciones(): void {
+    /**
+     * Abre el diálogo de notificaciones.
+     * 
+     * Pasa el título, el texto del botón y el historial de notificaciones como datos al componente de diálogo.
+     * El diálogo no se puede cerrar haciendo clic fuera de él.
+     */
     const dialogRef = this.dialog.open(DialogoNotificacionesComponent, {
       data: {
         title: 'Notificaciones',
@@ -87,22 +107,35 @@ export class InvesigadoresComponent implements OnInit {
       },
       disableClose: true,
     });
+  
+    // Suscribe a la acción después de cerrar el diálogo
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-      } 
+        // Aquí se puede manejar el resultado del diálogo si es necesario
+      }
     });
   }
-
-  limpiarNotificacion(notificacion:any) {
+  
+  limpiarNotificacion(notificacion: any) {
+    /**
+     * Marca una notificación como leída.
+     * 
+     * Llama al servicio para marcar la notificación como leída y actualiza las notificaciones del componente.
+     * 
+     * @param notificacion La notificación a marcar como leída.
+     */
     this.investigadorService.leerNotificacion(notificacion).subscribe(
       (data) => {
+        // Re-inicializa las notificaciones después de marcar una como leída
         this.ngOnInit();
       },
       (error) => {
+        // Manejo de errores al marcar la notificación como leída
         console.error('Error al obtener notificaciones:', error);
       }
     );
   }
+  
 
   navigateSection(route:string): any {
     this.router.navigate([route]);
