@@ -54,7 +54,7 @@ export class PerfilInvestigadorComponent implements OnInit {
     'Facultad de Ingeniería',
     'Facultad de Ciencias',
     'Facultad de Educación',
-  ];
+  ]; 
   inputDeshabilitado = true; 
   imagenUrl: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
@@ -84,6 +84,8 @@ export class PerfilInvestigadorComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.userData);
+    console.log(this.lineainvestigacion1);
     this.obtenerDatosUsuarioSesion();
     this.obtenerPregrado();
     this.obtenerPosgrado();
