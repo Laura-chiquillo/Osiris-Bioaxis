@@ -838,11 +838,20 @@
           
           </form>
         </mat-tab>
-        <!----------------------------- PRODUCTOS-->
+        <!--- PRODUCTOS-->
         <mat-tab label="Producto">
           <span style="display:inline-block; width: 150px;"></span>
           <form [formGroup]="productoFormGroup">
+
             <div class="titulo">
+              <div class="custom-input-container ">
+                <label for="codigo">Código proyecto</label>
+                <mat-select formControlName="codigo" multiple>
+                  <mat-option *ngFor="let codigo of codigosProyectosExistentes" [value]="codigo">
+                    {{ codigo }}
+                  </mat-option>
+                </mat-select>
+              </div>              
               <div class="custom-input-container">
                 <label for="codigoProducto">Código del producto</label>
                 <input matInput id="codigoProducto" placeholder="Ingrese el código"  required formControlName="id" (blur)="verificarIds()">
@@ -884,7 +893,7 @@
                 </mat-select>
               </div>              
               <div class="custom-input-container">
-                <label for="coinvestigadoresProducto">Soporte</label>
+                <label for="soporte">Soporte</label>
                 <input formControlName="Soporte" type="file" (change)="onFileSelected2($event)" />
               </div>
             </div>

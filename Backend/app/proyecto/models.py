@@ -141,7 +141,7 @@ class Eventos(models.Model):
     fechafin = models.DateTimeField(default=datetime.datetime.now)
     numparticinerno = models.IntegerField(default=0)
     numparticexterno = models.IntegerField(default=0)
-    tipoevento = models.ForeignKey(TipoEventos,null=False,blank=False,on_delete=models.CASCADE)
+    tipoevento = models.ForeignKey(TipoEventos,null=True, blank=True,on_delete=models.CASCADE)
     class Meta:
         db_table = 'proyecto_Eventos'
 
@@ -426,7 +426,7 @@ class Proyecto(models.Model):
     titulo = models.CharField(max_length=500)
     investigador = models.CharField(max_length=50)
     unidadAcademica =  models.CharField(max_length=50)
-    producto = models.ForeignKey(Producto,null=True,blank=True,on_delete=models.CASCADE)
+    producto = models.ManyToManyField(Producto)
     coinvestigador = models.ManyToManyField(Investigador)
     area = models.CharField(max_length=50)
     porcentajeEjecucionCorte = models.IntegerField()

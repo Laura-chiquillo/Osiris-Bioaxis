@@ -237,7 +237,7 @@ class CrearProyecto(APIView):
             'lineaInvestigacion': request.data.get('lineaInvestigacion'),
             'estadoProceso': 'Espera',
             'unidadAcademica': request.data.get('unidadAcademica'),
-            'producto': Producto.objects.get(pk=producto_id) if producto_id != None else None,
+            #'producto': Producto.objects.get(pk=producto_id) if producto_id != None else None,
         }
 
         proyecto_data['entidadPostulo'] = entidadPostulo
@@ -246,8 +246,10 @@ class CrearProyecto(APIView):
         proyecto_data['ubicacionProyecto']=ubicacionProyecto
 
         proyecto = Proyecto.objects.create(**proyecto_data)  # Crea el objeto Proyecto con los datos relacionados
-
         
+        
+        productos = Producto.objects.filter(pk=producto_id)
+        proyecto.producto.set(productos)
         # vinculación coinvestigadores
         coinvestigadores_base =request.data.get('coinvestigadores')
         coinvestigadores_proceso = str(coinvestigadores_base).split(',')
@@ -548,6 +550,7 @@ class CrearNuevoProducto(APIView):
         lista_producto = json.loads(request.data.get('listaProducto'))
         data_general = lista_producto
         capitulo_data = data_general.get('capitulo')
+        proyecto_codigo = request.data.get('codigo')
 
         # Crear o obtener otros objetos relacionados según sea necesario
         # Crear o obtener objetos relacionados según sea necesario
@@ -792,6 +795,10 @@ class CrearNuevoProducto(APIView):
         participantes_externos = ParticipantesExternos.objects.filter(numerodocumento__in=participantesExternos_ids)
         producto.participantesExternos.set(participantes_externos)
         
+        
+        proyecto, created = Proyecto.objects.get_or_create(codigo=proyecto_codigo)
+        proyecto.producto.add(producto)
+            
         if soporte:
             producto.Soporte = soporte
             producto.save()

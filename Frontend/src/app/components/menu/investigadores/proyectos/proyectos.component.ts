@@ -142,7 +142,9 @@ export class ProyectosComponent implements OnInit {
   allProductosData: any[] = [];
   estadosProyectos: any[] = [];
   estadosProductos: any[] = [];
-
+  codigosProyectosExistentes: string[] = []; 
+  codigosProyectosFiltrados: string[] = [];
+  searchTerm: string = '';
 
   @ViewChild('investigatorInput')
   investigatorInput!: ElementRef<HTMLInputElement>;
@@ -326,6 +328,7 @@ export class ProyectosComponent implements OnInit {
       })
     });
     this.productoFormGroup = this.formBuilder.group({
+      codigo:[''],
       id: [''],
       tituloProducto: [''],
       investigador: [''],
@@ -435,6 +438,21 @@ export class ProyectosComponent implements OnInit {
     this.selectedOption  = '';
   }
 
+  //mostrar todos los proyectos existenetes
+  obtenerCodigosProyectos() {
+    this.ProyectoyproductoService.getProyectos().subscribe(
+      proyectos => {
+        this.codigosProyectosExistentes = proyectos.map(proyecto => proyecto.codigo);
+        this.codigosProyectosFiltrados = [...this.codigosProyectosExistentes]; // Inicialmente mostrar todos los códigos
+        console.log('Códigos de proyectos existentes:', this.codigosProyectosExistentes);
+      },
+      error => {
+        console.error('Error al obtener los proyectos:', error);
+      }
+    );
+  }
+
+  
   //verificar si existe el codigo de proyecto y producto
   verificarCodigo() {
     const codigo = this.firstFormGroup.get('codigo')?.value;
@@ -475,6 +493,7 @@ export class ProyectosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.obtenerCodigosProyectos();
     this.obtenerUsuarios();
     this.configurarDatasource();
     this.obtenerDatosUsuarioSesion();
@@ -1376,6 +1395,7 @@ thumbLabel6 = false;
   guardarProducto() {
     if (this.productoFormGroup.valid) {
       const producto: Producto = {
+        codigo: this.productoFormGroup.value.codigo,
         id: this.productoFormGroup.value.id,
         tituloProducto: this.productoFormGroup.value.tituloProducto,
         investigador: this.usuarioSesion.numerodocumento,
