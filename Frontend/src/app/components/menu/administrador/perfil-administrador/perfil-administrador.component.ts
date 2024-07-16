@@ -49,7 +49,8 @@ export class PerfilAdministradorComponent  implements OnInit {
     'Ingeniería de software y sociedad',
     'Ingeniería para la salud y el desarrollo biológico',
     'Ingeniería y educación',
-    'Ingeniería para la sostenibilidad de sistemas naturales'];
+    'Ingeniería para la sostenibilidad de sistemas naturales'
+  ]; 
     unidadAcademica1: string [] =[
       'Facultad de Ingeniería',
       'Facultad de Ciencias',
@@ -83,6 +84,8 @@ export class PerfilAdministradorComponent  implements OnInit {
     });  
   }
  ngOnInit(): void {
+  console.log(this.userData);
+  console.log(this.lineainvestigacion1);
   this.obtenerDatosUsuarioSesion();
   this.obtenerPregrado();
   this.obtenerPosgrado();

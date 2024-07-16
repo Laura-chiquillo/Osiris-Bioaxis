@@ -32,7 +32,7 @@ class Imagen(models.Model):
 class Investigador(models.Model):
     numerodocumento = models.CharField(max_length=50, primary_key=True)
     contrasena = models.CharField(max_length=128)  # se aumenta la longitud para almacenar la contraseña encriptada
-    correo = models.CharField(max_length=50)
+    correo = models.CharField(max_length=150)
     nombre = models.CharField(max_length=50)
     estado = models.BooleanField(default=False)
     imagen = models.ForeignKey(Imagen, null=True, blank=True, on_delete=models.CASCADE)
@@ -47,12 +47,12 @@ class Investigador(models.Model):
     tipodocumento = models.CharField(max_length=2, choices=tipodpcumento, default='CC')
     horasestricto = models.IntegerField(default=0)
     horasformacion = models.IntegerField(default=0)
-    unidadAcademica = [
+    unidadAcademica1 = [
         ('Facultad de Ingeniería','Facultad de Ingeniería'),
         ('Facultad de Ciencias','Facultad de Ciencias'),
         ('Facultad de Educación','Facultad de Educación'),
     ]
-    unidadAcademica = models.CharField(max_length=50, choices=unidadAcademica, default='Facultad de Ingeniería')
+    unidadAcademica = models.CharField(max_length=180, choices=unidadAcademica1, default='Facultad de Ingeniería')
     grupoinvestigacion = models.ForeignKey(Grupoinvestigacion,null=False,blank=False,on_delete=models.CASCADE)
     categoriaminciencias = [
         ("Emérito", "Eméritos"),
@@ -68,13 +68,13 @@ class Investigador(models.Model):
         ("Estudiante", "Estudiante"),
     ]
     rolinvestigador = models.CharField(max_length=50, choices=rolinvestigador, default='Investigador')
-    lineainvestigacion =[
-        ("Ingeniería de software y sociedad.", "Ingeniería de software y sociedad"),
+    lineainvestigacion1 =[
+        ("Ingeniería de software y sociedad", "Ingeniería de software y sociedad"),
         ("Ingeniería para la salud y el desarrollo biológico", "Ingeniería para la salud y el desarrollo biológico"),
         ("Ingeniería y educación", "Ingeniería y educación"),
         ("Ingeniería para la sostenibilidad de sistemas naturales", "Ingeniería para la sostenibilidad de sistemas naturales"),
     ]
-    lineainvestigacion = models.CharField(max_length=100, choices=lineainvestigacion, default='Ingeniería de software y sociedad')
+    lineainvestigacion = models.CharField(max_length=180, choices=lineainvestigacion1, default='Ingeniería de software y sociedad')
     ies = models.CharField(max_length=50)
     ubicacion = models.ForeignKey(Ubicacion,null=False,blank=False,on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
