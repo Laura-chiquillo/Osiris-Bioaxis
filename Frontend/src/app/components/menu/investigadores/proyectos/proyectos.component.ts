@@ -1156,6 +1156,8 @@ export class ProyectosComponent implements OnInit {
             text: 'Se ha registrado el proyecto exitosamente.',
             icon: 'success',
             confirmButtonText: 'Aceptar'
+          }).then(() => {
+            window.location.reload(); 
           });
           this.ngAfterViewInit();
           this.ngOnInit();
@@ -1509,6 +1511,8 @@ thumbLabel6 = false;
                 text: 'Se ha registrado el producto exitosamente.',
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
+              }).then(() => {
+                window.location.reload(); 
               });
               this.notificar(
                 `Nuevo Producto ${resp.id}`,
