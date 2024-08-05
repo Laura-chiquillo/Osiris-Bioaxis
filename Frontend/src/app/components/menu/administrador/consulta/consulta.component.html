@@ -1,5 +1,50 @@
 <div class="tabs">
-  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">    
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+      <mat-tab  label="Plan de trabajo">
+        <div>
+          <section class="example-container mat-elevation-z8" tabindex="0">
+            <div class="example-button-row">
+              <button mat-mini-fab matTooltipPosition="above"  color="accent" (click)="openDialogoPlanTrabajo(productosData,'Productos',false)">+</button>
+            </div>
+            <table class="table" *ngIf="item.length > 0">
+              <thead>
+                <tr>
+                  <th>{{ tableHeaders.planTrabajo }}</th>
+                  <th>{{ tableHeaders.informacion }}</th>
+                  <th>{{ tableHeaders.descargar }}</th>
+                  <th>{{ tableHeaders.estado }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of item">
+                  <td>{{ item.plan }}</td>
+                  <td>
+                    <button mat-mini-fab matTooltipPosition="above" color="accent"
+                      (click)="openDialogoInformacionPlanTrabajo(productosData,'Productos',false)">
+                      <mat-icon>info</mat-icon>
+                    </button>
+                  </td>
+                  <td>
+                    <button matTooltip="Descargar" matTooltipPosition="above" mat-icon-button color="primary">
+                      <mat-icon>download</mat-icon>
+                    </button>
+                  </td>
+                  <td>
+                    <p>
+                      <mat-slide-toggle [(ngModel)]="item.estado" (toggleChange)="cambiarEstadoPlanTrabajo(item)"></mat-slide-toggle>
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            
+            
+            <p *ngIf="item.length === 0">No hay datos disponibles.</p>
+            
+            
+          </section>
+        </div>
+      </mat-tab>
       <mat-tab  label="Proyectos">
         <section class="example-container mat-elevation-z8" tabindex="0">
           <section>

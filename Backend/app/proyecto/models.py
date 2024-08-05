@@ -346,7 +346,6 @@ class Producto(models.Model):
     class Meta:
         db_table = 'proyecto_Producto'
 
-
 class ConfiguracionEntregableProducto(models.Model):
     id = models.AutoField(primary_key=True)
     descripcion = models.CharField(max_length=150)
@@ -505,7 +504,6 @@ class AvanceEntregableProyecto(models.Model):
     class Meta:
         db_table = 'proyecto_AvanceEntregableProyecto'
 
-#--------------------------Actividades o avances ----------
 class AvanceProyecto(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     reporte = models.CharField(max_length=50)
@@ -513,8 +511,7 @@ class AvanceProyecto(models.Model):
     entregablesReal = models.CharField(max_length=50)
     class Meta:
         db_table = 'proyecto_Avanceproyecto'
-        
-        
+                
 class Notificaciones(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     asunto = models.CharField(max_length=150)
@@ -526,3 +523,23 @@ class Notificaciones(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
     class Meta:
         db_table = 'proyecto_Notificaciones'
+
+class PlanTrabajo(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    investigador = models.ForeignKey(Investigador,on_delete=models.CASCADE)
+    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    horasestricto = models.IntegerField(default=0)
+    rol = models.CharField(max_length=150)
+    class Meta:
+        db_table = 'proyecto_PlanTrabajo'
+
+    
+class ConfiguracionPlanTrabajo(models.Model):
+    id = models.CharField(max_length=50, primary_key=True)
+    fecha = models.DateField(max_length=50)
+    estado = models.BooleanField(default=False)
+    titulo = models.CharField(max_length=150)
+    planTrabajo = models.ManyToManyField(PlanTrabajo)
+    class Meta:
+        db_table = 'proyecto_CofiguracionPlanTrabajo'

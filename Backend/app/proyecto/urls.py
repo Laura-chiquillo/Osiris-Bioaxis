@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .autentication import (ActualizarDatosUsuario, CrearNuevoProducto,
-                            CrearProyecto, CustomAuthToken,
+                            CrearProyecto, CustomAuthToken,MostrarPlanTrabajo,
                             MostrarInvestigadores, MostrarProductos)
 from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
                        articuloRetrieveUpdateDestroy, articulosList,
@@ -47,7 +47,7 @@ from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
                        ubicacionList, ubicacionProyectoList,
                        ubicacionProyectoRetrieveUpdateDestroy,
                        ubicacionRetrieveUpdateDestroy, ResetPasswordViewSet,
-                       ResetPasswordConfirmViewSet, ResetPasswordFormViewSet)
+                       ResetPasswordConfirmViewSet, ResetPasswordFormViewSet, planTrabajoList, planTrabajoRetrieveUpdateDestroy, configuracionPlanTrabajoList, configuracionPlanTrabajoRetrieveUpdateDestroy)
 
 urlpatterns = [
     path('custom-token-auth/', CustomAuthToken.as_view(), name='custom_token_auth'),
@@ -64,6 +64,11 @@ urlpatterns = [
     path('estadoproducto', estadoProductoList.as_view(), name='create-estadoProducto-list'),
     path('estadoproyecto', estadoProyectoList.as_view(), name='create-estadoProyecto-list'),
 
+    path('planTrabajo', planTrabajoList.as_view(), name='create-planTrabajo-list'),
+    path('planTrabajo/<pk>', planTrabajoRetrieveUpdateDestroy.as_view(), name='planTrabajo-detail'),
+    path('ConfiguracionPlanTrabajo', configuracionPlanTrabajoList.as_view(), name='create-configuracionPlanTraba-list'),
+    path('ConfiguracionPlanTrabajo/<pk>', configuracionPlanTrabajoRetrieveUpdateDestroy.as_view(), name='configuracionPlanTraba-detail'),
+    path('mostrar-plan-trabajo', MostrarPlanTrabajo.as_view(), name='mostrar-plan-trabajo'),
 
     path('investigador', investigadorList.as_view(), name='create-investigador-list'),
     path('grupoinvestigacion', grupoInvestigacionList.as_view(), name='create-grupoinvestigacion-list'),

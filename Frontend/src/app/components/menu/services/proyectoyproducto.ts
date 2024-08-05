@@ -4,6 +4,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Producto } from '../modelo/productos';
 import { Proyecto } from '../modelo/proyectos';
+import { MostrarPlan } from '../modelo/planDeTrabajo';
 import { AutenticacionService } from './autenticacion';
 @Injectable({
   providedIn: 'root' // Asegúrate de tener este providedIn en tu servicio
@@ -250,5 +251,47 @@ export class ProyectoyproductoService {
   getCuartilEsperado() {
     return this.http.get<any[]>(`${this.apiCuartilEsperado}`);
   }
+
+  //Plan de trabajo
+  private configplanTrabajo = 'http://localhost:8000/ConfiguracionPlanTrabajo';
+  
+  getconfigplanTrabajo(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.configplanTrabajo}`);
+  }
+
+  creargetconfigplanTrabajo(registro: any) {
+    return this.http.post<any>(this.configplanTrabajo, registro);
+  }
+
+  editarconfigplanTrabajo(registro: any) {
+    const url = `${this.configplanTrabajo}/${registro.id}`;
+    console.log('Enviando datos:', registro); // Agrega un log para verificar los datos que se envían
+    return this.http.put(url, registro).pipe(
+      catchError(error => {
+        if (error instanceof HttpErrorResponse) {
+          switch (error.status) {
+            case 404:
+              return throwError('Configuración no encontrada');
+            case 400:
+              return throwError('Datos de configuración inválidos'); 
+            default:
+              return throwError('Error al actualizar la configuración');
+          }
+        }
+        return throwError('Error desconocido');
+      })
+    );
+  }
+  
+  
+
+  private planTrabajo = 'http://localhost:8000/mostrar-plan-trabajo';
+
+  getPlanTrabajo(): Observable<MostrarPlan[]> {
+    return this.http.get<MostrarPlan[]>(`${this.planTrabajo}`);
+  }
+  
+
+
 
 }

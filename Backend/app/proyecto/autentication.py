@@ -21,10 +21,10 @@ from .models import (Apropiacion, Articulos, Capitulos, Consultoria, Contenido,I
                      Estudiantes, Eventos, Financiacion, Industrial, ConfiguracionEntregableProducto, ConfiguracionEntregableProyecto, 
                      Investigador, Libros, Licencia, ListaProducto, Maestria, AvanceEntregableProducto, AvanceEntregableProyecto,
                      PregFinalizadoyCurso, Producto, Proyecto, Reconocimientos,
-                     Software, Transacciones, UbicacionProyecto, ParticipantesExternos, EstadoProducto,
+                     Software, Transacciones, UbicacionProyecto, ParticipantesExternos, EstadoProducto, ConfiguracionPlanTrabajo,
                      CategoriaMinciencias,CuartilEsperado,TipoEventos)
 from .serializer import (investigadorSerializer, productoSerializer,imagenSerializer,
-                         proyectoSerializer)
+                         proyectoSerializer,grupoinvestigacionSerializer, categoriaMincienciasSerializer, cuartilEsperadoSerializer)
 from rest_framework.parsers import MultiPartParser, FormParser
 
 class CustomAuthToken(APIView):
@@ -806,7 +806,6 @@ class CrearNuevoProducto(APIView):
         serializer = productoSerializer(producto)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
 class MostrarInvestigadores(APIView):
     def get(self, request, *args, **kwargs):
         investigadores = Investigador.objects.all()
@@ -843,7 +842,55 @@ class MostrarInvestigadores(APIView):
             data.append(investigador_data)
 
         return JsonResponse(data, safe=False)
-    
+
+class MostrarPlanTrabajo(APIView):
+    def get(self, request, *args, **kwargs):
+        configuraciones = ConfiguracionPlanTrabajo.objects.all()
+
+        data = []
+        for configuracion in configuraciones:
+            planes_trabajo = configuracion.planTrabajo.all()
+
+            planes_data = []
+            for plan in planes_trabajo:
+                minciencias_data = categoriaMincienciasSerializer(plan.producto.categoriaMinciencias).data
+                cuartil_data = cuartilEsperadoSerializer(plan.producto.cuartilEsperado).data
+                productos_asociados = {
+                    'titulo_producto': plan.producto.tituloProducto,
+                    'minciencias': minciencias_data,
+                    'quartil': cuartil_data,
+                    'estado_inicio_semestre': plan.producto.estadoProceso,
+                } if plan.producto else {}
+                grupoinvestigacion= grupoinvestigacionSerializer(plan.investigador.grupoinvestigacion).data
+
+                plan_data = {
+                    'horasestricto': plan.horasestricto,
+                    'rol': plan.rol,
+                    'investigador': {
+                        'nombre': plan.investigador.nombre,
+                        'apellidos': plan.investigador.apellidos,
+                        'horas_formacion': plan.investigador.horasformacion,
+                        'Grupoinvestigacion':grupoinvestigacion,
+                    },
+                    'proyecto': {
+                        'codigo': plan.proyecto.codigo,
+                        'titulo': plan.proyecto.titulo,
+                        'porcentaje_final_semestre': plan.proyecto.porcentajeEjecucionFinCorte,
+                        'productos_asociados': productos_asociados
+                    }
+                }
+                planes_data.append(plan_data)
+
+            configuracion_data = {
+                'id': configuracion.id,
+                'planTrabajo': planes_data,
+                'fecha': configuracion.fecha,
+                'estado': configuracion.estado,
+                'titulo': configuracion.titulo
+            }
+            data.append(configuracion_data)
+
+        return JsonResponse(data, safe=False)
 
 class MostrarProductos(APIView):
     def get(self, request, *args, **kwargs):

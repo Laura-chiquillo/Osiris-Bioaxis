@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Estudiante, ParticipanteExterno } from '../modelo/proyectos';
 
 @Injectable({
-  providedIn: 'root' // Asegúrate de tener este providedIn en tu servicio
+  providedIn: 'root' 
 })
 
 export class ParticipantesExternosService {

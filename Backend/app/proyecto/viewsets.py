@@ -31,7 +31,7 @@ from .models import (Apropiacion, Articulos, AvanceProyecto, Notificaciones, Cap
                      Investigador, Libros, Licencia, ListaProducto, Maestria,
                      ParticipantesExternos, Posgrado, PregFinalizadoyCurso,
                      Pregrado, Producto, Proyecto, Reconocimientos, Software,
-                     TipoEventos, Transacciones, Ubicacion, UbicacionProyecto)
+                     TipoEventos, Transacciones, Ubicacion, UbicacionProyecto, PlanTrabajo,ConfiguracionPlanTrabajo)
 from .serializer import (apropiacionSerializer, articulosSerializer,
                          avanceProyectoSerializer, notificacionesSerializer,capitulosSerializer,
                          categoriaMincienciasSerializer, consultoriaSerializer,
@@ -49,7 +49,7 @@ from .serializer import (apropiacionSerializer, articulosSerializer,
                          proyectoSerializer, reconocimientosSerializer,
                          softwareSerializer, tipoEventoSerializer,
                          transaccionesSerializer, ubicacionProyectoSerializer,
-                         ubicacionSerializer)
+                         ubicacionSerializer, planTrabajoSerializer,configuracionPlanTrabajoSerializer)
 
 #------------------------ investigador ------------------------
 
@@ -106,7 +106,6 @@ class pregradoList(generics.ListCreateAPIView):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
 class ubicacionList(generics.ListCreateAPIView):
     queryset = Ubicacion.objects.all()
     serializer_class = ubicacionSerializer
@@ -133,7 +132,6 @@ class investigadorRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         obj.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 class imagenRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Imagen.objects.all()
@@ -218,11 +216,9 @@ class listaProductoList(generics.ListCreateAPIView):
     queryset = ListaProducto.objects.all()
     serializer_class = listaProductoSerializer
 
-
 class estudiantesList(generics.ListCreateAPIView):
     queryset = Estudiantes.objects.all()
     serializer_class = estudiantesSerializer
-
 
 class productoList(generics.ListCreateAPIView):
     queryset = Producto.objects.all()
@@ -307,7 +303,6 @@ class maeestriaRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 class listaProductoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = ListaProducto.objects.all()
     serializer_class = listaProductoSerializer
-
 
 class estudiantesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Estudiantes.objects.all()
@@ -689,3 +684,91 @@ class ResetPasswordFormViewSet(ViewSet):
     def retrieve(self, request, token_temporal, format=None):
         context = {'token_temporal': token_temporal}
         return render(request, 'reset_password_form.html', context)
+
+class planTrabajoList(generics.ListCreateAPIView):
+    queryset = PlanTrabajo.objects.all()
+    serializer_class = planTrabajoSerializer
+    
+    def post(self, request, *args, **kwargs):
+        new_id = PlanTrabajo.objects.count() + 1
+        admin_data = {
+            'id': str(new_id),
+            'rol': request.data.get('rol'),
+            'horasestricto': request.data.get('horasestricto'),
+            'investigador': Investigador.objects.get(pk=request.data.get('investigador')),
+			'proyecto': Proyecto.objects.get(pk=request.data.get('proyecto')),
+			'producto': Producto.objects.get(pk=request.data.get('producto')),
+        }
+        admin = PlanTrabajo.objects.create(**admin_data)
+        serializer = planTrabajoSerializer(admin) 
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+class planTrabajoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = PlanTrabajo.objects.all()
+    serializer_class = planTrabajoSerializer
+
+    def put(self, request, *args, **kwargs):
+        obj = PlanTrabajo.objects.get(pk=request.data.get('id'))
+        obj.rol = request.data.get('rol')
+        obj.horasestricto = request.data.get('horasestricto')
+        obj.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class configuracionPlanTrabajoList(generics.ListCreateAPIView):
+    queryset = ConfiguracionPlanTrabajo.objects.all()
+    serializer_class = configuracionPlanTrabajoSerializer
+    
+    def post(self, request, *args, **kwargs):
+        new_id = ConfiguracionPlanTrabajo.objects.count() + 1
+
+        # Asegurar que 'estado' sea un booleano
+        estado = request.data.get('estado')
+        if isinstance(estado, str):
+            estado = estado.lower() == 'true'
+        
+        # Crear el objeto ConfiguracionPlanTrabajo sin el campo ManyToMany
+        admin_data = {
+            'id': str(new_id),
+            'titulo': request.data.get('titulo'),
+            'fecha': request.data.get('fecha'),
+            'estado': estado,
+        }
+        admin = ConfiguracionPlanTrabajo.objects.create(**admin_data)
+        
+        # Agregar instancias de PlanTrabajo al campo ManyToMany
+        plan_trabajos_ids = request.data.get('planTrabajo')
+        if plan_trabajos_ids:
+            for pt_id in plan_trabajos_ids:
+                plan_trabajo = PlanTrabajo.objects.get(pk=pt_id)
+                admin.planTrabajo.add(plan_trabajo)
+        
+        serializer = configuracionPlanTrabajoSerializer(admin)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    
+class configuracionPlanTrabajoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ConfiguracionPlanTrabajo.objects.all()
+    serializer_class = configuracionPlanTrabajoSerializer
+
+    def put(self, request, *args, **kwargs):
+        obj = ConfiguracionPlanTrabajo.objects.get(pk=request.data.get('id'))
+        
+        # Actualiza solo los campos proporcionados
+        if 'titulo' in request.data:
+            obj.titulo = request.data.get('titulo')
+        if 'estado' in request.data:
+            obj.estado = request.data.get('estado')
+        
+        # Solo actualiza la relación ManyToMany si se proporciona una lista de IDs
+        plan_trabajo_ids = request.data.get('planTrabajo', None)
+        if plan_trabajo_ids is not None:
+            obj.planTrabajo.set(plan_trabajo_ids)
+        
+        obj.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+

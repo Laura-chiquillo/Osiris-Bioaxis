@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { InvestigadorService } from '../../services/registroInvestigador';
@@ -11,9 +11,15 @@ import { ProyectoyproductoService } from '../../services/proyectoyproducto';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
-import * as XLSX from 'xlsx'
+import * as XLSX from 'xlsx';
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import { ConfiguracionPlanTrabajo, PlanTrabajo } from '../../modelo/planDeTrabajo';
 import { DialogoEstadisticaComponent } from './dialogo-estadistica/dialogo-estadistica.component';
+import { DialogoPlanDeTrabajoComponent } from './dialogo-plan-de-trabajo/dialogo-plan-de-trabajo.component';
+import { DialogoInformacionPlanTrabajoComponent } from './dialogo-informacion-plan-trabajo/dialogo-informacion-plan-trabajo.component';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-consulta',
@@ -28,10 +34,13 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
     MatIconModule,
     MatSelectModule,
     MatTooltipModule,
-    MatPaginatorModule   
+    MatPaginatorModule,
+    MatSlideToggleModule,
+    MatSnackBarModule, 
+    FormsModule
   ],
 })
-export class ConsultaComponent {
+export class ConsultaComponent implements OnInit, AfterViewInit {
   @ViewChild('TABLE') table: any;
   dataSourceInvestigador: MatTableDataSource<any>;
   dataSourceProyecto: MatTableDataSource<any>;
@@ -45,12 +54,24 @@ export class ConsultaComponent {
   productosData: any[] =[];
   investigadoresData: any[] =[];
 
+  
+
   estadosProyectos: any[] = [];
   estadosProductos: any[] = [];
+
+  tableHeaders = {
+    planTrabajo: 'Plan de trabajo',
+    informacion: 'Información',
+    descargar: 'Descargar',
+    estado: 'Estado'
+  };
+
+  item: any[] =[];
 
   constructor(
     private investigadorService: InvestigadorService, 
     private searchService: SearchService,
+    private _snackBar: MatSnackBar,
     private proyectoyproductoService: ProyectoyproductoService,
     public dialog: MatDialog) {
     
@@ -65,6 +86,7 @@ export class ConsultaComponent {
 
   ngOnInit() {
     this.obtenerUsuarios();
+    this.obtenerPlanTrabajo();
     this.obtenerProyectos();
     this.obtenerProductos();
     this.obtenerEstadosProyecto();
@@ -82,11 +104,10 @@ export class ConsultaComponent {
     this.dataSourceProducto.paginator = this.paginator3;
   }
 
-  
   obtenerProyectos() {
     this.proyectoyproductoService.getProyectos().subscribe(
       (proyecto) => {
-        const dataSort = proyecto.sort((a, b) => (a.codigo < b.codigo ? -1 : 1))
+        const dataSort = proyecto.sort((a, b) => (a.codigo < b.codigo ? -1 : 1));
         this.dataSourceProyecto.data = dataSort.map(data => {
           return {
             codigo: data.codigo,
@@ -96,7 +117,7 @@ export class ConsultaComponent {
             estadoProyecto: this.estadosProyectos.filter(x => x.id == data.estado)[0].estado,
             created_at: data.created_at,
             updated_at: data.updated_at,
-          }
+          };
         });
         this.proyectosData = dataSort.map(data => {
           return {
@@ -125,7 +146,7 @@ export class ConsultaComponent {
             producto: data.producto,
             created_at: data.created_at,
             updated_at: data.updated_at
-          }
+          };
         });
       },
       (error) => {
@@ -137,7 +158,7 @@ export class ConsultaComponent {
   obtenerProductos() {
     this.proyectoyproductoService.getProductos().subscribe(
       (producto) => {        
-        const dataSort = producto.sort((a, b) => (a.id < b.id ? -1 : 1))
+        const dataSort = producto.sort((a, b) => (a.id < b.id ? -1 : 1));
         this.dataSourceProducto.data = dataSort.map(data => {
           return {
             id: data.id,
@@ -146,7 +167,7 @@ export class ConsultaComponent {
             estadoProducto: this.estadosProductos.filter(x => x.id == data.estadoProducto)[0].estado,
             created_at: data.created_at,
             updated_at: data.updated_at,
-          }
+          };
         });
         this.productosData = dataSort.map(data => {
           return {
@@ -169,7 +190,7 @@ export class ConsultaComponent {
             estadoProducto: this.estadosProductos.filter(x => x.id == data.estadoProducto)[0].estado,
             created_at: data.created_at,
             updated_at: data.updated_at,
-          }
+          };
         });
       },
       (error) => {
@@ -181,7 +202,7 @@ export class ConsultaComponent {
   obtenerUsuarios() {
     this.investigadorService.getUsuarios().subscribe(
       (usuarios) => {
-        const dataSort = usuarios.sort((a, b) => (a.nombre < b.nombre ? -1 : 1))
+        const dataSort = usuarios.sort((a, b) => (a.nombre < b.nombre ? -1 : 1));
         this.dataSourceInvestigador.data = dataSort;
         this.investigadoresData = dataSort.map(data => {
           return {
@@ -197,7 +218,7 @@ export class ConsultaComponent {
             rolinvestigador: data.rolinvestigador,
             created_at: data.created_at,
             updated_at: data.updated_at
-          }
+          };
         });
       },
       (error) => {
@@ -228,9 +249,8 @@ export class ConsultaComponent {
     );
   }
 
-  // excel 
   exportAsXLSX(data: any = undefined, tipo: string): void {
-    let filter: any [] = [];
+    let filter: any[] = [];
     switch(tipo) { 
       case 'Proyectos': {
         if(data == undefined){
@@ -257,7 +277,7 @@ export class ConsultaComponent {
         break; 
       } 
     } 
-    const ws:XLSX.WorkSheet = XLSX.utils.json_to_sheet(filter);
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filter);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, tipo);
     XLSX.writeFile(wb, `Reporte${tipo}.xls`);
@@ -268,7 +288,7 @@ export class ConsultaComponent {
       data: {
         type: type,
         data: data,
-        detail:detail,
+        detail: detail,
       },
       width: '60%'
     });
@@ -278,4 +298,73 @@ export class ConsultaComponent {
     });
   }
 
+  //PLAN DE TRABAJO
+  openDialogoPlanTrabajo(data: any = undefined, type:string, detail:boolean): void {
+    const dialogRef = this.dialog.open(DialogoPlanDeTrabajoComponent, {
+      data: {
+        type: type,
+        data: data,
+        detail: detail,
+      },
+      width: '20%'
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+      } 
+    });
+  }
+
+  openDialogoInformacionPlanTrabajo(data: any = undefined, type:string, detail:boolean): void {
+    const dialogRef = this.dialog.open(DialogoInformacionPlanTrabajoComponent, {
+      data: {
+        type: type,
+        data: data,
+        detail: detail,
+      },
+      width: '80%'
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+      } 
+    });
+  }
+
+  obtenerPlanTrabajo() {
+    this.proyectoyproductoService.getconfigplanTrabajo().subscribe(data => {
+      console.log("verificar:", data); // Verifica los datos recibidos
+      const dataProject = data.reverse();
+      this.item = dataProject.map(x => ({
+        id: x.id,
+        plan: x.titulo,
+        estado: x.estado,
+      }));
+      console.log("asignacion:", this.item); // Verifica la asignación de datos
+    });
+  }
+
+  cambiarEstadoPlanTrabajo(item: any): void {
+    // Asegúrate de que 'item' tenga el campo 'id'
+    if (!item.id) {
+      console.error('ID del plan de trabajo no está definido');
+      return;
+    }
+    
+    // Cambia el estado
+    item.estado = !item.estado;
+  
+    // Llama al servicio para actualizar el estado
+    this.proyectoyproductoService.editarconfigplanTrabajo(item).subscribe(
+      () => {
+        this._snackBar.open('Registro actualizado correctamente', 'Estado', {
+          duration: 2000,
+        });
+        console.log('Estado actualizado correctamente');
+        this.ngOnInit(); // Refresca los datos
+      },
+      (error) => {
+        console.error('Error al actualizar estado:', error);
+      }
+    );
+  }
+  
 }
