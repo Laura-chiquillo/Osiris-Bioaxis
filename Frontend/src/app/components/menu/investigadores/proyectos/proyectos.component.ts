@@ -133,6 +133,17 @@ export class ProyectosComponent implements OnInit {
     {value: 'Corregir', viewValue: 'Corregir'},
     {value: 'Espera', viewValue: 'Espera'},
   ];
+  lineaInvestigacionData: any[] = [
+    {value:'Ingeniería de software y sociedad', viewValue:'Ingeniería de software y sociedad'},
+    {value:'Ingeniería para la salud y el desarrollo biológico', viewValue: 'Ingeniería para la salud y el desarrollo biológico'},
+    {value:'Ingeniería y educación', viewValue:'Ingeniería y educación'},
+    {value:'Ingeniería para la sostenibilidad de sistemas naturales', viewValue:'Ingeniería para la sostenibilidad de sistemas naturales'}
+  ];
+  unidadAcademicaData: any [] =[
+    {value:'Facultad de Ingeniería', viewValue: 'Facultad de Ingeniería'},
+    {value:'Facultad de Ciencias',  viewValue: 'Facultad de Ciencias'},
+    {value:'Facultad de Educación',  viewValue: 'Facultad de Educación'}
+  ];
   // índice de las pestaña Proyectos y Nuevo
   demo1TabIndex!: number;
   expandedElement: any | null;
@@ -1030,8 +1041,7 @@ export class ProyectosComponent implements OnInit {
         estadoProyecto: this.firstFormGroup.get('estadoProyecto')?.value,
         modalidadProyecto: this.firstFormGroup.get('modalidadProyecto')?.value,
         nivelRiesgoEtico: this.firstFormGroup.get('nivelRiesgoEtico')?.value,
-        lineaInvestigacion:
-          this.firstFormGroup.get('lineaInvestigacion')?.value,
+        lineaInvestigacion:this.firstFormGroup.get('lineaInvestigacion')?.value,
         estudiantes: this.firstFormGroup.get('estudiantesProyecto')?.value,
         participantesExternos: this.firstFormGroup.get(
           'participantesExternosProyecto'
@@ -1156,6 +1166,8 @@ export class ProyectosComponent implements OnInit {
             text: 'Se ha registrado el proyecto exitosamente.',
             icon: 'success',
             confirmButtonText: 'Aceptar'
+          }).then(() => {
+            window.location.reload(); 
           });
           this.ngAfterViewInit();
           this.ngOnInit();
@@ -1509,6 +1521,8 @@ thumbLabel6 = false;
                 text: 'Se ha registrado el producto exitosamente.',
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
+              }).then(() => {
+                window.location.reload(); 
               });
               this.notificar(
                 `Nuevo Producto ${resp.id}`,

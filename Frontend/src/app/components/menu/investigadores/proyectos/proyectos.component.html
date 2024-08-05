@@ -156,7 +156,11 @@
             
               <div class="custom-input-container">
                 <label for="unidadAcademica">Unidad académica</label>
-                <input matInput id="unidadAcademica" placeholder="Ingrese la unidad academica" required formControlName="unidadAcademica">
+                <mat-select id="unidadAcademica" placeholder="Seleccione la unidad academica" formControlName="unidadAcademica">
+                  <mat-option *ngFor="let data of unidadAcademicaData" [value]="data.value">
+                    {{data.viewValue}}
+                  </mat-option>
+                </mat-select>
               </div>
             
               <div class="custom-input-container">
@@ -199,7 +203,11 @@
               
               <div class="custom-input-container">
                 <label for="codigo">Línea de investigación</label>
-                <input matInput id="lineaInvestigacion" placeholder="Ingrese la línea de investigación" required formControlName="lineaInvestigacion">
+                <mat-select id="lineaInvestigacion" placeholder="Seleccione la línea de investigación" formControlName="lineaInvestigacion">
+                    <mat-option *ngFor="let data of lineaInvestigacionData" [value]="data.value">
+                      {{data.viewValue}}
+                    </mat-option>
+                  </mat-select>
               </div>
               <div class="custom-input-container">
                 <label for="coinvestigadoresProducto">Soporte</label>
