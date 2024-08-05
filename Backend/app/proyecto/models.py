@@ -424,7 +424,12 @@ class Proyecto(models.Model):
     codigo = models.CharField(max_length=50, primary_key=True)
     titulo = models.CharField(max_length=500)
     investigador = models.CharField(max_length=50)
-    unidadAcademica =  models.CharField(max_length=50)
+    unidadAcademica = [
+        ('Facultad de Ingeniería','Facultad de Ingeniería'),
+        ('Facultad de Ciencias','Facultad de Ciencias'),
+        ('Facultad de Educación','Facultad de Educación'),
+    ]
+    unidadAcademica = models.CharField(max_length=180, choices=unidadAcademica, default='Facultad de Ingeniería')
     producto = models.ManyToManyField(Producto)
     coinvestigador = models.ManyToManyField(Investigador)
     area = models.CharField(max_length=50)
@@ -458,7 +463,13 @@ class Proyecto(models.Model):
         ("Sin riesgo", "Sin riesgo"),
     ]
     nivelRiesgoEtico = models.CharField(max_length=50, choices=nivelRiesgoEtico, default='Sin riesgo')
-    lineaInvestigacion =models.CharField(max_length=50)
+    lineaInvestigacion =[
+        ("Ingeniería de software y sociedad", "Ingeniería de software y sociedad"),
+        ("Ingeniería para la salud y el desarrollo biológico", "Ingeniería para la salud y el desarrollo biológico"),
+        ("Ingeniería y educación", "Ingeniería y educación"),
+        ("Ingeniería para la sostenibilidad de sistemas naturales", "Ingeniería para la sostenibilidad de sistemas naturales"),
+    ]
+    lineaInvestigacion = models.CharField(max_length=180, choices=lineaInvestigacion, default='Ingeniería de software y sociedad')
     estadoProceso = [
         ("Aprobado","Aprobado"),
         ("Rechazado","Rechazado"),
