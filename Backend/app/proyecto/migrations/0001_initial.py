@@ -456,31 +456,8 @@ class Migration(migrations.Migration):
                 'db_table': 'proyecto_Apropiacion',
             },
         ),
-        migrations.CreateModel(
-            name='PlanTrabajo',
-            fields=[
-                ('id', models.CharField(max_length=50, primary_key=True, serialize=False)),
-                ('horasestricto', models.IntegerField(default=0)),
-                ('rol', models.CharField(max_length=150)),
-                ('investigador', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='proyecto.investigador')),
-            ],
-            options={
-                'db_table': 'proyecto_PlanTrabajo',
-            },
-        ),
-        migrations.CreateModel(
-            name='ConfiguracionPlanTrabajo',
-            fields=[
-                ('id', models.CharField(max_length=50, primary_key=True, serialize=False)),
-                ('fecha', models.DateField(max_length=50)),
-                ('estado', models.BooleanField(default=False)),
-                ('titulo', models.CharField(max_length=150)),
-                ('planTrabajo', models.ManyToManyField(to='proyecto.plantrabajo')),
-            ],
-            options={
-                'db_table': 'proyecto_CofiguracionPlanTrabajo',
-            },
-        ),
+        
+        
         migrations.CreateModel(
             name='Posgrado',
             fields=[
@@ -565,11 +542,7 @@ class Migration(migrations.Migration):
                 'db_table': 'proyecto_Producto',
             },
         ),
-        migrations.AddField(
-            model_name='plantrabajo',
-            name='producto',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='proyecto.producto'),
-        ),
+        
         migrations.AddField(
             model_name='configuracionentregableproducto',
             name='producto_id',
@@ -611,11 +584,7 @@ class Migration(migrations.Migration):
                 'db_table': 'proyecto_Proyecto',
             },
         ),
-        migrations.AddField(
-            model_name='plantrabajo',
-            name='proyecto',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='proyecto.proyecto'),
-        ),
+        
         migrations.AddField(
             model_name='configuracionentregableproyecto',
             name='proyecto_id',
