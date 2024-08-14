@@ -24,7 +24,7 @@ from .models import (Apropiacion, Articulos, Capitulos, Consultoria, Contenido,I
                      PregFinalizadoyCurso, Producto, Proyecto, Reconocimientos,
                      Software, Transacciones, UbicacionProyecto, ParticipantesExternos, EstadoProducto, ConfiguracionPlanTrabajo,
                      CategoriaMinciencias,CuartilEsperado,TipoEventos)
-from .serializer import (investigadorSerializer, productoSerializer,imagenSerializer,
+from .serializer import (investigadorSerializer, productoSerializer,listaProductoSerializer,
                          proyectoSerializer,grupoinvestigacionSerializer, categoriaMincienciasSerializer, cuartilEsperadoSerializer)
 from rest_framework.parsers import MultiPartParser, FormParser
 
@@ -844,22 +844,33 @@ class MostrarInvestigadores(APIView):
 class MostrarPlanTrabajo(APIView):
     def get(self, request, *args, **kwargs):
         configuraciones = ConfiguracionPlanTrabajo.objects.all()
-
         data = []
+
         for configuracion in configuraciones:
             planes_trabajo = configuracion.planTrabajo.all()
 
             planes_data = []
             for plan in planes_trabajo:
-                minciencias_data = categoriaMincienciasSerializer(plan.producto.categoriaMinciencias).data
-                cuartil_data = cuartilEsperadoSerializer(plan.producto.cuartilEsperado).data
-                productos_asociados = {
-                    'titulo_producto': plan.producto.tituloProducto,
-                    'minciencias': minciencias_data,
-                    'quartil': cuartil_data,
-                    'estado_inicio_semestre': plan.producto.estadoProceso,
-                } if plan.producto else {}
-                grupoinvestigacion= grupoinvestigacionSerializer(plan.investigador.grupoinvestigacion).data
+                productos_asociados = {}
+
+                if plan.producto:
+                    minciencias_data = categoriaMincienciasSerializer(plan.producto.categoriaMinciencias).data if plan.producto.categoriaMinciencias else None
+                    cuartil_data = cuartilEsperadoSerializer(plan.producto.cuartilEsperado).data if plan.producto.cuartilEsperado else None
+
+                    # Usa el serializador para obtener el tipo de producto
+                    lista_producto = plan.producto.listaProducto
+                    lista_producto_serializer = listaProductoSerializer(lista_producto)
+                    tipo_producto = lista_producto_serializer.data.get('tipo_producto', 'Unknown')
+
+                    productos_asociados = {
+                        'titulo_producto': plan.producto.tituloProducto,
+                        'minciencias': minciencias_data,
+                        'quartil': cuartil_data,
+                        'estado_inicio_semestre': plan.producto.estadoProceso,
+                        'tipo_producto': tipo_producto
+                    }
+
+                grupoinvestigacion = grupoinvestigacionSerializer(plan.investigador.grupoinvestigacion).data if plan.investigador.grupoinvestigacion else None
 
                 plan_data = {
                     'horasestricto': plan.horasestricto,
@@ -868,7 +879,7 @@ class MostrarPlanTrabajo(APIView):
                         'nombre': plan.investigador.nombre,
                         'apellidos': plan.investigador.apellidos,
                         'horas_formacion': plan.investigador.horasformacion,
-                        'Grupoinvestigacion':grupoinvestigacion,
+                        'Grupoinvestigacion': grupoinvestigacion,
                     },
                     'proyecto': {
                         'codigo': plan.proyecto.codigo,
@@ -889,7 +900,11 @@ class MostrarPlanTrabajo(APIView):
             data.append(configuracion_data)
 
         return JsonResponse(data, safe=False)
-
+     
+     
+     
+     
+   
 class MostrarProductos(APIView):
     def get(self, request, *args, **kwargs):
         productos = Producto.objects.all()
