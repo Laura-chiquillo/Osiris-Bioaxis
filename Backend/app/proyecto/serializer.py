@@ -119,40 +119,6 @@ class listaProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ListaProducto
         fields = '__all__'
-    def get_tipo_producto(self, obj):
-            # Determine the type of product based on which ForeignKey is set
-        if obj.articulo:
-            return 'articulo'
-        elif obj.capitulo:
-            return 'capitulo'
-        elif obj.software:
-            return 'software'
-        elif obj.libro:
-            return 'libro'
-        elif obj.prototipoIndustrial:
-            return 'prototipoIndustrial'
-        elif obj.evento:
-            return 'evento'
-        elif obj.reconocimiento:
-            return 'reconocimiento'
-        elif obj.consultoria:
-            return 'consultoria'
-        elif obj.contenido:
-            return 'contenido'
-        elif obj.pregFinalizadoyCurso:
-            return 'pregFinalizadoyCurso'
-        elif obj.apropiacion:
-            return 'apropiacion'
-        elif obj.maestria:
-            return 'maestria'
-        elif obj.proyectoCursoProducto:
-            return 'proyectoCursoProducto'
-        elif obj.proyectoFormuladoProducto:
-            return 'proyectoFormuladoProducto'
-        elif obj.proyectoRSUProducto:
-            return 'proyectoRSUProducto'
-        else:
-            return 'Unknown'
 
 class estudiantesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -183,12 +149,14 @@ class estadoProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = EstadoProducto
         fields = '__all__'
+
     
 class productoSerializer(serializers.ModelSerializer):
     Soporte = serializers.FileField(required=False)
     class Meta:
         model = Producto
         fields = '__all__'
+    
     
 
 #------------------------ PROYECTOS ------------------------

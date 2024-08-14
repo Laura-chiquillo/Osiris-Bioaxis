@@ -41,7 +41,9 @@ export interface ProductoAsociado {
     minciencias: Minciencias;
     quartil: Quartil;
     estado_inicio_semestre: string;
+    tipo_producto: string; 
 }
+
 
 export interface Proyecto {
     codigo: string;
