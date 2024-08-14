@@ -259,6 +259,7 @@ export class ProyectoyproductoService {
     return this.http.get<any[]>(`${this.configplanTrabajo}`);
   }
 
+
   creargetconfigplanTrabajo(registro: any) {
     return this.http.post<any>(this.configplanTrabajo, registro);
   }
@@ -283,7 +284,11 @@ export class ProyectoyproductoService {
     );
   }
   
-  
+  private registrarplanTrabajo = 'http://localhost:8000/planTrabajo';
+
+  creargetplanTrabajo(registro: any) {
+    return this.http.post<any>(this.registrarplanTrabajo, registro);
+  }
 
   private planTrabajo = 'http://localhost:8000/mostrar-plan-trabajo';
 
@@ -291,6 +296,7 @@ export class ProyectoyproductoService {
     return this.http.get<MostrarPlan[]>(`${this.planTrabajo}`);
   }
   
+
 
 
 

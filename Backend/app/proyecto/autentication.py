@@ -14,6 +14,7 @@ from datetime import datetime
 from django.utils.timezone import make_aware
 import ast
 import base64
+from django.db.models import Q
 from django.core.files.base import ContentFile
 
 from .models import (Apropiacion, Articulos, Capitulos, Consultoria, Contenido,Imagen,
@@ -819,13 +820,11 @@ class MostrarInvestigadores(APIView):
                 'codigo': proyecto.codigo,
                 'fecha': proyecto.created_at,
                 'titulo': proyecto.titulo,
-                # otros campos del proyecto si los hay
             } for proyecto in proyectos]
 
             productos_data = [{
                 'id': producto.id,
                 'tituloProducto': producto.tituloProducto,
-                # otros campos del producto si los hay
             } for producto in productos]
             
             investigador_data = {
@@ -837,7 +836,6 @@ class MostrarInvestigadores(APIView):
                 'created_at':investigador.created_at,
                 'proyectos': proyectos_data,
                 'productos': productos_data
-                # otros campos del investigador si los hay
             }
             data.append(investigador_data)
 
@@ -1038,3 +1036,73 @@ class MostrarProductos(APIView):
             data.append(producto_data)
 
         return Response(data)
+
+class MostrarPyPdeInvestigador(APIView):
+    def get(self, request, *args, **kwargs):
+        investigadores = Investigador.objects.all()
+        data = []
+
+        for investigador in investigadores:
+            # Obtener proyectos donde el investigador es principal, coinvestigador, o está relacionado con un producto del proyecto
+            proyectos = Proyecto.objects.filter(
+                Q(investigador=investigador.numerodocumento) | 
+                Q(coinvestigador=investigador) |
+                Q(producto__investigador=investigador.numerodocumento) |
+                Q(producto__coinvestigador=investigador.numerodocumento)
+            ).distinct()
+
+            proyectos_con_productos = []
+            for proyecto in proyectos:
+                # Filtrar productos donde el investigador participa como investigador principal o coinvestigador
+                productos_asociados_proyecto = Producto.objects.filter(
+                    Q(proyecto=proyecto) & 
+                    (Q(investigador=investigador.numerodocumento) | Q(coinvestigador=investigador.numerodocumento))
+                ).distinct()
+
+                productos_data = [{
+                    'id': producto.id,
+                    'tituloProducto': producto.tituloProducto,
+                } for producto in productos_asociados_proyecto]
+
+                # Si el proyecto tiene productos y el investigador no participa en ninguno,
+                # igual se debe mostrar el proyecto con el producto asociado
+                if not productos_data:
+                    productos_data = [{
+                        'id': None, 
+                        'tituloProducto': 'Sin productos asociados'
+                    }]
+                elif not productos_asociados_proyecto.exists() and proyecto not in proyectos_con_productos:
+                    proyectos_con_productos.append({
+                        'codigo': proyecto.codigo,
+                        'titulo': proyecto.titulo,
+                        'productos': [{
+                            'id': None,
+                            'tituloProducto': 'Producto asociado al proyecto'
+                        }]
+                    })
+
+                proyectos_con_productos.append({
+                    'codigo': proyecto.codigo,
+                    'titulo': proyecto.titulo,
+                    'productos': productos_data
+                })
+
+            if proyectos_con_productos:
+                investigador_data = {
+                    'nombre': investigador.nombre,
+                    'correo': investigador.correo,
+                    'numerodocumento': investigador.numerodocumento,
+                    'proyectos': proyectos_con_productos,
+                }
+                data.append(investigador_data)
+
+        return JsonResponse(data, safe=False)
+
+
+
+
+
+
+
+
+

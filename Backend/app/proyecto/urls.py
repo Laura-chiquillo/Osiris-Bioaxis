@@ -2,7 +2,7 @@ from django.urls import path
 
 from .autentication import (ActualizarDatosUsuario, CrearNuevoProducto,
                             CrearProyecto, CustomAuthToken,MostrarPlanTrabajo,
-                            MostrarInvestigadores, MostrarProductos)
+                            MostrarInvestigadores, MostrarProductos, MostrarPyPdeInvestigador)
 from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
                        articuloRetrieveUpdateDestroy, articulosList,
                        avanceProyectoList, avanceProyectoRetrieveUpdateDestroy,
@@ -69,6 +69,8 @@ urlpatterns = [
     path('ConfiguracionPlanTrabajo', configuracionPlanTrabajoList.as_view(), name='create-configuracionPlanTraba-list'),
     path('ConfiguracionPlanTrabajo/<pk>', configuracionPlanTrabajoRetrieveUpdateDestroy.as_view(), name='configuracionPlanTraba-detail'),
     path('mostrar-plan-trabajo', MostrarPlanTrabajo.as_view(), name='mostrar-plan-trabajo'),
+    path('mostrarPyP', MostrarPyPdeInvestigador.as_view(), name='mostrarPyP'),
+
 
     path('investigador', investigadorList.as_view(), name='create-investigador-list'),
     path('grupoinvestigacion', grupoInvestigacionList.as_view(), name='create-grupoinvestigacion-list'),

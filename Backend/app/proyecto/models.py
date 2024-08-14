@@ -539,7 +539,7 @@ class PlanTrabajo(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     investigador = models.ForeignKey(Investigador,on_delete=models.CASCADE)
     proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, null=True, blank=True) 
     horasestricto = models.IntegerField(default=0)
     rol = models.CharField(max_length=150)
     class Meta:

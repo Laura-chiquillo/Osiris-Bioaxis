@@ -2,6 +2,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Investigador, Investigadores } from '../modelo/investigador';
+import { Person } from '../modelo/person';
+import { AutenticacionService } from './autenticacion';
 
 @Injectable({
   providedIn: 'root' // Asegúrate de tener este providedIn en tu servicio
@@ -13,7 +15,7 @@ export class InvestigadorService {
   private apiNotificaciones = 'http://localhost:8000/notificaciones'; 
   private url = 'http://localhost:8000/ActualizarInvestigador';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private AutenticacionService:AutenticacionService) { }
 
   // mostrar la informacion de todos los investigadores
   getUsuarios(): Observable<any[]> {
@@ -23,7 +25,18 @@ export class InvestigadorService {
   getUsuarioDetail(documento:string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/${documento}`);
   }
-
+  
+  private mostrarPyP = 'http://localhost:8000/mostrarPyP';
+  getmostrarPyP(): Observable<Person[]> {
+    return this.http.get<Person[]>(`${this.mostrarPyP}`).pipe(
+      catchError(error => {
+        console.error('Error fetching data:', error);
+        return throwError(() => new Error('Error fetching data'));
+      })
+    );
+  }
+  
+  
   //Crear pregrado
   private apiPregrado = 'http://localhost:8000/pregrado';
   crearPregrado(data: any): Observable<any> {
