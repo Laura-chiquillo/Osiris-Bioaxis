@@ -586,4 +586,4 @@ class ConfiguracionPlanTrabajo(models.Model):
     titulo = models.CharField(max_length=150)
     planTrabajo = models.ManyToManyField(PlanTrabajo)
     class Meta:
-        db_table = 'proyecto_CofiguracionPlanTrabajo'
+        db_table = 'proyecto_ConfiguracionPlanTrabajo'
