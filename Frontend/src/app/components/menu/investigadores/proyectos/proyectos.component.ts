@@ -4,9 +4,10 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator'; 
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { forkJoin } from 'rxjs';
-
+import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatExpansionModule } from '@angular/material/expansion';
+import { SelectionModel } from '@angular/cdk/collections';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
@@ -45,6 +46,7 @@ import { map, startWith } from 'rxjs/operators';
 import { Investigador } from '../../modelo/investigador';
 import { Evento, Producto } from '../../modelo/productos';
 import { Coinvestigador, Estudiantes, ParticipanteExterno, Proyecto } from '../../modelo/proyectos';
+import { Product, Person, Proyectos } from '../../modelo/person';
 import { ProyectoyproductoService } from '../../services/proyectoyproducto';
 import { EstudiantesService } from '../../services/estudiantes';
 import { InvestigadorService } from '../../services/registroInvestigador';
@@ -74,6 +76,8 @@ import { DialogoDetalleComponent } from '../../administrador/control/dialogo-det
         ]),
     ], imports: [MatTabsModule,
         MatSelectModule,
+        MatExpansionModule,
+        MatListModule,
         MatTableModule,
         MatPaginatorModule,
         MatButtonModule,
@@ -103,6 +107,7 @@ import { DialogoDetalleComponent } from '../../administrador/control/dialogo-det
         MatDialogModule,
         DialogoCreacionEstudiantesComponent,
         MatTooltipModule],  })//providers: [provideHttpClient(withInterceptorsFromDi())]
+
 export class ProyectosComponent implements OnInit {
   //mostrar los coinvestigadores que hay
   separatorKeysCodes: number[] = [13, 188];
@@ -112,6 +117,9 @@ export class ProyectosComponent implements OnInit {
   selectedInvestigators: string[] = [];
   proyecto: Proyecto = {};
   usuarioSesion!: UsuarioSesion;
+  dataSources = new MatTableDataSource<any>(); 
+  dataSourceses = new MatTableDataSource<any>(); 
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
   origenData: any[] = [
     {value: 'nacional', viewValue: 'nacional'},
     {value: 'internacional', viewValue: 'internacional'},
@@ -165,6 +173,12 @@ export class ProyectosComponent implements OnInit {
   mensajeError: string = '';
   idExistente: boolean = false;
   mensajeErrorId: string = '';
+  form: FormGroup;
+  rolControl: FormControl;
+  horasEstrictosControl: FormControl;
+  idConfiguracion: string | null = null; 
+  
+
   constructor(
     private ProyectoyproductoService: ProyectoyproductoService,
     private formBuilder: FormBuilder,
@@ -447,6 +461,13 @@ export class ProyectosComponent implements OnInit {
       coinvestigadoresProducto: [''],
     });
     this.selectedOption  = '';
+    this.form = this.formBuilder.group({
+      activarCampos: [false],
+      rol: [{ value: '', disabled: true }],
+      horasEstrictos: [{ value: '', disabled: true }, [Validators.required]]
+    });
+    this.rolControl = this.form.get('rol') as FormControl;
+    this.horasEstrictosControl = this.form.get('horasEstrictos') as FormControl;
   }
 
   //mostrar todos los proyectos existenetes
@@ -463,7 +484,6 @@ export class ProyectosComponent implements OnInit {
     );
   }
 
-  
   //verificar si existe el codigo de proyecto y producto
   verificarCodigo() {
     const codigo = this.firstFormGroup.get('codigo')?.value;
@@ -515,6 +535,9 @@ export class ProyectosComponent implements OnInit {
     this.obtenerEntregableProducto();
     this.obtenerEstadosProyecto();
     this.obtenerEstadosProducto();
+    this.obtenerPlanTrabajo();
+    this.loadProjectsAndProducts();
+    
   }
 
   obtenerEntregableProyecto(){
@@ -856,7 +879,6 @@ export class ProyectosComponent implements OnInit {
       porcentajeEjecucionCorteControl.setValue(this.value.toString()); // Convertir a string y asignar el valor al control del formulario
     }
   }
-
   onValue2Change(event: any) {
     this.value2 = Number(event.target.value); // Convertir a número
     const porcentajeEjecucionFinCorte = this.firstFormGroup.get(
@@ -1354,7 +1376,6 @@ onValue4Change(event: any) {
     porcentanjeAvanFinSemestre.setValue(this.value4.toString());
   }
 }
-
 onValue5Change(event: any) {
   this.value5 = Number(event.target.value);
   const porcentajeComSemestral = this.productoFormGroup.get(
@@ -1615,7 +1636,7 @@ thumbLabel6 = false;
  
   displayedColumns: string[] = ['tipo', 'titulo', 'estado', 'etapa', 'acciones', 'expand'];
   columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
-  dataSource = new MatTableDataSource<any>([]);
+  
   
   expandedDetail = false;
 
@@ -1670,6 +1691,170 @@ thumbLabel6 = false;
   
   accionUno(element: any) {
     console.log("Editar")
+  }
+  
+  // ------- plan de trabajo -----------------------------------
+  //--------------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------------
+
+  displayedColumnas: string[] = ['select', 'titulo', 'tituloproducto','rol', 'horasestricto'];
+  displayedColumn: string[] = ['titulo', 'fecha', 'expand'];
+  selection = new SelectionModel<any>(true, []);
+  expandedElements: any | null = null;
+  selectedPlanId: string = '';
+  data: any[] = [];
+
+  loadProjectsAndProducts() {
+    this.investigatorService.getmostrarPyP().subscribe((data: Person[]) => {
+        const userData = this.AutenticacionService.obtenerDatosUsuario();
+        const userId = userData ? userData.numerodocumento : '';
+        this.data = this.transformData(data, userId); // Usamos 'this.data' en lugar de 'dataSources.data'
+    });
+  }
+
+  transformData(data: Person[], userId: string): any[] {
+    const transformedData: any[] = [];
+  
+    data.forEach(person => {
+      if (person.numerodocumento === userId) {
+        person.proyectos.forEach(proyecto => {
+          let hasProducts = false;
+  
+          proyecto.productos.forEach(producto => {
+            if (producto.tituloProducto !== 'Sin productos asociados') {
+              hasProducts = true;
+              transformedData.push({
+                nombre: person.nombre,
+                correo: person.correo,
+                numerodocumento: person.numerodocumento,
+                titulo: proyecto.titulo,
+                tituloproducto: producto.tituloProducto,
+                isSelected: false,  // Inicialmente no seleccionada
+                rol: '',  // Inicialmente vacío
+                horasestricto: '',  // Inicialmente vacío
+                proyectoId: proyecto.codigo,
+                productoId: producto.id
+              });
+            }
+          });
+  
+          if (!hasProducts) {
+            transformedData.push({
+              nombre: person.nombre,
+              correo: person.correo,
+              numerodocumento: person.numerodocumento,
+              titulo: proyecto.titulo,
+              tituloproducto: '',
+              isSelected: false,  // Inicialmente no seleccionada
+              rol: '',  // Inicialmente vacío
+              horasestricto: '',  // Inicialmente vacío
+              proyectoId: proyecto.codigo,
+              productoId: null
+            });
+          }
+        });
+      }
+    });
+  
+    console.log('Datos transformados:', transformedData); // Para depuración
+    return transformedData;
+  }
+  
+  obtenerPlanTrabajo() {
+  this.ProyectoyproductoService.getconfigplanTrabajo().subscribe(data => {
+    console.log('Datos recibidos:', data);
+    if (data && data.length > 0) {
+      this.idConfiguracion = data[0].id;
+    }
+    this.dataSourceses.data = data;
+    this.dataSourceses.paginator = this.paginator;
+  });
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSourceses.data.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSources.data.forEach(row => {
+          row.isSelected = true;
+          this.selection.select(row);
+        });
+  }
+
+  toggleRow(element: any): void {
+    this.expandedElements = this.expandedElements === element ? null : element;
+    if (this.expandedElements) {
+      this.selectedPlanId = this.expandedElements.id;  // Guarda el ID del plan seleccionado
+    } else {
+      this.selectedPlanId = ' ';
+    }
+  }
+
+  //rol 
+  typerol: string[] = ['Investigador principal', 'Coinvestigador', 'Director'];
+
+  toggleSelection(row: any) {
+    row.isSelected = !row.isSelected;
+    if (row.isSelected) {
+      // Los campos ya están vacíos cuando se selecciona, puedes llenarlos luego
+      row.rol = row.rol || '';
+      row.horasestricto = row.horasestricto || '';
+    } else {
+      // Limpiar campos si se deselecciona la fila
+      row.rol = '';
+      row.horasestricto = '';
+    }
+    console.log('Fila seleccionada:', {
+      isSelected: row.isSelected,
+      rol: row.rol,
+      horasestricto: row.horasestricto
+    });
+  }
+  
+  guardar() {
+    const datosAGuardar = this.data
+      .filter(row => row.isSelected && row.rol && row.horasestricto !== undefined) // Filtrar datos con horasestricto definido
+      .map(row => ({
+        configPlanTrabajoId: this.selectedPlanId || this.idConfiguracion,
+        horasEstricto: row.horasestricto || 0,  // Usa 0 si horasestricto es null o undefined
+        investigadorId: row.numerodocumento,
+        productoId: row.productoId || null,
+        proyectoId: row.proyectoId,
+        rol: row.rol
+      }));
+  
+    console.log('Datos para guardar:', datosAGuardar);
+  
+    if (datosAGuardar.length > 0) {
+      this.ProyectoyproductoService.creargetplanTrabajo(datosAGuardar).subscribe(response => {
+        console.log('Datos guardados exitosamente', response);
+        this.data.forEach(row => {
+          if (row.isSelected) {
+            row.isSelected = false; // Desmarcar la fila
+            row.rol = ''; // Limpiar el campo rol
+            row.horasestricto = undefined; // Limpiar el campo horasestricto
+            window.location.reload(); 
+          }
+        });
+        Swal.fire({
+          title: 'Registro Exitoso !!!',
+          text: 'Se ha registrado el plan de trabajo.',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          window.location.reload(); 
+        });
+      }, error => {
+        console.error('Error al guardar los datos', error);
+      });
+    } else {
+      console.warn('No hay datos seleccionados o completos para guardar');
+    }
   }
   
   

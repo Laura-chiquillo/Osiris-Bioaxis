@@ -690,19 +690,40 @@ class planTrabajoList(generics.ListCreateAPIView):
     serializer_class = planTrabajoSerializer
     
     def post(self, request, *args, **kwargs):
-        new_id = PlanTrabajo.objects.count() + 1
-        admin_data = {
-            'id': str(new_id),
-            'rol': request.data.get('rol'),
-            'horasestricto': request.data.get('horasestricto'),
-            'investigador': Investigador.objects.get(pk=request.data.get('investigador')),
-			'proyecto': Proyecto.objects.get(pk=request.data.get('proyecto')),
-			'producto': Producto.objects.get(pk=request.data.get('producto')),
-        }
-        admin = PlanTrabajo.objects.create(**admin_data)
-        serializer = planTrabajoSerializer(admin) 
+        data = request.data
+        if not isinstance(data, list):
+            return Response({"error": "Expected a list of items"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        created_items = []
+        for item in data:
+            try:
+                # Create new PlanTrabajo
+                new_id = PlanTrabajo.objects.count() + 1
+                admin_data = {
+                    'id': str(new_id),
+                    'rol': item.get('rol'),
+                    'horasestricto': item.get('horasEstricto') or 0,
+                    'investigador': Investigador.objects.get(pk=item.get('investigadorId')),
+                    'proyecto': Proyecto.objects.get(pk=item.get('proyectoId')),
+                    'producto': Producto.objects.get(pk=item.get('productoId')) if item.get('productoId') else None,
+                }
+                admin = PlanTrabajo.objects.create(**admin_data)
+                serializer = planTrabajoSerializer(admin)
+                created_items.append(serializer.data)
+                
+                # Get ConfiguracionPlanTrabajo and update it
+                config_plan_id = item.get('configPlanTrabajoId')
+                if config_plan_id:
+                    config_plan = ConfiguracionPlanTrabajo.objects.get(pk=config_plan_id)
+                    config_plan.planTrabajo.add(admin)
+                    config_plan.save()
+
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(created_items, status=status.HTTP_201_CREATED)
+    
+    
     
 class planTrabajoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = PlanTrabajo.objects.all()
