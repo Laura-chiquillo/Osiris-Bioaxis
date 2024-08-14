@@ -1833,22 +1833,23 @@ thumbLabel6 = false;
     if (datosAGuardar.length > 0) {
       this.ProyectoyproductoService.creargetplanTrabajo(datosAGuardar).subscribe(response => {
         console.log('Datos guardados exitosamente', response);
-        this.data.forEach(row => {
-          if (row.isSelected) {
-            row.isSelected = false; // Desmarcar la fila
-            row.rol = ''; // Limpiar el campo rol
-            row.horasestricto = undefined; // Limpiar el campo horasestricto
-            window.location.reload(); 
-          }
-        });
+        
         Swal.fire({
           title: 'Registro Exitoso !!!',
           text: 'Se ha registrado el plan de trabajo.',
           icon: 'success',
           confirmButtonText: 'Aceptar'
         }).then(() => {
-          window.location.reload(); 
+          this.data.forEach(row => {
+            if (row.isSelected) {
+              row.isSelected = false; // Desmarcar la fila
+              row.rol = ''; // Limpiar el campo rol
+              row.horasestricto = undefined; // Limpiar el campo horasestricto
+              window.location.reload(); 
+            }
+          }); 
         });
+        
       }, error => {
         console.error('Error al guardar los datos', error);
       });
