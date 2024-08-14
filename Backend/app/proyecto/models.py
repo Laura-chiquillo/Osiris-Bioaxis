@@ -343,6 +343,39 @@ class Producto(models.Model):
     participantesExternos = models.ManyToManyField(ParticipantesExternos)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+    
+    def tipo_producto(self):
+        if self.listaProducto.articulo is not None:
+            return 'Articulo'
+        elif self.listaProducto.capitulo is not None:
+            return 'capitulo'
+        elif self.listaProducto.software is not None:
+            return 'software'
+        elif self.listaProducto.libro is not None:
+            return 'libro'
+        elif self.listaProducto.prototipoIndustrial is not None:
+            return 'prototipoIndustrial'
+        elif self.listaProducto.evento is not None:
+            return 'evento'
+        elif self.listaProducto.reconocimiento is not None:
+            return 'reconocimiento'
+        elif self.listaProducto.consultoria is not None:
+            return 'consultoria'
+        elif self.listaProducto.contenido is not None:
+            return 'contenido'
+        elif self.listaProducto.pregFinalizadoyCurso is not None:
+            return 'pregFinalizadoyCurso'
+        elif self.listaProducto.apropiacion is not None:
+            return 'apropiacion'
+        elif self.listaProducto.maestria is not None:
+            return 'maestria'
+        elif self.listaProducto.proyectoCursoProducto is not None:
+            return 'proyectoCursoProducto'
+        elif self.listaProducto.proyectoFormuladoProducto is not None:
+            return 'proyectoFormuladoProducto'
+        elif self.listaProducto.proyectoRSUProducto is not None:
+            return 'proyectoRSUProducto'
+        
     class Meta:
         db_table = 'proyecto_Producto'
 
