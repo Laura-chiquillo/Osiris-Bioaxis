@@ -577,8 +577,7 @@ class PlanTrabajo(models.Model):
     rol = models.CharField(max_length=150)
     class Meta:
         db_table = 'proyecto_PlanTrabajo'
-
-    
+ 
 class ConfiguracionPlanTrabajo(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     fecha = models.DateField(max_length=50)

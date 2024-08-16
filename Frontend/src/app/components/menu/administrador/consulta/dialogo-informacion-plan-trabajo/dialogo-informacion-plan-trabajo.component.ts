@@ -39,7 +39,6 @@ export class DialogoInformacionPlanTrabajoComponent implements AfterViewInit {
 
   transformData(plan: MostrarPlan): PlanTableData[] {
     return plan.planTrabajo.map(pt => {
-      // Verifica si productos_asociados existe y tiene las propiedades necesarias
       const productos_asociados = pt.proyecto.productos_asociados || {};
       const minciencias = productos_asociados.minciencias || {};
       const quartil = productos_asociados.quartil || {};
@@ -47,7 +46,6 @@ export class DialogoInformacionPlanTrabajoComponent implements AfterViewInit {
       return {
         name: pt.investigador.Grupoinvestigacion ? pt.investigador.Grupoinvestigacion.nombre : '',
         weight: `${pt.investigador.nombre || ''} ${pt.investigador.apellidos || ''}`,
-        // Asegúrate de que symbol sea un número. Si es una cadena, conviértela a número.
         symbol: typeof pt.investigador.horas_formacion === 'string' 
                   ? Number(pt.investigador.horas_formacion) 
                   : pt.investigador.horas_formacion || 0,
@@ -56,7 +54,7 @@ export class DialogoInformacionPlanTrabajoComponent implements AfterViewInit {
                   : pt.horasestricto || 0,
         codigo: pt.proyecto.codigo || '',
         tituloProyecto: pt.proyecto.titulo || '',
-        tipoProducto: productos_asociados.titulo_producto || '',
+        tipoProducto: productos_asociados.tipo_producto || '',  // Asignar el valor de tipo_producto
         rol: pt.rol || '',
         tituloProducto: productos_asociados.titulo_producto || '',
         categoria: minciencias.categoria || '',
@@ -67,6 +65,7 @@ export class DialogoInformacionPlanTrabajoComponent implements AfterViewInit {
                   : pt.proyecto.porcentaje_final_semestre || 0
       };
     });
-  }
+}
+
   
 }

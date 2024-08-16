@@ -25,10 +25,11 @@
                     </button>
                   </td>
                   <td>
-                    <button matTooltip="Descargar" matTooltipPosition="above" mat-icon-button color="primary">
+                    <button matTooltip="Descargar" matTooltipPosition="above" mat-icon-button color="primary"
+                      (click)="descargarPlanTrabajo(item)">
                       <mat-icon>download</mat-icon>
                     </button>
-                  </td>
+                  </td>                  
                   <td>
                     <p>
                       <mat-slide-toggle [(ngModel)]="item.estado" (toggleChange)="cambiarEstadoPlanTrabajo(item)"></mat-slide-toggle>

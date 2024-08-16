@@ -41,7 +41,9 @@ export interface ProductoAsociado {
     minciencias: Minciencias;
     quartil: Quartil;
     estado_inicio_semestre: string;
+    tipo_producto: string; 
 }
+
 
 export interface Proyecto {
     codigo: string;
@@ -79,5 +81,28 @@ export interface PlanTableData {
     quartil: string;
     estado: string;
     avance: number;
+  }
+  
+  export interface DetallePlan {
+    Grupo: string;
+    Nombre_del_investigador: string;
+    Horas_de_investigacion_formacion: number;
+    Horas_de_investigacion_sentido_estricto: number;
+    Codigo_de_proyecto: string;
+    Titulo_de_proyecto: string;
+    Tipo_de_producto: string;
+    Rol_en_producto: string;
+    Titulo_de_producto: string;
+    Categoria: string;
+    Quartil: string;
+    Estado_del_producto_al_inicio_del_semestre: string;
+    Porcentaje_de_avances_para_final_semestre: number;
+  }
+
+  export interface PlanDeTrabajos {
+    id: number;
+    titulo: string;
+    estado: boolean;
+    planTrabajo: PlanDeTrabajo[];
   }
   

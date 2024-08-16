@@ -74,7 +74,6 @@ class CustomAuthToken(APIView):
         }
         return Response({'token': access_token, 'user_data': user_data}, status=status.HTTP_200_OK)
 
-
 class ActualizarDatosUsuario(APIView):
     parser_classes = (MultiPartParser, FormParser)
 
@@ -854,15 +853,13 @@ class MostrarPlanTrabajo(APIView):
                 productos_asociados = {}
 
                 if plan.producto:
+                    tipo_producto = plan.producto.tipo_producto()
+
                     minciencias_data = categoriaMincienciasSerializer(plan.producto.categoriaMinciencias).data if plan.producto.categoriaMinciencias else None
                     cuartil_data = cuartilEsperadoSerializer(plan.producto.cuartilEsperado).data if plan.producto.cuartilEsperado else None
 
-                    # Usa el serializador para obtener el tipo de producto
-                    lista_producto = plan.producto.listaProducto
-                    lista_producto_serializer = listaProductoSerializer(lista_producto)
-                    tipo_producto = lista_producto_serializer.data.get('tipo_producto', 'Unknown')
-
                     productos_asociados = {
+                        'id': plan.producto.id,
                         'titulo_producto': plan.producto.tituloProducto,
                         'minciencias': minciencias_data,
                         'quartil': cuartil_data,
@@ -876,6 +873,7 @@ class MostrarPlanTrabajo(APIView):
                     'horasestricto': plan.horasestricto,
                     'rol': plan.rol,
                     'investigador': {
+                        'numerodocumento':plan.investigador.numerodocumento,
                         'nombre': plan.investigador.nombre,
                         'apellidos': plan.investigador.apellidos,
                         'horas_formacion': plan.investigador.horasformacion,
@@ -900,11 +898,8 @@ class MostrarPlanTrabajo(APIView):
             data.append(configuracion_data)
 
         return JsonResponse(data, safe=False)
-     
-     
-     
-     
-   
+    
+       
 class MostrarProductos(APIView):
     def get(self, request, *args, **kwargs):
         productos = Producto.objects.all()
