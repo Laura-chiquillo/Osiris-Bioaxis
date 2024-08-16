@@ -13,13 +13,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import * as XLSX from 'xlsx';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
-import { ConfiguracionPlanTrabajo, PlanTrabajo } from '../../modelo/planDeTrabajo';
+import {ConfigPlanTrabajo,Investigador,PlanTrabajo,Proyecto,ProductoAsociado} from '../../modelo/plan';
 import { DialogoEstadisticaComponent } from './dialogo-estadistica/dialogo-estadistica.component';
 import { DialogoPlanDeTrabajoComponent } from './dialogo-plan-de-trabajo/dialogo-plan-de-trabajo.component';
 import { DialogoInformacionPlanTrabajoComponent } from './dialogo-informacion-plan-trabajo/dialogo-informacion-plan-trabajo.component';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
+
 
 @Component({
   selector: 'app-consulta',
@@ -329,18 +331,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
     });
   }
 
-  obtenerPlanTrabajo() {
-    this.proyectoyproductoService.getconfigplanTrabajo().subscribe(data => {
-      console.log("verificar:", data); // Verifica los datos recibidos
-      const dataProject = data.reverse();
-      this.item = dataProject.map(x => ({
-        id: x.id,
-        plan: x.titulo,
-        estado: x.estado,
-      }));
-      console.log("asignacion:", this.item); // Verifica la asignación de datos
-    });
-  }
+
 
   cambiarEstadoPlanTrabajo(item: any): void {
     // Asegúrate de que 'item' tenga el campo 'id'
@@ -366,5 +357,97 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
       }
     );
   }
-  
+
+  obtenerPlanTrabajo() {
+    this.proyectoyproductoService.getconfigplanTrabajo().subscribe(data => {
+      console.log("verificar:", data); // Verifica los datos recibidos
+      const dataProject = data.reverse();
+      this.item = dataProject.map(x => ({
+        id: x.id,
+        plan: x.titulo,
+        estado: x.estado,
+        planTrabajo: x.planTrabajo // Incluye la información detallada del plan
+      }));
+      console.log("asignacion:", this.item); // Verifica la asignación de datos
+    });
+  }
+
+  descargarPlanTrabajo(item: any): void {
+    if (Array.isArray(item.planTrabajo) && item.planTrabajo.length > 0) {
+        // Obtener todos los proyectos, productos e investigadores
+        const proyectos$ = this.proyectoyproductoService.getProyectos();
+        const productos$ = this.proyectoyproductoService.getProductos();
+        const investigadores$ = this.investigadorService.getUsuarios();
+        const grupos$ = this.investigadorService.getgrupos();
+        const cuartil$ = this.proyectoyproductoService.getCuartilEsperado();
+        const minciencias$ = this.proyectoyproductoService.getCategoria();
+
+        forkJoin([proyectos$, productos$, investigadores$, grupos$, cuartil$, minciencias$]).subscribe(([proyectos, productos, investigadores, grupos, cuartiles, minciencias]) => {
+          const datosProcesados = item.planTrabajo.map((pt: any) => {
+            // Encontrar los datos correspondientes
+            const investigador = investigadores.find((i: any) => i.numerodocumento === pt.investigador);
+            const grupo = grupos.find((p: any) => p.id === pt.grupo);
+            const proyecto = proyectos.find((p: any) => p.codigo === pt.proyecto);
+            const producto = productos.find((p: any) => p.id === pt.producto) || {};
+            const quartil = cuartiles.find((p: any) => p.id === producto.cuartilEsperado);
+            const categoria = minciencias.find((p: any) => p.id === producto.categoriaMinciencias);
+        
+            return {
+                Grupo: grupo?.nombre || 'Sin grupo',
+                'Nombre del investigador': `${investigador?.nombre || 'Nombre no disponible'} ${investigador?.apellidos || ''}`.trim(),
+                'Horas de investigación formación': investigador?.horas_formacion || 0,
+                'Horas de investigación sentido estricto': pt.horasestricto || 0,
+                'Código de proyecto': proyecto?.codigo || 'Código no disponible',
+                'Titulo de proyecto': proyecto?.titulo || 'Título no disponible',
+                'Tipo de producto': producto.tipo_producto || '',
+                'Rol en producto': pt.rol || '',
+                'Titulo de producto': producto.tituloProducto || '',
+                Categoria: categoria?.categoria || '',
+                Quartil: quartil?.cuartil || '',
+                'Estado del producto al inicio del semestre': producto.estadoProceso || '',
+                'Porcentaje de avances para final semestre': proyecto?.porcentaje_final_semestre || 0
+            };
+        });
+        
+            // Exportar los datos a Excel
+            if (datosProcesados.length > 0) {
+                const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(datosProcesados);
+                const wb: XLSX.WorkBook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Datos Exportados');
+                XLSX.writeFile(wb, `datos_plan_trabajo_${item.id}.xlsx`);
+            } else {
+                console.warn(`El plan de trabajo con id ${item.id} no tiene datos relevantes para procesar.`);
+            }
+        }, error => {
+            console.error('Error al obtener datos:', error);
+        });
+    } else {
+        console.warn(`El plan de trabajo con id ${item.id} no tiene datos para procesar.`);
+    }
+}
+
+
+convertToCSV(objArray: any[]) {
+  const array = [Object.keys(objArray[0])].concat(objArray);
+  return array.map(it => {
+      return Object.values(it).toString();
+  }).join('\n');
+}
+
+downloadCSV(csvContent: string, fileName: string) {
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', fileName);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+  }
+}
+
+
+
 }

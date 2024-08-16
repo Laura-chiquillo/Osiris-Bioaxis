@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { Producto } from '../modelo/productos';
 import { Proyecto } from '../modelo/proyectos';
 import { MostrarPlan } from '../modelo/planDeTrabajo';
+import { ConfigPlanTrabajo } from '../modelo/plan';
 import { AutenticacionService } from './autenticacion';
 @Injectable({
   providedIn: 'root' // Asegúrate de tener este providedIn en tu servicio
@@ -248,10 +249,15 @@ export class ProyectoyproductoService {
   //cuartil esperado
   private apiCuartilEsperado = 'http://localhost:8000/cuartilEsperado';
 
-  getCuartilEsperado() {
+  getCuartilEsperado(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiCuartilEsperado}`);
   }
 
+  //Categoria minciencias
+  private categoria = 'http://localhost:8000/categoriaMinciencias';
+  getCategoria(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.categoria}`);
+  }
   //Plan de trabajo
   private configplanTrabajo = 'http://localhost:8000/ConfiguracionPlanTrabajo';
   
@@ -296,7 +302,9 @@ export class ProyectoyproductoService {
     return this.http.get<MostrarPlan[]>(`${this.planTrabajo}`);
   }
   
-
+  getPlanTrabajos(): Observable<ConfigPlanTrabajo> {
+    return this.http.get<ConfigPlanTrabajo>(this.planTrabajo);
+  }
 
 
 

@@ -859,6 +859,7 @@ class MostrarPlanTrabajo(APIView):
                     cuartil_data = cuartilEsperadoSerializer(plan.producto.cuartilEsperado).data if plan.producto.cuartilEsperado else None
 
                     productos_asociados = {
+                        'id': plan.producto.id,
                         'titulo_producto': plan.producto.tituloProducto,
                         'minciencias': minciencias_data,
                         'quartil': cuartil_data,
@@ -872,6 +873,7 @@ class MostrarPlanTrabajo(APIView):
                     'horasestricto': plan.horasestricto,
                     'rol': plan.rol,
                     'investigador': {
+                        'numerodocumento':plan.investigador.numerodocumento,
                         'nombre': plan.investigador.nombre,
                         'apellidos': plan.investigador.apellidos,
                         'horas_formacion': plan.investigador.horasformacion,

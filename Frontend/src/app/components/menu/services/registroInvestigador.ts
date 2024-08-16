@@ -21,7 +21,10 @@ export class InvestigadorService {
   getUsuarios(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}`);
   }
-
+  //mostrar grupos
+  getgrupos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl2}`);
+  }
   getUsuarioDetail(documento:string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/${documento}`);
   }

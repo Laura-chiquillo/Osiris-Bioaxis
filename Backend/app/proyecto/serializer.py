@@ -153,9 +153,12 @@ class estadoProductoSerializer(serializers.ModelSerializer):
     
 class productoSerializer(serializers.ModelSerializer):
     Soporte = serializers.FileField(required=False)
+    tipo_producto = serializers.SerializerMethodField()
     class Meta:
         model = Producto
         fields = '__all__'
+    def get_tipo_producto(self, obj):
+        return obj.tipo_producto()
     
     
 
