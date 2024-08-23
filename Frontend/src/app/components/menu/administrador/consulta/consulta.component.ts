@@ -322,6 +322,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
         type: type,
         data: data,
         detail: detail,
+        planTrabajoId: data.id //línea para pasar el ID del plan de trabajo
       },
       width: '80%'
     });
