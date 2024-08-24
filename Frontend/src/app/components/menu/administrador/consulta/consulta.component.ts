@@ -91,8 +91,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
     this.obtenerPlanTrabajo();
     this.obtenerProyectos();
     this.obtenerProductos();
-    this.obtenerEstadosProyecto();
-    this.obtenerEstadosProducto();
+    
     this.searchService.getSearchQuery().subscribe(query => {
       this.dataSourceInvestigador.filter = query.trim().toLowerCase();
       this.dataSourceProyecto.filter = query.trim().toLowerCase();
@@ -107,10 +106,16 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
   }
 
   obtenerProyectos() {
-    this.proyectoyproductoService.getProyectos().subscribe(
-      (proyecto) => {
-        const dataSort = proyecto.sort((a, b) => (a.codigo < b.codigo ? -1 : 1));
+    forkJoin({
+      proyectos: this.proyectoyproductoService.getProyectos(),
+      estados: this.proyectoyproductoService.obtenerEstadosProyecto()
+    }).subscribe(
+      ({proyectos , estados}) => {
+
+        this.estadosProyectos = estados;
+        const dataSort = proyectos.sort((a, b) => (a.codigo < b.codigo ? -1 : 1));
         this.dataSourceProyecto.data = dataSort.map(data => {
+        const estadoProyecto = this.estadosProyectos.find(x => x.id == data.estadoProyecto);
           return {
             codigo: data.codigo,
             investigador: data.investigador,
@@ -158,19 +163,26 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
   }
 
   obtenerProductos() {
-    this.proyectoyproductoService.getProductos().subscribe(
-      (producto) => {        
-        const dataSort = producto.sort((a, b) => (a.id < b.id ? -1 : 1));
+    forkJoin({
+      productos: this.proyectoyproductoService.getProductos(),
+      estados: this.proyectoyproductoService.obtenerEstadosProducto()
+    }).subscribe(
+      ({ productos, estados }) => {
+        this.estadosProductos = estados;
+        
+        const dataSort = productos.sort((a, b) => (a.id < b.id ? -1 : 1));
         this.dataSourceProducto.data = dataSort.map(data => {
+          const estadoProducto = this.estadosProductos.find(x => x.id == data.estadoProducto);
           return {
             id: data.id,
             investigador: data.investigador,
             estadoProceso: data.estadoProceso,
-            estadoProducto: this.estadosProductos.filter(x => x.id == data.estadoProducto)[0].estado,
+            estadoProducto: estadoProducto ? estadoProducto.estado : 'Desconocido',
             created_at: data.created_at,
             updated_at: data.updated_at,
           };
         });
+  
         this.productosData = dataSort.map(data => {
           return {
             id: data.id,
@@ -312,6 +324,8 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        window.location.reload(); // Esto recargará toda la página
+
       } 
     });
   }
