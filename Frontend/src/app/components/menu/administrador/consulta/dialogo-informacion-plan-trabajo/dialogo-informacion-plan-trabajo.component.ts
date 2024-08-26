@@ -1,9 +1,11 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, Inject, OnInit, } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProyectoyproductoService } from '../../../services/proyectoyproducto';
 import { PlanTableData,MostrarPlan } from '../../../modelo/planDeTrabajo';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 @Component({
   selector: 'app-dialogo-informacion-plan-trabajo',
   standalone: true,
@@ -11,7 +13,7 @@ import { PlanTableData,MostrarPlan } from '../../../modelo/planDeTrabajo';
   templateUrl: './dialogo-informacion-plan-trabajo.component.html',
   styleUrls: ['./dialogo-informacion-plan-trabajo.component.css']
 })
-export class DialogoInformacionPlanTrabajoComponent implements AfterViewInit {
+export class DialogoInformacionPlanTrabajoComponent implements AfterViewInit,OnInit  {
   
   displayedColumns: string[] = [
     'name', 'weight', 'symbol', 'estricto', 'codigo', 'tituloProyecto',
@@ -21,16 +23,25 @@ export class DialogoInformacionPlanTrabajoComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
-  constructor(private planTrabajoService: ProyectoyproductoService) {}
+  constructor(
+    private planTrabajoService: ProyectoyproductoService,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
   ngOnInit() {
-    this.planTrabajoService.getPlanTrabajo().subscribe((data: MostrarPlan[]) => {
-      // Flatten the array of MostrarPlan and transform each planTrabajo
-      const transformedData = data.flatMap(plan => this.transformData(plan));
-      this.dataSource.data = transformedData;
+    this.planTrabajoService.getPlanTrabajo().subscribe((allPlans: MostrarPlan[]) => {
+      // Filtra el plan de trabajo específico usando el ID
+      const selectedPlan = allPlans.find(plan => plan.id === this.data.planTrabajoId);
+      
+      if (selectedPlan) {
+        const transformedData = this.transformData(selectedPlan);
+        this.dataSource.data = transformedData;
+      } else {
+        console.error('Plan de trabajo no encontrado');
+        this.dataSource.data = [];
+      }
     });
   }
-
   ngAfterViewInit() {
     if (this.paginator) {
       this.dataSource.paginator = this.paginator;

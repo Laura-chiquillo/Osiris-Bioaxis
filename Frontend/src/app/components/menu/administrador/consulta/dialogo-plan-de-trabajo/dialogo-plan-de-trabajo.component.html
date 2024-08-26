@@ -9,12 +9,13 @@
                 </mat-form-field>
             </div>
             <div class="example-form-fields">
-                <mat-form-field class="example-full-width">
-                    <mat-label>Fecha limite</mat-label>
-                    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" formControlName="fecha" />
-                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
+                <mat-form-field class="example-full-width" appearance="fill"> 
+                    <mat-label>Fecha Limite</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="fecha" [min]="fechaMinima">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
             </div>
         </form>
     </div>

@@ -53,7 +53,7 @@ export class DialogoPlanDeTrabajoComponent implements OnInit {
   buttonTitle!: string;
   title!: string;
   hide = true;
-
+  fechaMinima: Date;
   constructor(
     @Inject(MAT_DIALOG_DATA) public dialogData: { title: string, buttonTitle: string },
     private formBuilder: FormBuilder,
@@ -64,6 +64,7 @@ export class DialogoPlanDeTrabajoComponent implements OnInit {
       titulo: ['', [Validators.required]],
       fecha: ['', [Validators.required]],
     });
+    this.fechaMinima = new Date();
   }
 
   async ngOnInit() {
