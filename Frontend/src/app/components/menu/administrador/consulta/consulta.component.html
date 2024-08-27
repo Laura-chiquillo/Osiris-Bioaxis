@@ -77,6 +77,11 @@
                 <td mat-cell *matCellDef="let proyecto"> {{ proyecto.investigador}} </td>
             </ng-container>
             <!-- Estado Column -->
+             
+            <ng-container matColumnDef="lineaInvestigacion">
+              <th mat-header-cell *matHeaderCellDef> Línea de Investigación </th>
+              <td mat-cell *matCellDef="let proyecto"> {{ proyecto.lineaInvestigacion }} </td>
+            </ng-container>
             <ng-container matColumnDef="estadoProceso">
                 <th mat-header-cell *matHeaderCellDef> Proceso </th>
                 <td mat-cell *matCellDef="let proyecto"> {{ proyecto.estadoProceso }} </td>

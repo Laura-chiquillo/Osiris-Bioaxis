@@ -21,7 +21,8 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
-
+import { EstudiantesService } from '../../services/estudiantes';
+import { ParticipantesExternosService } from '../../services/participantesExternos';
 
 @Component({
   selector: 'app-consulta',
@@ -49,7 +50,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
   dataSourceProducto: MatTableDataSource<any>;
 
   displayedColumnsInvestigador: string[] = ['nombre', 'rolinvestigador', 'estado','updated_at','created_at','accion'];
-  displayedColumnsProyecto: string[] = ['codigo', 'lider','estadoProceso','estadoProyecto','updated_at','created_at','accion'];
+  displayedColumnsProyecto: string[] = ['codigo', 'lider','lineaInvestigacion','estadoProceso','estadoProyecto','updated_at','created_at','accion'];
   displayedColumnsProducto: string[] = ['nombre', 'lider','estadoProceso','estadoProducto','updated_at','created_at','accion'];
 
   proyectosData: any[] =[];
@@ -75,6 +76,8 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
     private searchService: SearchService,
     private _snackBar: MatSnackBar,
     private proyectoyproductoService: ProyectoyproductoService,
+    private estudiantesService: EstudiantesService,
+    private participantesExternosService: ParticipantesExternosService,
     public dialog: MatDialog) {
     
     this.dataSourceInvestigador = new MatTableDataSource<any>([]);
@@ -105,20 +108,32 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
     this.dataSourceProducto.paginator = this.paginator3;
   }
 
+  getNombreCompleto(id: string | number, lista: any[]): string {
+    const persona = lista.find(u => u.numerodocumento === id || u.id === id);
+    return persona ? `${persona.nombre} ${persona.apellidos}` : String(id);  
+  }
+
   obtenerProyectos() {
     forkJoin({
       proyectos: this.proyectoyproductoService.getProyectos(),
-      estados: this.proyectoyproductoService.obtenerEstadosProyecto()
+      estados: this.proyectoyproductoService.obtenerEstadosProyecto(),
+      usuarios: this.investigadorService.getUsuarios(),
+      estudiantes: this.estudiantesService.getEstudiantes(),
+      participantesExternos: this.participantesExternosService.getParticipantesExternos()
+
     }).subscribe(
-      ({proyectos , estados}) => {
+      ({proyectos , estados, usuarios, estudiantes, participantesExternos}) => {
 
         this.estadosProyectos = estados;
         const dataSort = proyectos.sort((a, b) => (a.codigo < b.codigo ? -1 : 1));
         this.dataSourceProyecto.data = dataSort.map(data => {
         const estadoProyecto = this.estadosProyectos.find(x => x.id == data.estadoProyecto);
+
+    
           return {
             codigo: data.codigo,
-            investigador: data.investigador,
+            investigador: this.getNombreCompleto(data.investigador, usuarios),
+            lineaInvestigacion: data.lineaInvestigacion,
             observacion: data.observacion,
             estadoProceso: data.estadoProceso,
             estadoProyecto: this.estadosProyectos.filter(x => x.id == data.estado)[0].estado,
@@ -127,14 +142,20 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
           };
         });
         this.proyectosData = dataSort.map(data => {
+        
           return {
             codigo: data.codigo,
-            fecha: data.fecha,
-            titulo: data.estadoProceso,
-            investigador: data.investigador,
-            coinvestigador: data.coinvestigador.join(),
-            estudiantes: data.estudiantes.join(),
-            participantesExternos: data.participantesExternos.join(),
+            titulo: data.titulo,
+            investigador: this.getNombreCompleto(data.investigador, usuarios),
+            coinvestigador: Array.isArray(data.coinvestigador) 
+              ? data.coinvestigador.map((id: string | number) => this.getNombreCompleto(id, usuarios)).join(', ')
+              : this.getNombreCompleto(data.coinvestigador, usuarios),
+            estudiantes: Array.isArray(data.estudiantes) 
+              ? data.estudiantes.map((id: string | number) => this.getNombreCompleto(id, estudiantes)).join(', ')
+              : this.getNombreCompleto(data.estudiantes, estudiantes),
+            participantesExternos: Array.isArray(data.participantesExternos) 
+              ? data.participantesExternos.map((id: string | number) => this.getNombreCompleto(id, participantesExternos)).join(', ')
+              :this.getNombreCompleto(data.participantesExternos, participantesExternos),
             unidadAcademica: data.unidadAcademica,
             area: data.area,
             porcentajeEjecucionCorte: data.porcentajeEjecucionCorte,
@@ -150,7 +171,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
             lineaInvestigacion: data.lineaInvestigacion,
             estadoProceso: data.estadoProceso,
             estadoProyecto: this.estadosProyectos.filter(x => x.id == data.estado)[0].estado,
-            producto: data.producto,
+            producto: Array.isArray(data.producto) ? data.producto.join(', ') : 'Producto no disponible',
             created_at: data.created_at,
             updated_at: data.updated_at
           };
@@ -165,9 +186,13 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
   obtenerProductos() {
     forkJoin({
       productos: this.proyectoyproductoService.getProductos(),
-      estados: this.proyectoyproductoService.obtenerEstadosProducto()
+      estados: this.proyectoyproductoService.obtenerEstadosProducto(),
+      usuarios: this.investigadorService.getUsuarios(),
+      estudiantes: this.estudiantesService.getEstudiantes(),
+      participantesExternos: this.participantesExternosService.getParticipantesExternos()
+
     }).subscribe(
-      ({ productos, estados }) => {
+      ({ productos, estados, usuarios, estudiantes, participantesExternos }) => {
         this.estadosProductos = estados;
         
         const dataSort = productos.sort((a, b) => (a.id < b.id ? -1 : 1));
@@ -175,7 +200,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
           const estadoProducto = this.estadosProductos.find(x => x.id == data.estadoProducto);
           return {
             id: data.id,
-            investigador: data.investigador,
+            investigador: this.getNombreCompleto(data.investigador, usuarios),
             estadoProceso: data.estadoProceso,
             estadoProducto: estadoProducto ? estadoProducto.estado : 'Desconocido',
             created_at: data.created_at,
@@ -184,20 +209,26 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
         });
   
         this.productosData = dataSort.map(data => {
+          
           return {
             id: data.id,
             Soporte: data.Soporte,
             tituloProducto: data.tituloProducto,
-            investigador: data.investigador,
-            coinvestigador: data.coinvestigador.join(),
-            estudiantes: data.estudiantes.join(),
-            participantesExternos: data.participantesExternos.join(),
+            investigador: this.getNombreCompleto(data.investigador, usuarios),
+            coinvestigador: Array.isArray(data.coinvestigador) 
+              ? data.coinvestigador.map((id: string | number) => this.getNombreCompleto(id, usuarios)).join(', ')
+              : this.getNombreCompleto(data.coinvestigador, usuarios),
+            estudiantes: Array.isArray(data.estudiantes) 
+              ? data.estudiantes.map((id: string | number) => this.getNombreCompleto(id, estudiantes)).join(', ')
+              : this.getNombreCompleto(data.estudiantes, estudiantes),
+            participantesExternos: Array.isArray(data.participantesExternos) 
+              ? data.participantesExternos.map((id: string | number) => this.getNombreCompleto(id, participantesExternos)).join(', ')
+              :this.getNombreCompleto(data.participantesExternos, participantesExternos),
             publicacion: data.publicacion,
             porcentanjeAvanFinSemestre: data.porcentanjeAvanFinSemestre,
             observaciones: data.observaciones,
             porcentajeComSemestral: data.porcentajeComSemestral,
             porcentajeRealMensual: data.porcentajeRealMensual,
-            fecha: data.fecha,
             origen: data.origen,
             observacion: data.observacion,
             estadoProceso: data.estadoProceso,
