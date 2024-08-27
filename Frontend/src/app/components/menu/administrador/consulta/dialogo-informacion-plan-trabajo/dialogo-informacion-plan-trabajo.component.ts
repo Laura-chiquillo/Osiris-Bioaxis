@@ -55,6 +55,7 @@ export class DialogoInformacionPlanTrabajoComponent implements AfterViewInit,OnI
       const quartil = productos_asociados.quartil || {};
   
       return {
+        id: this.data.planTrabajoId,
         name: pt.investigador.Grupoinvestigacion ? pt.investigador.Grupoinvestigacion.nombre : '',
         weight: `${pt.investigador.nombre || ''} ${pt.investigador.apellidos || ''}`,
         symbol: typeof pt.investigador.horas_formacion === 'string' 

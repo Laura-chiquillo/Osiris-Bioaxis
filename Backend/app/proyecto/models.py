@@ -574,7 +574,7 @@ class PlanTrabajo(models.Model):
     proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE, null=True, blank=True) 
     horasestricto = models.IntegerField(default=0)
-    rol = models.CharField(max_length=150)
+    rol = models.CharField(max_length=150,blank=True, null=True)
     class Meta:
         db_table = 'proyecto_PlanTrabajo'
  

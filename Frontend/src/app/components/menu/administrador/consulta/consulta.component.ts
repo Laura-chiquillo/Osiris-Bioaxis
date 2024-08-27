@@ -441,28 +441,4 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
     }
 }
 
-
-convertToCSV(objArray: any[]) {
-  const array = [Object.keys(objArray[0])].concat(objArray);
-  return array.map(it => {
-      return Object.values(it).toString();
-  }).join('\n');
-}
-
-downloadCSV(csvContent: string, fileName: string) {
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', fileName);
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-  }
-}
-
-
-
 }

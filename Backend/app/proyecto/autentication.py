@@ -870,6 +870,7 @@ class MostrarPlanTrabajo(APIView):
                 grupoinvestigacion = grupoinvestigacionSerializer(plan.investigador.grupoinvestigacion).data if plan.investigador.grupoinvestigacion else None
 
                 plan_data = {
+                    'id':plan.id,
                     'horasestricto': plan.horasestricto,
                     'rol': plan.rol,
                     'investigador': {
