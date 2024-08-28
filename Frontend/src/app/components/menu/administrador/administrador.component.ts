@@ -51,7 +51,31 @@ export class AdministradorComponent implements OnInit {
       private AutenticacionService:AutenticacionService,
       private dialog: MatDialog,
       private router: Router,
-    ) {}
+    ) {} 
+    
+    getNombreAbreviado(): string {
+      if (this.usuarioSesion) {
+        const nombre = this.usuarioSesion.nombre; // Nombre
+        const apellidos = this.usuarioSesion.apellidos; // Apellidos
+    
+        if (nombre && apellidos) {
+          const nombres = nombre.split(' '); // Dividir el nombre en partes si hay más de un nombre
+          const inicialNombre = nombres[0].charAt(0); // Inicial del primer nombre
+    
+          // Dividir los apellidos y tomar el primer apellido
+          const apellidosPartidos = apellidos.split(' ');
+          const primerApellido = apellidosPartidos.length > 0 ? apellidosPartidos[0] : '';
+    
+          return `${inicialNombre}. ${primerApellido}`;
+        } else if (nombre) {
+          // Solo nombre sin apellidos
+          const inicialNombre = nombre.charAt(0);
+          return `${inicialNombre}.`;
+        }
+      }
+      return ''; // Retornar vacío si no hay datos
+    }
+    
 
     ngOnInit() {
       this.obtenerDatosUsuarioSesion();
