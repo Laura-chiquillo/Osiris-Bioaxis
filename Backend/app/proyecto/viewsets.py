@@ -1,8 +1,11 @@
 import statistics
+from dateutil import parser
+
 from http.client import responses
 from telnetlib import STATUS
 from urllib import response
 from .utils import send_registration_email
+from django.utils import timezone
 
 from django.forms import ValidationError
 from rest_framework import generics, status, serializers
@@ -739,21 +742,25 @@ class planTrabajoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 class configuracionPlanTrabajoList(generics.ListCreateAPIView):
     queryset = ConfiguracionPlanTrabajo.objects.all()
     serializer_class = configuracionPlanTrabajoSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        for config in queryset:
+            if config.fecha < timezone.now().date():
+                config.estado_fecha = False
+                config.save()
+        return queryset
     
     def post(self, request, *args, **kwargs):
         new_id = ConfiguracionPlanTrabajo.objects.count() + 1
 
-        # Asegurar que 'estado' sea un booleano
-        estado = request.data.get('estado')
-        if isinstance(estado, str):
-            estado = estado.lower() == 'true'
-        
         # Crear el objeto ConfiguracionPlanTrabajo sin el campo ManyToMany
         admin_data = {
             'id': str(new_id),
             'titulo': request.data.get('titulo'),
             'fecha': request.data.get('fecha'),
-            'estado': estado,
+            'estado_manual': True,
+            'estado_fecha': True,
         }
         admin = ConfiguracionPlanTrabajo.objects.create(**admin_data)
         
@@ -772,21 +779,37 @@ class configuracionPlanTrabajoRetrieveUpdateDestroy(generics.RetrieveUpdateDestr
     queryset = ConfiguracionPlanTrabajo.objects.all()
     serializer_class = configuracionPlanTrabajoSerializer
 
+    def get_object(self):
+        obj = super().get_object()
+        obj.actualizar_estado_fecha()
+        return obj
+    
     def put(self, request, *args, **kwargs):
-        obj = ConfiguracionPlanTrabajo.objects.get(pk=request.data.get('id'))
+        instance = self.get_object()
+
+        if 'estado_manual' in request.data:
+            instance.estado_manual = request.data.get('estado_manual')
         
         # Actualiza solo los campos proporcionados
         if 'titulo' in request.data:
-            obj.titulo = request.data.get('titulo')
-        if 'estado' in request.data:
-            obj.estado = request.data.get('estado')
-        
+            instance.titulo = request.data.get('titulo')
+
+        if 'fecha' in request.data:
+            fecha_str = request.data.get('fecha')
+            try:
+                fecha_date = parser.parse(fecha_str).date()
+                instance.fecha = fecha_date
+                instance.actualizar_estado_fecha()
+            except ValueError:
+                return Response({"error": "Formato de fecha inválido"}, status=status.HTTP_400_BAD_REQUEST)
+
+        instance.save()
         # Solo actualiza la relación ManyToMany si se proporciona una lista de IDs
         plan_trabajo_ids = request.data.get('planTrabajo', None)
         if plan_trabajo_ids is not None:
-            obj.planTrabajo.set(plan_trabajo_ids)
+            instance.planTrabajo.set(plan_trabajo_ids)
         
-        obj.save()
+        instance.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

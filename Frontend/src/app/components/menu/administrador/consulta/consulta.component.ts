@@ -390,7 +390,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
     }
     
     // Cambia el estado
-    item.estado = !item.estado;
+      item.estado_manual = !item.estado_manual;
   
     // Llama al servicio para actualizar el estado
     this.proyectoyproductoService.editarconfigplanTrabajo(item).subscribe(
@@ -415,6 +415,9 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
         id: x.id,
         plan: x.titulo,
         estado: x.estado,
+        estado_manual: x.estado_manual,
+        estado_fecha: x.estado_fecha,
+        fecha: new Date(x.fecha),
         planTrabajo: x.planTrabajo // Incluye la información detallada del plan
       }));
       console.log("asignacion:", this.item); // Verifica la asignación de datos

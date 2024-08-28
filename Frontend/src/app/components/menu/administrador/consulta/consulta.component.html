@@ -31,7 +31,8 @@
                   </button>
                 </td>                  
                 <td>
-                  <mat-slide-toggle [(ngModel)]="item.estado" (toggleChange)="cambiarEstadoPlanTrabajo(item)"></mat-slide-toggle>
+                  <mat-slide-toggle [(ngModel)]="item.estado_manual" (toggleChange)="cambiarEstadoPlanTrabajo(item)" [disabled]="!item.estado_fecha"></mat-slide-toggle>
+                  <span *ngIf="!item.estado_fecha" class="estado-vencido">Vencido</span>
                 </td>
               </tr>
             </tbody>

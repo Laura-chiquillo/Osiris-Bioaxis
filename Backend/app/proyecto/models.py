@@ -1,4 +1,5 @@
 import datetime
+from dateutil import parser
 
 from django.contrib.auth.hashers import make_password
 from django.db import models, transaction
@@ -580,9 +581,21 @@ class PlanTrabajo(models.Model):
  
 class ConfiguracionPlanTrabajo(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
-    fecha = models.DateField(max_length=50)
-    estado = models.BooleanField(default=False)
+    fecha = models.DateField()
+    estado_manual = models.BooleanField(default=True)
+    estado_fecha = models.BooleanField(default=True)
     titulo = models.CharField(max_length=150)
     planTrabajo = models.ManyToManyField(PlanTrabajo)
+
     class Meta:
         db_table = 'proyecto_ConfiguracionPlanTrabajo'
+
+    @property
+    def estado(self):
+        return self.estado_manual and self.estado_fecha
+
+    def actualizar_estado_fecha(self):
+        if isinstance(self.fecha, str):
+            self.fecha = parser.parse(self.fecha).date()
+        self.estado_fecha = self.fecha >= timezone.now().date()
+        self.save()

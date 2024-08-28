@@ -234,6 +234,9 @@ class planTrabajoSerializer(serializers.ModelSerializer):
 
 class configuracionPlanTrabajoSerializer(serializers.ModelSerializer):
     planTrabajo = planTrabajoSerializer(read_only=True, many=True)
+    estado = serializers.BooleanField(read_only=True)
+
     class Meta:
         model = ConfiguracionPlanTrabajo
-        fields = '__all__'
+        fields = ['id', 'fecha', 'estado_manual', 'estado_fecha', 'titulo', 'planTrabajo', 'estado']
+        read_only_fields = ('estado_fecha', 'estado')
