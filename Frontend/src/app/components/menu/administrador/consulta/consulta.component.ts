@@ -500,6 +500,52 @@ downloadCSV(csvContent: string, fileName: string) {
   }
 }
 
+openDialogoDetalle(data: any, tipo: string): void {
+  let dialogData;
+  
+  // Agrega logs para verificar los datos iniciales
+  console.log('Datos de entrada:', data);
+  console.log('Tipo:', tipo);
+
+  if (tipo === 'Proyecto') {
+    // Asegúrate de que `this.proyectosData` esté bien poblado
+    console.log('Datos de proyectos:', this.proyectosData);
+    
+    dialogData = this.proyectosData.find(x => x.codigo === data.codigo);
+  } else {
+    // Asegúrate de que `this.productosData` esté bien poblado
+    console.log('Datos de productos:', this.productosData);
+    
+    dialogData = this.productosData.find(x => x.id === data.id);
+  }
+
+  // Verifica el resultado de la búsqueda
+  console.log('Resultado de la búsqueda:', dialogData);
+
+  // Asegúrate de que los campos de selección múltiple sean arrays
+  if (dialogData) {
+    dialogData.coinvestigador = Array.isArray(dialogData.coinvestigador) ? dialogData.coinvestigador : [];
+    dialogData.estudiantes = Array.isArray(dialogData.estudiantes) ? dialogData.estudiantes : [];
+    dialogData.participantesExternos = Array.isArray(dialogData.participantesExternos) ? dialogData.participantesExternos : [];
+    
+    console.log('Datos del diálogo después de la verificación:', dialogData); // Verifica los datos después de la conversión
+  } else {
+    console.error('No se encontró dialogData');
+  }
+
+  const dialogRef = this.dialog.open(DialogoDetalleComponent, {
+    data: {
+      title: 'Detalle ' + tipo,
+      buttonTitle: 'CREAR',
+      type: tipo,
+      data: dialogData,
+      isEdit: false 
+    },
+    disableClose: true,
+    panelClass: "dialog-responsive"
+  });
+
+}
 
 
 }
