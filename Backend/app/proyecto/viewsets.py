@@ -733,11 +733,11 @@ class planTrabajoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = planTrabajoSerializer
 
     def put(self, request, *args, **kwargs):
-        obj = PlanTrabajo.objects.get(pk=request.data.get('id'))
+        obj = PlanTrabajo.objects.get(pk=kwargs['pk'])
         obj.rol = request.data.get('rol')
         obj.horasestricto = request.data.get('horasestricto')
         obj.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "Plan de trabajo actualizado correctamente."}, status=status.HTTP_200_OK)
 
 class configuracionPlanTrabajoList(generics.ListCreateAPIView):
     queryset = ConfiguracionPlanTrabajo.objects.all()

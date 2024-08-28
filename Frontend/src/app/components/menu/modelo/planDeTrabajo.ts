@@ -20,6 +20,7 @@ export interface GrupoInvestigacion {
 }
 
 export interface Investigador {
+    numerodocumento: string;
     nombre: string;
     apellidos: string;
     horas_formacion: number;
@@ -53,6 +54,7 @@ export interface Proyecto {
 }
 
 export interface PlanDeTrabajo {
+    id: string;
     horasestricto: number;
     rol: string;
     investigador: Investigador;
@@ -68,6 +70,7 @@ export interface MostrarPlan {
 }
 
 export interface PlanTableData {
+    id: number;
     name: string;
     weight: string;
     symbol: number;
@@ -104,5 +107,11 @@ export interface PlanTableData {
     titulo: string;
     estado: boolean;
     planTrabajo: PlanDeTrabajo[];
+  }
+  
+  export interface PlanDeTrabajoUpdate {
+    id: string;
+    rol: string;
+    horasestricto: number;
   }
   

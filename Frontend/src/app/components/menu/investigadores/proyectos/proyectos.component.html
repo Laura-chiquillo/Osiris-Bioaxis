@@ -20,6 +20,15 @@
               <td mat-cell *matCellDef="let element"> {{element.fecha | date}} </td>
             </ng-container>
         
+            <ng-container matColumnDef="editar">
+              <th mat-header-cell *matHeaderCellDef> Editar </th>
+              <td mat-cell *matCellDef="let element">
+                  <button mat-button (click)="editarElemento(element, 'tipoPorDefecto', false)" *ngIf="element.estado !== false">
+                      <mat-icon>edit</mat-icon> 
+                  </button>
+              </td>
+          </ng-container>                               
+
             <!-- Expand Column -->
             <ng-container matColumnDef="expand">
               <th mat-header-cell *matHeaderCellDef></th>

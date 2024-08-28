@@ -4,7 +4,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Producto } from '../modelo/productos';
 import { Proyecto } from '../modelo/proyectos';
-import { MostrarPlan } from '../modelo/planDeTrabajo';
+import { MostrarPlan,PlanDeTrabajoUpdate } from '../modelo/planDeTrabajo';
 import { ConfigPlanTrabajo } from '../modelo/plan';
 import { AutenticacionService } from './autenticacion';
 @Injectable({
@@ -296,6 +296,10 @@ export class ProyectoyproductoService {
     return this.http.post<any>(this.registrarplanTrabajo, registro);
   }
 
+  updatePlanTrabajo(planTrabajo: PlanDeTrabajoUpdate): Observable<any> {
+    return this.http.put(`${this.registrarplanTrabajo}/${planTrabajo.id}`, planTrabajo);
+}
+  
   private planTrabajo = 'http://localhost:8000/mostrar-plan-trabajo';
 
   getPlanTrabajo(): Observable<MostrarPlan[]> {

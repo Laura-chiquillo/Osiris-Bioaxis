@@ -60,6 +60,7 @@ import { ParticipantesExternosService } from '../../services/participantesExtern
 import { DialogoCreacionParticipantesComponent } from '../../dialogo-creacion-participantes/dialogo-creacion-participantes.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DialogoConfiguracionEntregableComponent } from './dialogo-configuracion-entregable/dialogo-configuracion-entregable.component';
+import { DialogoEditarPlanTrabajoComponent } from './dialogo-editar-plan-trabajo/dialogo-editar-plan-trabajo.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DialogoAvanceEntregableComponent } from './dialogo-avance-entregable/dialogo-avance-entregable.component';
 import { DialogoDetalleComponent } from '../../administrador/control/dialogo-detalle/dialogo-detalle.component';
@@ -1698,7 +1699,7 @@ thumbLabel6 = false;
   //--------------------------------------------------------------------------------------
 
   displayedColumnas: string[] = ['select', 'titulo', 'tituloproducto','rol', 'horasestricto'];
-  displayedColumn: string[] = ['titulo', 'fecha', 'expand'];
+  displayedColumn: string[] = ['titulo', 'fecha', 'editar','expand'];
   selection = new SelectionModel<any>(true, []);
   expandedElements: any | null = null;
   selectedPlanId: string = '';
@@ -1708,10 +1709,14 @@ thumbLabel6 = false;
     this.investigatorService.getmostrarPyP().subscribe((data: Person[]) => {
         const userData = this.AutenticacionService.obtenerDatosUsuario();
         const userId = userData ? userData.numerodocumento : '';
-        this.data = this.transformData(data, userId); // Usamos 'this.data' en lugar de 'dataSources.data'
+        this.data = this.transformData(data, userId);
     });
   }
 
+  @ViewChild('paginator1') paginator1!: MatPaginator; 
+  @ViewChild('paginator2') paginator2!: MatPaginator; 
+
+  
   transformData(data: Person[], userId: string): any[] {
     const transformedData: any[] = [];
   
@@ -1818,20 +1823,23 @@ thumbLabel6 = false;
   
   guardar() {
     const datosAGuardar = this.data
-      .filter(row => row.isSelected && row.rol && row.horasestricto !== undefined) // Filtrar datos con horasestricto definido
+      .filter(row => row.isSelected && row.horasestricto !== undefined) // Filtrar datos con horasestricto definido
       .map(row => ({
         configPlanTrabajoId: this.selectedPlanId || this.idConfiguracion,
         horasEstricto: row.horasestricto || 0,  // Usa 0 si horasestricto es null o undefined
         investigadorId: row.numerodocumento,
         productoId: row.productoId || null,
         proyectoId: row.proyectoId,
-        rol: row.rol
+        rol: row.productoId ? row.rol : ''  // Solo asignar rol si hay producto
       }));
-  
+
     console.log('Datos para guardar:', datosAGuardar);
-  
-    if (datosAGuardar.length > 0) {
-      this.ProyectoyproductoService.creargetplanTrabajo(datosAGuardar).subscribe(response => {
+
+    // Comprobar que haya datos para guardar
+    const datosValidos = datosAGuardar.filter(dato => dato.productoId ? dato.rol : true); // Asegurarse de que si hay producto, el rol esté presente
+
+    if (datosValidos.length > 0) {
+      this.ProyectoyproductoService.creargetplanTrabajo(datosValidos).subscribe(response => {
         console.log('Datos guardados exitosamente', response);
         
         Swal.fire({
@@ -1857,7 +1865,23 @@ thumbLabel6 = false;
       console.warn('No hay datos seleccionados o completos para guardar');
     }
   }
+
   
+  editarElemento(data: any = undefined, type:string, detail:boolean): void {
+    const dialogRef = this.dialog.open(DialogoEditarPlanTrabajoComponent, {
+      data: {
+        type: type,
+        data: data,
+        detail: detail,
+        planTrabajoId: data.id //línea para pasar el ID del plan de trabajo
+      },
+      width: '80%'
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+      } 
+    });
+  }
   
 }
 
