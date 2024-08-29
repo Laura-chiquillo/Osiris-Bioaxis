@@ -66,6 +66,7 @@
                   <button matTooltip="Procesos" matTooltipPosition="above" style="float: right;right: 45px;top:8px" mat-mini-fab color="primary" (click)="openDialogoEstadistica(proyectosData,'Proyectos',true)" aria-label="Example icon button with a delete icon">
                     <mat-icon>pie_chart</mat-icon>
                   </button>
+
                 </div>
               </div>
             </div>
@@ -111,7 +112,10 @@
                   </button>
                   <button  matTooltip="Descargar" matTooltipPosition="above" mat-icon-button color="primary" (click)="exportAsXLSX(proyecto,'Proyectos')">
                     <mat-icon>download</mat-icon>
-                  </button>
+                  </button> 
+                  <button matTooltip="Trazabilidad" matTooltipPosition="above" mat-icon-button color="primary" (click)="openDialogoTrazabilidad(proyecto, 'Proyecto', true)">
+                    <mat-icon>swap_calls</mat-icon>
+                  </button>                  
                 </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumnsProyecto"></tr>
@@ -175,6 +179,9 @@
                         <button matTooltip="Descargar" matTooltipPosition="above" mat-icon-button color="accent" (click)="exportAsXLSX(producto,'Productos')">
                             <mat-icon>download</mat-icon>
                         </button>
+                        <button matTooltip="Trazabilidad" matTooltipPosition="above" mat-icon-button color="primary" (click)="openDialogoTrazabilidad(producto, 'Producto', true)">
+                          <mat-icon>swap_calls</mat-icon>
+                        </button>  
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumnsProducto"></tr>

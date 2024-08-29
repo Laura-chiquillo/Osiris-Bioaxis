@@ -17,7 +17,7 @@ import base64
 from django.db.models import Q
 from django.core.files.base import ContentFile
 
-from .models import (Apropiacion, Articulos, Capitulos, Consultoria, Contenido,Imagen,
+from .models import (Apropiacion, Articulos, Capitulos, Consultoria, Contenido,Imagen, Notificaciones,
                      Contrato, EntidadPostulo, EstadoProyecto,
                      Estudiantes, Eventos, Financiacion, Industrial, ConfiguracionEntregableProducto, ConfiguracionEntregableProyecto, 
                      Investigador, Libros, Licencia, ListaProducto, Maestria, AvanceEntregableProducto, AvanceEntregableProyecto,
@@ -1109,11 +1109,87 @@ class MostrarPyPdeInvestigador(APIView):
 
         return JsonResponse(data, safe=False)
 
+class Trazabilidad(APIView):
+    def get(self, request, *args, **kwargs):
+        data = {
+            'proyectos': [],
+            'productos': []
+        }
 
+        # Obtener todos los proyectos
+        proyectos = Proyecto.objects.all()
 
+        for proyecto in proyectos:
+            # Preparar datos del proyecto
+            proyecto_data = {
+                'codigo': proyecto.codigo,
+                'titulo': proyecto.titulo,
+                'notificaciones': []
+            }
+            
+            # Obtener todas las notificaciones relacionadas con el proyecto
+            notificaciones = Notificaciones.objects.filter(
+                asunto__icontains=proyecto.codigo
+            ).distinct()
 
+            # Agregar las notificaciones al proyecto
+            if notificaciones.exists():
+                proyecto_data['notificaciones'] = [{
+                    'id': notificacion.id,
+                    'asunto': notificacion.asunto,
+                    'remitente': notificacion.remitente,
+                    'destinatario': notificacion.destinatario,
+                    'mensaje': notificacion.mensaje,
+                    'estado': notificacion.estado,
+                    'created_at': notificacion.created_at.isoformat(),
+                    'updated_at': notificacion.updated_at.isoformat(),
+                } for notificacion in notificaciones]
+            else:
+                proyecto_data['notificaciones'] = [{'id': None, 'asunto': 'Sin notificaciones'}]
 
+            data['proyectos'].append(proyecto_data)
 
+            # Obtener todos los productos asociados al proyecto
+            productos = Producto.objects.filter(proyecto=proyecto)
 
+            # Crear un diccionario para las notificaciones de cada producto
+            notificaciones_por_producto = {producto.id: [] for producto in productos}
 
+            # Obtener todas las notificaciones relevantes para productos
+            todas_notificaciones = Notificaciones.objects.filter(
+                asunto__icontains="Producto_02"
+            ).distinct()
 
+            for producto in productos:
+                if producto.id == "Producto_02":
+                    # Asignar todas las notificaciones al producto Producto_02
+                    notificaciones_por_producto[producto.id] = [{
+                        'id': notificacion.id,
+                        'asunto': notificacion.asunto,
+                        'remitente': notificacion.remitente,
+                        'destinatario': notificacion.destinatario,
+                        'mensaje': notificacion.mensaje,
+                        'estado': notificacion.estado,
+                        'created_at': notificacion.created_at.isoformat(),
+                        'updated_at': notificacion.updated_at.isoformat(),
+                    } for notificacion in todas_notificaciones]
+                else:
+                    # Para otros productos, asignar una notificación de "Sin notificaciones"
+                    notificaciones_por_producto[producto.id] = [{'id': None, 'asunto': 'Sin notificaciones'}]
+
+            # Construir la lista de productos con sus notificaciones
+            for producto in productos:
+                data['productos'].append({
+                    'id': producto.id,
+                    'tituloProducto': producto.tituloProducto,
+                    'notificaciones': notificaciones_por_producto[producto.id],
+                })
+
+        return JsonResponse(data, safe=False)
+
+    
+    
+    
+    
+    
+   
