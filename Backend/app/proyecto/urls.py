@@ -2,7 +2,7 @@ from django.urls import path
 
 from .autentication import (ActualizarDatosUsuario, CrearNuevoProducto,
                             CrearProyecto, CustomAuthToken,MostrarPlanTrabajo,
-                            MostrarInvestigadores, MostrarProductos, MostrarPyPdeInvestigador)
+                            MostrarInvestigadores, MostrarProductos, MostrarPyPdeInvestigador, Trazabilidad)
 from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
                        articuloRetrieveUpdateDestroy, articulosList,
                        avanceProyectoList, avanceProyectoRetrieveUpdateDestroy,
@@ -50,6 +50,9 @@ from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
                        ResetPasswordConfirmViewSet, ResetPasswordFormViewSet, planTrabajoList, planTrabajoRetrieveUpdateDestroy, configuracionPlanTrabajoList, configuracionPlanTrabajoRetrieveUpdateDestroy)
 
 urlpatterns = [
+    path('trazabilidad', Trazabilidad.as_view(), name='create-trazabilidad'),
+
+    
     path('custom-token-auth/', CustomAuthToken.as_view(), name='custom_token_auth'),
     path("CrearProyecto", CrearProyecto.as_view(), name="Crear-Proyecto"),
     path("CrearProducto", CrearNuevoProducto.as_view(), name="Crear-NuevoProducto"),

@@ -13,8 +13,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import * as XLSX from 'xlsx';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
-import {ConfigPlanTrabajo,Investigador,PlanTrabajo,Proyecto,ProductoAsociado} from '../../modelo/plan';
 import { DialogoEstadisticaComponent } from './dialogo-estadistica/dialogo-estadistica.component';
+import { DialogoTrazabilidadComponent } from './dialogo-trazabilidad/dialogo-trazabilidad.component';
 import { DialogoPlanDeTrabajoComponent } from './dialogo-plan-de-trabajo/dialogo-plan-de-trabajo.component';
 import { DialogoInformacionPlanTrabajoComponent } from './dialogo-informacion-plan-trabajo/dialogo-informacion-plan-trabajo.component';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -547,6 +547,22 @@ openDialogoDetalle(data: any, tipo: string): void {
 
 }
 
+// Trazabilidad
+openDialogoTrazabilidad(data: any, type: string, detail: boolean): void {
+  const dialogRef = this.dialog.open(DialogoTrazabilidadComponent, {
+    data: {
+      type: type,
+      data: data,
+      detail: detail,
+    },
+    width: '80%',
+    height: '90%',
+  });
+  dialogRef.afterClosed().subscribe((result) => {
+    if (result) {
+    }
+  });
+}
 
 }
  

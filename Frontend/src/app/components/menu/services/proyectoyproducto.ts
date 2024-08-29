@@ -310,6 +310,9 @@ export class ProyectoyproductoService {
     return this.http.get<ConfigPlanTrabajo>(this.planTrabajo);
   }
 
-
-
+  //Trazabilidad
+  private trazabilidad = 'http://localhost:8000/trazabilidad';
+  getTrazabilidadData(): Observable<any> {
+    return this.http.get<any>(this.trazabilidad);
+  }
 }
