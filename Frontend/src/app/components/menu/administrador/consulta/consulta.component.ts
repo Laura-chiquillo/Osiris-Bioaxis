@@ -71,7 +71,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
     descargar: 'Descargar',
     estado: 'Estado',
     fecha:'Fecha',
-    editar:'Editar Fecha'
+    editar:'Editar Titulo y Fecha'
   };
 
   item: any[] =[];
@@ -428,21 +428,21 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
   openDialogoEditarFecha(item: any): void {
     const dialogRef = this.dialog.open(DialogoEditarFechaComponent, {
       width: '300px',
-      data: { id: item.id, fecha: item.fecha }
+      data: { id: item.id, fecha: item.fecha , titulo: item.plan }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.proyectoyproductoService.editarconfigplanTrabajo(result).subscribe(
           () => {
-            this._snackBar.open('Fecha actualizada correctamente', 'Cerrar', {
+            this._snackBar.open('Fecha y Título actualizados correctamente', 'Cerrar', {
               duration: 2000,
             });
             this.obtenerPlanTrabajo(); // Refresh the data
           },
           error => {
-            console.error('Error al actualizar la fecha:', error);
-            this._snackBar.open('Error al actualizar la fecha', 'Cerrar', {
+            console.error('Error al actualizar la fecha y el Titulo:', error);
+            this._snackBar.open('Error al actualizar la fecha´y el Titulo', 'Cerrar', {
               duration: 2000,
             });
           }

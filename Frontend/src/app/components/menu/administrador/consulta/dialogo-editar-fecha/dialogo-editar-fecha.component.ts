@@ -41,7 +41,9 @@ export class DialogoEditarFechaComponent {
   ) {
     this.form = this.fb.group({
       id: [data.id],
-      fecha: [moment(data.fecha, 'YYYY-MM-DD').toDate(), Validators.required]
+      fecha: [moment(data.fecha, 'YYYY-MM-DD').toDate(), Validators.required],
+      titulo: [data.titulo, Validators.required] // Añadir campo para el título
+
     });
     this.fechaMinima = new Date();
   }
