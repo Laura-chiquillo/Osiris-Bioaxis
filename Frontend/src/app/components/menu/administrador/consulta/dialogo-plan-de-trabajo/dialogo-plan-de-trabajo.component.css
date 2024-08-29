@@ -23,7 +23,7 @@
 
 /* Estilo para el campo de fecha */
 .mat-form-field .mat-datepicker-toggle {
-  color: #00796b; /* Color del icono del calendario */
+  color: #6AABA0; /* Color del icono del calendario */
 }
 
 .mat-form-field .mat-form-field-infix {
@@ -41,14 +41,14 @@
 /* Estilo para los botones de acción */
 .dialog-action-button {
   margin-left: 8px;
-  color: #00796b; /* Color del texto del botón */
+  color: #6AABA0; /* Color del texto del botón */
   font-weight: 500;
   border-radius: 4px; /* Bordes redondeados */
   transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave */
 }
 
 .dialog-action-button:hover {
-  background-color: #004d40; /* Color de fondo en hover */
+  background-color: #6AABA0; /* Color de fondo en hover */
   color: #ffffff; /* Color del texto en hover */
 }
 

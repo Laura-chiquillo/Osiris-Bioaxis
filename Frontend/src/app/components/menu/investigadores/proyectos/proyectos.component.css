@@ -754,3 +754,118 @@ tr.example-element-row:not(.example-expanded-row):active {
 .example-element-description-attribution {
   opacity: 0.5;
 }
+
+
+/*-------------------------------------------+*/
+/* Contenedor principal */
+.work-plan-container {
+  padding: 20px;
+  background-color: #f7f7f7; /* Fondo más claro para destacar el contenido */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave para profundidad */
+}
+
+/* Título del plan de trabajo */
+.work-plan-title {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center; /* Centrar el título */
+  font-weight: bold;
+}
+
+/* Contenedor de la tabla */
+.table-container {
+  overflow-x: auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombra ligera para destacar la tabla */
+  margin-bottom: 20px;
+}
+
+/* Estilos de las celdas y encabezados de la tabla */
+th.mat-header-cell {
+  background-color: #6AABA0;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+td.mat-cell {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.mat-column-expand {
+  width: 48px;
+  text-align: center;
+}
+
+.expanded-row-detail {
+  overflow: hidden;
+  margin-top: 20px;
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Botones de acción */
+button.mat-icon-button {
+  color: #6AABA0; /* Color de los íconos */
+  margin-left: 8px; /* Espaciado entre botones */
+}
+
+/* Botón "Guardar" */
+.save-button {
+  margin-top: 20px;
+  width: 100%;
+  background-color: #6AABA0;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.save-button:hover {
+  background-color: #5b9987;
+}
+
+/* Estilo de la fila expandida */
+.example-detail-row {
+  background-color: #f9f9f9;
+}
+
+.example-detail-row.expanded-row {
+  background-color: #efefef;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* Añadir margen al botón "Agregar Plan de trabajo" */
+.mat-column-expand button {
+  margin-left: auto; /* Separar botón de agregar hacia la derecha */
+  margin-right: auto; /* Centrar botón en su celda */
+  display: block;
+}
+
+/* Estilo de celda para mejorar visualización */
+td.mat-cell {
+  vertical-align: middle;
+  padding: 10px 15px; /* Ajuste de relleno */
+  font-size: 14px; /* Tamaño de fuente ajustado para mayor legibilidad */
+}
+
+/* Estilo para los botones de editar y agregar plan de trabajo */
+button.mat-icon-button {
+  color: #6AABA0;
+  transition: background-color 0.3s;
+}
+
+button.mat-icon-button:hover {
+  background-color: rgba(106, 171, 160, 0.1);
+}
