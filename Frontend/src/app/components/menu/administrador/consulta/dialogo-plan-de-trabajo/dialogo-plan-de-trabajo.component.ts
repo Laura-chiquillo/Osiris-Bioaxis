@@ -98,10 +98,15 @@ export class DialogoPlanDeTrabajoComponent implements OnInit {
   guardarConfiguracion() {
     if (this.registroForm.valid) {
       console.log('Formulario válido. Procediendo a guardar...');
-      const fecha = this.fecha?.value ? this.formatDateToISO(new Date(this.fecha?.value)) : '';
+      const fecha = this.fecha?.value ? new Date(this.fecha?.value) : new Date();
+      // Establece la fecha límite al final del día
+      fecha.setHours(23, 59, 59, 999);
+  
+      const fechaISO = this.formatDateToISO(fecha);
+
       const configuracion: ConfiguracionPlanTrabajo = {
         titulo: this.titulo?.value,
-        fecha: fecha,
+        fecha: fechaISO,
         estado: "true"
       };
       this.ProyectoyproductoService.creargetconfigplanTrabajo(configuracion).subscribe(
