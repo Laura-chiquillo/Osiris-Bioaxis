@@ -72,11 +72,13 @@ procesaNotificaciones() {
       // Encuentra el usuario correspondiente al remitente de la notificación
       const user = this.usuariosData.find(data => data.numerodocumento === x.remitente);
 
+      const remitenteNombre = user ? `${user.nombre} ${user.apellidos} ${user.correo}` : 'Remitente desconocido';
+
       // Retorna un nuevo objeto con los datos de la notificación y la información del remitente
       return {
         asunto: x.asunto,
         mensaje: x.mensaje,
-        remitente: `${user.nombre} ${user.apellidos} ${user.correo}`,
+        remitente: remitenteNombre,
         estado: x.estado,
         created_at: x.created_at,
       }
