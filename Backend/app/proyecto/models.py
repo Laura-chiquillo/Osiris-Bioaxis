@@ -584,7 +584,7 @@ class ConfiguracionPlanTrabajo(models.Model):
     fecha = models.DateField()
     estado_manual = models.BooleanField(default=True)
     estado_fecha = models.BooleanField(default=True)
-    titulo = models.CharField(max_length=150)
+    titulo = models.CharField(max_length=250)
     planTrabajo = models.ManyToManyField(PlanTrabajo)
 
     class Meta:

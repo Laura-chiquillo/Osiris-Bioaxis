@@ -13,6 +13,8 @@
                 <th>{{ tableHeaders.informacion }}</th>
                 <th>{{ tableHeaders.descargar }}</th>
                 <th>{{ tableHeaders.estado }}</th>
+                <th>{{ tableHeaders.fecha }}</th>
+                <th>{{ tableHeaders.editar }}</th>
               </tr>
             </thead>
             <tbody>
@@ -33,6 +35,12 @@
                 <td>
                   <mat-slide-toggle [(ngModel)]="item.estado_manual" (toggleChange)="cambiarEstadoPlanTrabajo(item)" [disabled]="!item.estado_fecha"></mat-slide-toggle>
                   <span *ngIf="!item.estado_fecha" class="estado-vencido">Vencido</span>
+                </td>
+                <td>{{ item.fecha | date:'dd/MM/yyyy' }}</td>
+                <td>
+                  <button matTooltip="Editar fecha" matTooltipPosition="above" mat-icon-button color="primary" (click)="openDialogoEditarFecha(item)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
                 </td>
               </tr>
             </tbody>
