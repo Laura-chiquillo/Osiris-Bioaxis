@@ -13,6 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from './components/shared/shared.module';
 import { ResetPasswordDialogComponent } from './components/menu/navbar/reset-password-dialog/reset-password-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -26,7 +27,7 @@ import { MatDialogModule } from '@angular/material/dialog';
         FormsModule,
         MatSlideToggleModule,
         MatDialogModule,
-        CommonModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        CommonModule,MatNativeDateModule,], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { 
    
 }

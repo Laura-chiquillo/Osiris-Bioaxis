@@ -24,7 +24,7 @@ import { forkJoin } from 'rxjs';
 import { EstudiantesService } from '../../services/estudiantes';
 import { ParticipantesExternosService } from '../../services/participantesExternos';
 import { DialogoDetalleComponent } from '../control/dialogo-detalle/dialogo-detalle.component';
-
+import { DialogoEditarFechaComponent } from './dialogo-editar-fecha/dialogo-editar-fecha.component';
 @Component({
   selector: 'app-consulta',
   templateUrl: './consulta.component.html',
@@ -69,7 +69,9 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
     planTrabajo: 'Plan de trabajo',
     informacion: 'Información',
     descargar: 'Descargar',
-    estado: 'Estado'
+    estado: 'Estado',
+    fecha:'Fecha',
+    editar:'Editar Titulo y Fecha'
   };
 
   item: any[] =[];
@@ -417,12 +419,38 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
         estado: x.estado,
         estado_manual: x.estado_manual,
         estado_fecha: x.estado_fecha,
-        fecha: new Date(x.fecha),
+        fecha: x.fecha,
         planTrabajo: x.planTrabajo // Incluye la información detallada del plan
       }));
       console.log("asignacion:", this.item); // Verifica la asignación de datos
     });
   }
+  openDialogoEditarFecha(item: any): void {
+    const dialogRef = this.dialog.open(DialogoEditarFechaComponent, {
+      width: '300px',
+      data: { id: item.id, fecha: item.fecha , titulo: item.plan }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.proyectoyproductoService.editarconfigplanTrabajo(result).subscribe(
+          () => {
+            this._snackBar.open('Fecha y Título actualizados correctamente', 'Cerrar', {
+              duration: 2000,
+            });
+            this.obtenerPlanTrabajo(); // Refresh the data
+          },
+          error => {
+            console.error('Error al actualizar la fecha y el Titulo:', error);
+            this._snackBar.open('Error al actualizar la fecha´y el Titulo', 'Cerrar', {
+              duration: 2000,
+            });
+          }
+        );
+      }
+    });
+  }
+
 
   descargarPlanTrabajo(item: any): void {
     if (Array.isArray(item.planTrabajo) && item.planTrabajo.length > 0) {
