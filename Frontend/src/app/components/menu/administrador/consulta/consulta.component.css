@@ -308,3 +308,9 @@ table.mat-table {
 }
 
 
+.action-buttons {
+  display: flex;
+  gap: 8px; /* Ajusta el espacio entre los botones si es necesario */
+  justify-content: center; /* Centra los botones dentro de la celda */
+  align-items: center; /* Alinea verticalmente los botones */
+}
