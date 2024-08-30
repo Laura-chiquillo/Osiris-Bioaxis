@@ -45,6 +45,7 @@ export class ConsultasComponent {
 
   proyectosData: any[] =[];
   productosData: any[] =[];
+  usuarios: any[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatPaginator) paginator2!: MatPaginator;
@@ -60,12 +61,15 @@ export class ConsultasComponent {
     
     forkJoin([
       this.ProyectoyproductoService.getProyectos(),
-      this.ProyectoyproductoService.getProductos()
-    ]).subscribe(([proyectos, productos]) => {
+      this.ProyectoyproductoService.getProductos(),
+      this.InvestigadorService.getInvestigadores() 
+
+    ]).subscribe(([proyectos, productos, investigadores]) => {
 
       this.proyectosData = proyectos;
       this.productosData = productos;
-
+      this.usuarios = investigadores;
+      
       const productosConTipo = productos.map(producto => ({
         ...producto,
         tipo: 'Producto',
@@ -92,6 +96,8 @@ export class ConsultasComponent {
       // Asignar los datos combinados a dataSource
       this.dataSource.data = combinedData;
     });
+
+    
     //INVESTIGADORES
 
     this.InvestigadorService.getInvestigadores().subscribe(investigadores => {
@@ -109,7 +115,13 @@ export class ConsultasComponent {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
- 
+  getNombreCompleto(id: string | number, lista: any[]): string {
+    const persona = lista.find(u => u.numerodocumento === id || u.id === id);
+    return persona ? `${persona.nombre} ${persona.apellidos}` : String(id);  
+  }
+  getNombreLider(investigadorId: number): string {
+    return this.getNombreCompleto(investigadorId, this.usuarios);
+  }
   // -------------------------TABLA INVESTIGADORES --------------------
   
   toggleExpansion(element: Element): void {
