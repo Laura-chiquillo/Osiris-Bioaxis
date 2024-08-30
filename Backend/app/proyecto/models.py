@@ -455,9 +455,9 @@ class EstadoProyecto(models.Model):
         db_table = 'proyecto_EstadoProyecto'
 
 class Proyecto(models.Model):
-    codigo = models.CharField(max_length=50, primary_key=True)
+    codigo = models.CharField(max_length=5000, primary_key=True)
     titulo = models.CharField(max_length=500)
-    investigador = models.CharField(max_length=50)
+    investigador = models.CharField(max_length=500)
     unidadAcademica = [
         ('Facultad de Ingeniería','Facultad de Ingeniería'),
         ('Facultad de Ciencias','Facultad de Ciencias'),
@@ -466,11 +466,11 @@ class Proyecto(models.Model):
     unidadAcademica = models.CharField(max_length=180, choices=unidadAcademica, default='Facultad de Ingeniería')
     producto = models.ManyToManyField(Producto)
     coinvestigador = models.ManyToManyField(Investigador)
-    area = models.CharField(max_length=50)
+    area = models.CharField(max_length=500)
     porcentajeEjecucionCorte = models.IntegerField()
     entidadPostulo = models.ForeignKey(EntidadPostulo,null=True,blank=True,on_delete=models.CASCADE)
     financiacion = models.ForeignKey(Financiacion,null=True,blank=True,on_delete=models.CASCADE)
-    grupoInvestigacionPro =  models.CharField(max_length=50)
+    grupoInvestigacionPro =  models.CharField(max_length=500)
     porcentajeEjecucionFinCorte = models.IntegerField()
     porcentajeAvance = models.IntegerField()
     observacion = models.CharField(max_length=5000,default='')
@@ -480,8 +480,8 @@ class Proyecto(models.Model):
         ("nacional", "nacional"),
         ("internacional", "internacional"),
     ]
-    origen = models.CharField(max_length=50, choices=origen, default='nacional')
-    convocatoria = models.CharField(max_length=50)
+    origen = models.CharField(max_length=500, choices=origen, default='nacional')
+    convocatoria = models.CharField(max_length=500)
     ubicacionProyecto = models.ForeignKey(UbicacionProyecto,null=False,blank=False,on_delete=models.CASCADE)
     estado =models.ForeignKey(EstadoProyecto,null=False,blank=False,on_delete=models.CASCADE)
     modalidad = [
@@ -489,28 +489,28 @@ class Proyecto(models.Model):
         ("clinical", "clinical"),
         ("creación", "creación"),
     ]
-    modalidad = models.CharField(max_length=50, choices=modalidad, default='general')
+    modalidad = models.CharField(max_length=500, choices=modalidad, default='general')
     nivelRiesgoEtico  = [
         ("Alto", "Alto"),
         ("Medio", "Medio"),
         ("Bajo", "Bajo"),
         ("Sin riesgo", "Sin riesgo"),
     ]
-    nivelRiesgoEtico = models.CharField(max_length=50, choices=nivelRiesgoEtico, default='Sin riesgo')
+    nivelRiesgoEtico = models.CharField(max_length=500, choices=nivelRiesgoEtico, default='Sin riesgo')
     lineaInvestigacion =[
         ("Ingeniería de software y sociedad", "Ingeniería de software y sociedad"),
         ("Ingeniería para la salud y el desarrollo biológico", "Ingeniería para la salud y el desarrollo biológico"),
         ("Ingeniería y educación", "Ingeniería y educación"),
         ("Ingeniería para la sostenibilidad de sistemas naturales", "Ingeniería para la sostenibilidad de sistemas naturales"),
     ]
-    lineaInvestigacion = models.CharField(max_length=180, choices=lineaInvestigacion, default='Ingeniería de software y sociedad')
+    lineaInvestigacion = models.CharField(max_length=1800, choices=lineaInvestigacion, default='Ingeniería de software y sociedad')
     estadoProceso = [
         ("Aprobado","Aprobado"),
         ("Rechazado","Rechazado"),
         ("Corregir","Corregir"),
         ("Espera","Espera")
     ]
-    estadoProceso=models.CharField(max_length=50, choices=estadoProceso, default='Espera')
+    estadoProceso=models.CharField(max_length=500, choices=estadoProceso, default='Espera')
     estudiantes = models.ManyToManyField(Estudiantes)
     participantesExternos = models.ManyToManyField(ParticipantesExternos)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)

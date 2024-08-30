@@ -14,6 +14,7 @@ from datetime import datetime
 from django.utils.timezone import make_aware
 import ast
 import base64
+import re
 from django.db.models import Q
 from django.core.files.base import ContentFile
 
@@ -1126,14 +1127,14 @@ class Trazabilidad(APIView):
                 'titulo': proyecto.titulo,
                 'notificaciones': []
             }
-            
-            # Obtener todas las notificaciones relacionadas con el proyecto
-            notificaciones = Notificaciones.objects.filter(
-                asunto__icontains=proyecto.codigo
-            ).distinct()
+
+            # Obtener todas las notificaciones y filtrar manualmente en Python
+            notificaciones = Notificaciones.objects.all()
+            notificaciones_proyecto = [notificacion for notificacion in notificaciones 
+                                       if proyecto.codigo in notificacion.asunto]
 
             # Agregar las notificaciones al proyecto
-            if notificaciones.exists():
+            if notificaciones_proyecto:
                 proyecto_data['notificaciones'] = [{
                     'id': notificacion.id,
                     'asunto': notificacion.asunto,
@@ -1143,7 +1144,7 @@ class Trazabilidad(APIView):
                     'estado': notificacion.estado,
                     'created_at': notificacion.created_at.isoformat(),
                     'updated_at': notificacion.updated_at.isoformat(),
-                } for notificacion in notificaciones]
+                } for notificacion in notificaciones_proyecto]
             else:
                 proyecto_data['notificaciones'] = [{'id': None, 'asunto': 'Sin notificaciones'}]
 
@@ -1152,18 +1153,14 @@ class Trazabilidad(APIView):
             # Obtener todos los productos asociados al proyecto
             productos = Producto.objects.filter(proyecto=proyecto)
 
-            # Crear un diccionario para las notificaciones de cada producto
-            notificaciones_por_producto = {producto.id: [] for producto in productos}
-
-            # Obtener todas las notificaciones relevantes para productos
-            todas_notificaciones = Notificaciones.objects.filter(
-                asunto__icontains="Producto_02"
-            ).distinct()
-
             for producto in productos:
-                if producto.id == "Producto_02":
-                    # Asignar todas las notificaciones al producto Producto_02
-                    notificaciones_por_producto[producto.id] = [{
+                # Filtrar las notificaciones que están relacionadas con este producto específico
+                notificaciones_producto = [notificacion for notificacion in notificaciones 
+                                           if producto.id in notificacion.asunto]
+
+                if notificaciones_producto:
+                    # Si hay notificaciones, asignarlas al producto
+                    producto_notificaciones = [{
                         'id': notificacion.id,
                         'asunto': notificacion.asunto,
                         'remitente': notificacion.remitente,
@@ -1172,24 +1169,18 @@ class Trazabilidad(APIView):
                         'estado': notificacion.estado,
                         'created_at': notificacion.created_at.isoformat(),
                         'updated_at': notificacion.updated_at.isoformat(),
-                    } for notificacion in todas_notificaciones]
+                    } for notificacion in notificaciones_producto]
                 else:
-                    # Para otros productos, asignar una notificación de "Sin notificaciones"
-                    notificaciones_por_producto[producto.id] = [{'id': None, 'asunto': 'Sin notificaciones'}]
+                    # Si no hay notificaciones, asignar "Sin notificaciones"
+                    producto_notificaciones = [{'id': None, 'asunto': 'Sin notificaciones'}]
 
-            # Construir la lista de productos con sus notificaciones
-            for producto in productos:
                 data['productos'].append({
                     'id': producto.id,
                     'tituloProducto': producto.tituloProducto,
-                    'notificaciones': notificaciones_por_producto[producto.id],
+                    'notificaciones': producto_notificaciones,
                 })
 
-        return JsonResponse(data, safe=False)
-
-    
-    
-    
+        return JsonResponse(data, safe=False)  
     
     
    
