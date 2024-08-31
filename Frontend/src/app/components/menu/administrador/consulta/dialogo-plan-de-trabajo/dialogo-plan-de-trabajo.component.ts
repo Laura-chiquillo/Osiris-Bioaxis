@@ -11,7 +11,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ConfiguracionPlanTrabajo } from '../../../modelo/planDeTrabajo';
 import { ProyectoyproductoService } from '../../../services/proyectoyproducto';
 import { MatNativeDateModule, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
-
+import { InvestigadorService } from '../../../services/registroInvestigador';
+import { HttpErrorResponse } from '@angular/common/http';
+import { forkJoin, Observable, catchError, of} from 'rxjs';
+import {  switchMap,  } from 'rxjs/operators';
+import { AutenticacionService } from '../../../services/autenticacion';
 export const MY_DATE_FORMATS = {
   parse: {
     dateInput: 'YYYY-MM-DD', // Formato para parsear la fecha
@@ -58,6 +62,8 @@ export class DialogoPlanDeTrabajoComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public dialogData: { title: string, buttonTitle: string },
     private formBuilder: FormBuilder,
     private ProyectoyproductoService: ProyectoyproductoService,
+    private investigadorService: InvestigadorService,
+    private AutenticacionService: AutenticacionService,
     private readonly dialogRef: MatDialogRef<DialogoPlanDeTrabajoComponent>
   ) { 
     this.registroForm = this.formBuilder.group({
@@ -99,28 +105,73 @@ export class DialogoPlanDeTrabajoComponent implements OnInit {
     if (this.registroForm.valid) {
       console.log('Formulario válido. Procediendo a guardar...');
       const fecha = this.fecha?.value ? new Date(this.fecha?.value) : new Date();
-      // Establece la fecha límite al final del día
-      fecha.setHours(23, 59, 59, 999);
-  
+      fecha.setHours(23, 59, 59, 999); // Establece la fecha límite al final del día
       const fechaISO = this.formatDateToISO(fecha);
-
+  
       const configuracion: ConfiguracionPlanTrabajo = {
         titulo: this.titulo?.value,
         fecha: fechaISO,
         estado: "true"
       };
-      this.ProyectoyproductoService.creargetconfigplanTrabajo(configuracion).subscribe(
-        (resp) => {
+  
+      this.ProyectoyproductoService.creargetconfigplanTrabajo(configuracion).pipe(
+        switchMap((resp) => {
           console.log('Se ha registrado el plan de trabajo exitosamente:', resp);
+          return this.notificarInvestigadores(configuracion);
+        })
+      ).subscribe(
+        () => {
+          console.log('Todas las notificaciones han sido enviadas');
           this.registroForm.reset();
           this.dialogRef.close(true);
         },
         (error) => {
-          console.error('Error al registrar el plan de trabajo:', error);
+          console.error('Error en el proceso:', error);
+          // Manejar el error (mostrar mensaje al usuario, etc.)
         }
       );
     } else {
       console.error('Formulario inválido. Verifica los campos.');
     }
   }
+  
+  notificarInvestigadores(planTrabajo: ConfiguracionPlanTrabajo): Observable<any> {
+    const usuarioActualDocumento = this.AutenticacionService.obtenerDatosUsuario().numerodocumento;
+  
+    return this.investigadorService.getInvestigadores().pipe(
+      switchMap(investigadores => {
+        const investigadoresFiltrados = investigadores.filter(
+          investigador => investigador.numerodocumento !== usuarioActualDocumento
+        );
+  
+        if (investigadoresFiltrados.length === 0) {
+          console.log('No hay investigadores para notificar.');
+          return of([]); // Retorna un observable vacío si no hay investigadores para notificar
+        }
+  
+        const notificaciones = investigadoresFiltrados.map(investigador => {
+          const notificacion = {
+            asunto: 'Nuevo Plan de Trabajo Creado',
+            mensaje: `Se ha creado un nuevo plan de trabajo: ${planTrabajo.titulo}. Fecha límite: ${planTrabajo.fecha}`,
+            remitente: usuarioActualDocumento,
+            destinatario: investigador.numerodocumento,
+            estado: 'no leído'
+          };
+          return this.enviarNotificacion(notificacion);
+        });
+  
+        return forkJoin(notificaciones);
+      })
+    );
+  }
+  
+  enviarNotificacion(notificacion: any): Observable<any> {
+    return this.ProyectoyproductoService.notificar(notificacion).pipe(
+      catchError(error => {
+        console.error('Error al enviar la notificación:', error);
+        return of(null); // Retorna un observable vacío para que forkJoin no se detenga
+      })
+    );
+  }
 }
+  

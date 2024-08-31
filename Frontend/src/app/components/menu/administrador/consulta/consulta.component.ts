@@ -25,6 +25,12 @@ import { EstudiantesService } from '../../services/estudiantes';
 import { ParticipantesExternosService } from '../../services/participantesExternos';
 import { DialogoDetalleComponent } from '../control/dialogo-detalle/dialogo-detalle.component';
 import { DialogoEditarFechaComponent } from './dialogo-editar-fecha/dialogo-editar-fecha.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import {  Observable, catchError, of} from 'rxjs';
+import {  switchMap,  } from 'rxjs/operators';
+import { AutenticacionService } from '../../services/autenticacion';
+import { ConfiguracionPlanTrabajo } from '../../modelo/planDeTrabajo';
+
 @Component({
   selector: 'app-consulta',
   templateUrl: './consulta.component.html',
@@ -77,6 +83,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
   item: any[] =[];
 
   constructor(
+    private AutenticacionService:AutenticacionService,
     private investigadorService: InvestigadorService, 
     private searchService: SearchService,
     private _snackBar: MatSnackBar,
@@ -439,16 +446,64 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
               duration: 2000,
             });
             this.obtenerPlanTrabajo(); // Refresh the data
+            this.notificarInvestigadores(result).subscribe(
+              () => {
+                console.log('Notificaciones enviadas exitosamente.');
+              },
+              error => {
+                console.error('Error al enviar notificaciones:', error);
+              }
+            );
           },
           error => {
             console.error('Error al actualizar la fecha y el Titulo:', error);
-            this._snackBar.open('Error al actualizar la fecha´y el Titulo', 'Cerrar', {
+            this._snackBar.open('Error al actualizar la fecha y el Titulo', 'Cerrar', {
               duration: 2000,
             });
           }
         );
       }
     });
+  }
+
+  
+  notificarInvestigadores(planTrabajo: ConfiguracionPlanTrabajo): Observable<any> {
+    const usuarioActualDocumento = this.AutenticacionService.obtenerDatosUsuario().numerodocumento;
+  
+    return this.investigadorService.getInvestigadores().pipe(
+      switchMap(investigadores => {
+        const investigadoresFiltrados = investigadores.filter(
+          investigador => investigador.numerodocumento !== usuarioActualDocumento
+        );
+  
+        if (investigadoresFiltrados.length === 0) {
+          console.log('No hay investigadores para notificar.');
+          return of([]); // Retorna un observable vacío si no hay investigadores para notificar
+        }
+  
+        const notificaciones = investigadoresFiltrados.map(investigador => {
+          const notificacion = {
+            asunto: ' Plan de Trabajo',
+            mensaje: `Se ha modificado la fecha del plan de trabajo: ${planTrabajo.titulo}. Fecha límite: ${planTrabajo.fecha}`,
+            remitente: usuarioActualDocumento,
+            destinatario: investigador.numerodocumento,
+            estado: 'no leído'
+          };
+          return this.enviarNotificacion(notificacion);
+        });
+  
+        return forkJoin(notificaciones);
+      })
+    );
+  }
+  
+  enviarNotificacion(notificacion: any): Observable<any> {
+    return this.proyectoyproductoService.notificar(notificacion).pipe(
+      catchError(error => {
+        console.error('Error al enviar la notificación:', error);
+        return of(null); // Retorna un observable vacío para que forkJoin no se detenga
+      })
+    );
   }
 
 

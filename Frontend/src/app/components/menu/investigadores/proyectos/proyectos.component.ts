@@ -1823,25 +1823,24 @@ thumbLabel6 = false;
   
   guardar() {
     const datosAGuardar = this.data
-      .filter(row => row.isSelected && row.horasestricto !== undefined) // Filtrar datos con horasestricto definido
+      .filter(row => row.isSelected && row.horasestricto !== undefined)
       .map(row => ({
         configPlanTrabajoId: this.selectedPlanId || this.idConfiguracion,
-        horasEstricto: row.horasestricto || 0,  // Usa 0 si horasestricto es null o undefined
+        horasEstricto: row.horasestricto || 0,
         investigadorId: row.numerodocumento,
         productoId: row.productoId || null,
         proyectoId: row.proyectoId,
-        rol: row.productoId ? row.rol : ''  // Solo asignar rol si hay producto
+        rol: row.productoId ? row.rol : ''
       }));
-
+  
     console.log('Datos para guardar:', datosAGuardar);
-
-    // Comprobar que haya datos para guardar
-    const datosValidos = datosAGuardar.filter(dato => dato.productoId ? dato.rol : true); // Asegurarse de que si hay producto, el rol esté presente
-
+  
+    const datosValidos = datosAGuardar.filter(dato => dato.productoId ? dato.rol : true);
+  
     if (datosValidos.length > 0) {
       this.ProyectoyproductoService.creargetplanTrabajo(datosValidos).subscribe(response => {
         console.log('Datos guardados exitosamente', response);
-        
+  
         Swal.fire({
           title: 'Registro Exitoso !!!',
           text: 'Se ha registrado el plan de trabajo.',
@@ -1850,22 +1849,47 @@ thumbLabel6 = false;
         }).then(() => {
           this.data.forEach(row => {
             if (row.isSelected) {
-              row.isSelected = false; // Desmarcar la fila
-              row.rol = ''; // Limpiar el campo rol
-              row.horasestricto = undefined; // Limpiar el campo horasestricto
-              window.location.reload(); 
+              console.log('Enviando notificación para el row:', row);
+  
+              this.notificar(
+                `Plan de trabajo ${row.productoId}${row.proyectoId}`,
+                row.numerodocumento,
+                this.usuariosAdmin,
+                `El plan de trabajo del investigador ${row.numerodocumento} ha sido registrado`
+              );
+  
+              row.isSelected = false;
+              row.rol = '';
+              row.horasestricto = undefined;
             }
-          }); 
+          });
+  
+          // Retarda la recarga para permitir que se completen las notificaciones
+          setTimeout(() => {
+            window.location.reload();
+          }, 10000);
         });
-        
+  
       }, error => {
         console.error('Error al guardar los datos', error);
+        Swal.fire({
+          title: 'Oops...',
+          text: 'Error al guardar el plan de trabajo. Intenta nuevamente.',
+          icon: 'error',
+          confirmButtonText: 'Aceptar'
+        });
       });
     } else {
       console.warn('No hay datos seleccionados o completos para guardar');
+      Swal.fire({
+        title: 'Datos incompletos !!!',
+        text: 'Por favor, completa los datos necesarios antes de guardar.',
+        icon: 'warning',
+        confirmButtonText: 'Aceptar'
+      });
     }
   }
-
+  
   
   editarElemento(data: any = undefined, type:string, detail:boolean): void {
     const dialogRef = this.dialog.open(DialogoEditarPlanTrabajoComponent, {

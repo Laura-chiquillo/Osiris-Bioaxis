@@ -8,7 +8,7 @@ import { AutenticacionService } from '../../../services/autenticacion';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { InvestigadorService } from '../../../services/registroInvestigador';
 @Component({
   selector: 'app-dialogo-editar-plan-trabajo',
   standalone: true,
@@ -26,9 +26,11 @@ export class DialogoEditarPlanTrabajoComponent implements AfterViewInit,OnInit {
   constructor(
     private planTrabajoService: ProyectoyproductoService,
     private autenticacionService: AutenticacionService,
+    private InvestigadorService :InvestigadorService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private snackBar: MatSnackBar
   ) {}
+  
 
   ngOnInit() {
     this.planTrabajoService.getPlanTrabajo().subscribe((allPlans: MostrarPlan[]) => {
@@ -41,6 +43,17 @@ export class DialogoEditarPlanTrabajoComponent implements AfterViewInit,OnInit {
         console.error('Plan de trabajo no encontrado');
         this.dataSource.data = [];
       }
+    });
+    this.obtenerUsuarios();
+
+  }
+  usuariosAdmin: any[] = [];
+  obtenerUsuarios(){
+    this.InvestigadorService.getUsuarios().subscribe((data) => {   
+      const usersAdmin = data.filter(u => u.rolinvestigador === 'Administrador');
+      usersAdmin.forEach(element => {
+        this.usuariosAdmin.push(element.numerodocumento);
+      });
     });
   }
 
@@ -102,12 +115,37 @@ saveChanges() {
       this.planTrabajoService.updatePlanTrabajo(planTrabajo).subscribe(
           response => {
               this.snackBar.open('Plan de trabajo actualizado exitosamente.', 'Cerrar', { duration: 3000 });
-          },
+              this.notificar(
+                `Actualización de Plan de Trabajo`,
+                planTrabajo.id, // Remitente puede ser un valor estático o dinámico
+                this.usuariosAdmin, // Reemplaza con destinatarios reales
+                `El plan de trabajo con ID ${planTrabajo.id} ha sido actualizado con rol ${planTrabajo.rol} y horas estrictas ${planTrabajo.horasestricto}.`
+              );
+            
+            },
           error => {
               console.error('Error al actualizar el plan de trabajo:', error);
               this.snackBar.open('Error al actualizar el plan de trabajo.', 'Cerrar', { duration: 3000 });
           }
       );
+  });
+} 
+notificar(asunto:string,remitente:any,destinatario:string[],mensaje:string):void {
+  destinatario.forEach(admin => {
+    const notificacion = {
+      asunto: asunto,
+      remitente: remitente,
+      destinatario: admin,
+      mensaje: mensaje
+    }
+    this.planTrabajoService.notificar(notificacion).subscribe(
+      (resp: any) => {
+        console.log('Se ha registrado el proyecto exitosamente:', resp);
+      },
+      (error: any) => {
+        console.error('Error al registrar el proyecto:', error);
+      }
+    );
   });
 }
 
