@@ -288,6 +288,7 @@ export class NavbarComponent {
             confirmButtonText: 'Aceptar'
           });
           this.registroForm.reset();
+          window.location.reload(); 
         },
         (error) => {
           console.error('Error al registrar el usuario:', error);

@@ -116,6 +116,7 @@ export class DialogoCargaEstudiosComponent implements OnInit {
         (resp) => {
           console.log('Se ha creado el pregrado:', resp);
           this.dialogRef.close(true);
+          window.location.reload(); 
         },
         (error) => {
           console.error('Error al notificar:', error);
@@ -132,6 +133,7 @@ export class DialogoCargaEstudiosComponent implements OnInit {
       (resp) => {
         console.log('Se ha creado el posgrado:', resp);
         this.dialogRef.close(true);
+        window.location.reload(); 
       },
       (error) => {
         console.error('Error al notificar:', error);
