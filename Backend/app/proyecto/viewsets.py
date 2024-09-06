@@ -1,5 +1,6 @@
 import statistics
 from dateutil import parser
+import uuid
 
 from http.client import responses
 from telnetlib import STATUS
@@ -425,7 +426,7 @@ class notificacionesList(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         # Preparar los datos de la nueva notificación
         notification_data = {
-            'id': Notificaciones.objects.count() + 1,
+            'id': str(uuid.uuid4()),
             'asunto': request.data.get('asunto'),
             'remitente': request.data.get('remitente'),
             'destinatario': request.data.get('destinatario'),
@@ -534,10 +535,14 @@ class notificacionesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
     serializer_class = notificacionesSerializer
     
     def put(self, request, *args, **kwargs):
-        # Obtener la notificación a actualizar usando el ID proporcionado en la solicitud
-        obj = Notificaciones.objects.get(pk=request.data.get('id'))
-        # Actualizar el estado de la notificación a False
-        obj.estado = False
+         # Obtener el ID de la solicitud
+        notification_id = request.data.get('id')
+        try:
+            # Obtener la notificación a actualizar usando el ID proporcionado en la solicitud
+            obj = Notificaciones.objects.get(pk=notification_id)
+        except Notificaciones.DoesNotExist:
+            return Response({'detail': 'Notificación no encontrada.'}, status=status.HTTP_404_NOT_FOUND)
+        
         obj.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

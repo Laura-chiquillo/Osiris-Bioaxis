@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password
 from django.db import models, transaction
 from rest_framework.authtoken.models import Token
 from django.utils import timezone
+import uuid
 
 # Se crean las clases para los modelos
 # colocamos los atributos de la clase
@@ -558,7 +559,7 @@ class AvanceProyecto(models.Model):
         db_table = 'proyecto_Avanceproyecto'
                 
 class Notificaciones(models.Model):
-    id = models.CharField(max_length=50, primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     asunto = models.CharField(max_length=150)
     remitente = models.CharField(max_length=150)
     destinatario = models.CharField(max_length=150)
