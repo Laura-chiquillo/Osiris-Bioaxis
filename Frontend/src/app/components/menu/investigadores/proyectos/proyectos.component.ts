@@ -545,18 +545,21 @@ export class ProyectosComponent implements OnInit {
     this.ProyectoyproductoService.obtenerEntregablesProyecto().subscribe((data) => {    
       const dataProject = data.reverse();
       this.proyectosData = dataProject.map(x => {
-        const date1 = moment(x.fecha);
-        const date2 = moment(new Date());
-        return {
+        const date1 = moment(x.fecha, 'YYYY-MM-DD'); 
+        const date2 = moment(); 
+        const diferenciaDias = date1.diff(date2, 'days');
+        const estadoEntregable = x.estado !== undefined ? x.estado : (diferenciaDias >= 0);
+
+      return {
           descripcion: x.descripcion,
-          estado: x.estado,
+          estado: estadoEntregable,
           estadoProceso: x.estadoProceso,
           observacion: x.observacion,
           fecha: x.fecha,
           id: x.id,
           proyecto_id: x.proyecto_id,
           updated_at: x.updated_at,
-          diferenciaDias: date1.diff(date2, 'days')
+          diferenciaDias: diferenciaDias
         }
       })
     });
@@ -564,21 +567,25 @@ export class ProyectosComponent implements OnInit {
 
   obtenerEntregableProducto(){
     this.ProyectoyproductoService.obtenerEntregablesProducto().subscribe((data) => {    
+      console.log('Datos obtenidos del proyecto:', data);  
       const dataProduct = data.reverse();
       this.productosData = dataProduct.map(x => {
-        const date1 = moment(x.fecha);
-        const date2 = moment(new Date());
+        const date1 = moment(x.fecha, 'YYYY-MM-DD'); 
+        const date2 = moment();
+        const diferenciaDias = date1.diff(date2, 'days');
+        const estadoEntregable = x.estado !== undefined ? x.estado : (diferenciaDias >= 0);
+
         return {
           created_at: x.created_at,
           descripcion: x.descripcion,
-          estado: x.estado,
+          estado: estadoEntregable,
           estadoProceso: x.estadoProceso,
           observacion: x.observacion,
           fecha: x.fecha,
           id: x.id,
           producto_id: x.producto_id,
           updated_at: x.updated_at,
-          diferenciaDias: date1.diff(date2, 'days')
+          diferenciaDias: diferenciaDias
         }
       })
     });
@@ -633,7 +640,7 @@ export class ProyectosComponent implements OnInit {
     });
   }
 
-  estudiantesData: Estudiantes[] = [];
+  estudiantesData: Estudiantes[] = []; 
   participanteExternoData: ParticipanteExterno[] = [];
 
   obtenerDatosUsuarioSesion(){

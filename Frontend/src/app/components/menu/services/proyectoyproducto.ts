@@ -158,9 +158,9 @@ export class ProyectoyproductoService {
     return this.http.get<any[]>(`${this.apiConfiguracionEntregableProducto}`);
   }
 
-  actualizarEntregableProducto(proyecto: any) {
-    const url = `${this.apiConfiguracionEntregableProducto}/${proyecto.id}`;
-    return this.http.put(url, proyecto).pipe(
+  actualizarEntregableProducto(producto: any) {
+    const url = `${this.apiConfiguracionEntregableProducto}/${producto.id}`;
+    return this.http.put(url, producto).pipe(
       catchError(error => {
         if(error instanceof HttpErrorResponse) {
           switch (error.status) {
