@@ -587,7 +587,6 @@ class ConfiguracionPlanTrabajo(models.Model):
     estado_fecha = models.BooleanField(default=True)
     titulo = models.CharField(max_length=250)
     planTrabajo = models.ManyToManyField(PlanTrabajo)
-
     class Meta:
         db_table = 'proyecto_ConfiguracionPlanTrabajo'
 

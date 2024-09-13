@@ -199,9 +199,9 @@
     tslib "^2.3.0"
 
 "@angular/compiler-cli@^18.0.0":
-  version "18.2.3"
-  resolved "https://registry.npmjs.org/@angular/compiler-cli/-/compiler-cli-18.2.3.tgz"
-  integrity sha512-BcmqYKnkcJTkGjuPztClZNQve7tdI290J5F3iZBx6c7/vaw8EU8EGZtpWYZpgiVn5S6jhcKyc1dLF9ggO9vftg==
+  version "18.2.4"
+  resolved "https://registry.npmjs.org/@angular/compiler-cli/-/compiler-cli-18.2.4.tgz"
+  integrity sha512-BIp5zr+npqSs/4KWPxwKdn7+sjo008ieNOQDlXyQms9BKlxx/gDnj7W2TsxhrkDTYCIHF73fJZ7u2U8Qy4JWfw==
   dependencies:
     "@babel/core" "7.25.2"
     "@jridgewell/sourcemap-codec" "^1.4.14"
@@ -212,14 +212,14 @@
     tslib "^2.3.0"
     yargs "^17.2.1"
 
-"@angular/compiler@^18.0.0", "@angular/compiler@18.0.0", "@angular/compiler@18.2.3":
-  version "18.2.3"
-  resolved "https://registry.npmjs.org/@angular/compiler/-/compiler-18.2.3.tgz"
-  integrity sha512-Il3ljs0j1GaYoqYFdShjUP1ryck5xTOaA8uQuRgqwU0FOwEDfugSAM3Qf7nJx/sgxTM0Lm/Nrdv2u6i1gZWeuQ==
+"@angular/compiler@^18.0.0", "@angular/compiler@18.0.0", "@angular/compiler@18.2.4":
+  version "18.2.4"
+  resolved "https://registry.npmjs.org/@angular/compiler/-/compiler-18.2.4.tgz"
+  integrity sha512-o3ngFr1Bjt7cKOu4DSZJGCUF9YPTxJee97wFon2eNFj6FFNTmnGwAvsnJjHBMmk90fmZLC2/HpPdhYz7WprMZQ==
   dependencies:
     tslib "^2.3.0"
 
-"@angular/core@^17.0.0 || ^18.0.0", "@angular/core@^18.0.0", "@angular/core@18.0.0", "@angular/core@18.2.3":
+"@angular/core@^17.0.0 || ^18.0.0", "@angular/core@^18.0.0", "@angular/core@18.0.0", "@angular/core@18.2.4":
   version "18.0.0"
   resolved "https://registry.npmjs.org/@angular/core/-/core-18.0.0.tgz"
   integrity sha512-tpR7HIY4MJuM9ETpG15IvBr1wsI8Cyec3ZxYFe/27FKHARvxDbqIrT9QevmC6lxg1NdfD990G2XphYML1EyJ8g==

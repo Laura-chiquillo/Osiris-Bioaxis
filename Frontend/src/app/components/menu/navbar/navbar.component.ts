@@ -26,7 +26,7 @@ export class NavbarComponent {
       correo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@unbosque\.edu\.co$/)]],
       tipodocumento: ['', [Validators.required]],
       numerodocumento: ['', [Validators.required,Validators.pattern(/^[0-9]+$/), Validators.minLength(9)]],
-      contrasena: ['', [Validators.required, Validators.minLength(8)]],
+      contrasena: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)]],
       confirmarContrasena: ['', [Validators.required]],
     });
     
@@ -286,9 +286,13 @@ export class NavbarComponent {
             text: 'Tu usuario se encuentra preparado para activación',
             icon: 'success',
             confirmButtonText: 'Aceptar'
+          }).then(() => {
+            // Recarga la página después de que el usuario haga clic en 'Aceptar'
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000); // Espera 2 segundos antes de recargar
           });
           this.registroForm.reset();
-          window.location.reload(); 
         },
         (error) => {
           console.error('Error al registrar el usuario:', error);
