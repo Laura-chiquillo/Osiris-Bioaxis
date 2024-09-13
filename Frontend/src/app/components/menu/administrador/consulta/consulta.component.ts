@@ -419,6 +419,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
     );
   }
 
+  
   obtenerPlanTrabajo() {
     this.proyectoyproductoService.getconfigplanTrabajo().subscribe(data => {
       this.dataSourcePlanTrabajo.data = data;
