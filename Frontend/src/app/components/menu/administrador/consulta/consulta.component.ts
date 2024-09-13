@@ -55,6 +55,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
   dataSourceInvestigador: MatTableDataSource<any>;
   dataSourceProyecto: MatTableDataSource<any>;
   dataSourceProducto: MatTableDataSource<any>;
+  dataSourcePlanTrabajo: MatTableDataSource<any>;
 
   displayedColumnsInvestigador: string[] = ['nombre', 'rolinvestigador', 'estado','updated_at','created_at','accion'];
   displayedColumnsProyecto: string[] = ['codigo', 'lider','lineaInvestigacion','estadoProceso','estadoProyecto','updated_at','created_at','accion'];
@@ -95,11 +96,13 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
     this.dataSourceInvestigador = new MatTableDataSource<any>([]);
     this.dataSourceProyecto = new MatTableDataSource<any>([]);
     this.dataSourceProducto = new MatTableDataSource<any>([]);
+    this.dataSourcePlanTrabajo = new MatTableDataSource<any>([]);
   }
 
   @ViewChild('paginatorInvestigador') paginator!: MatPaginator;
   @ViewChild('paginatorProyecto') paginator2!: MatPaginator;
   @ViewChild('paginatorProducto') paginator3!: MatPaginator;
+  @ViewChild('paginatorPlanTrabajo') paginator4!: MatPaginator;
 
   ngOnInit() {
     this.obtenerUsuarios();
@@ -111,6 +114,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
       this.dataSourceInvestigador.filter = query.trim().toLowerCase();
       this.dataSourceProyecto.filter = query.trim().toLowerCase();
       this.dataSourceProducto.filter = query.trim().toLowerCase();
+      this.dataSourcePlanTrabajo.filter = query.trim().toLowerCase();
     });
   }
 
@@ -118,6 +122,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
     this.dataSourceInvestigador.paginator = this.paginator;
     this.dataSourceProyecto.paginator = this.paginator2;
     this.dataSourceProducto.paginator = this.paginator3;
+    this.dataSourcePlanTrabajo.paginator= this.paginator4;
   }
 
   getNombreCompleto(id: string | number, lista: any[]): string {
@@ -389,8 +394,6 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
     });
   }
 
-
-
   cambiarEstadoPlanTrabajo(item: any): void {
     // Asegúrate de que 'item' tenga el campo 'id'
     if (!item.id) {
@@ -418,6 +421,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
 
   obtenerPlanTrabajo() {
     this.proyectoyproductoService.getconfigplanTrabajo().subscribe(data => {
+      this.dataSourcePlanTrabajo.data = data;
       console.log("verificar:", data); // Verifica los datos recibidos
       const dataProject = data.reverse();
       this.item = dataProject.map(x => ({
@@ -465,8 +469,7 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
-  
+ 
   notificarInvestigadores(planTrabajo: ConfiguracionPlanTrabajo): Observable<any> {
     const usuarioActualDocumento = this.AutenticacionService.obtenerDatosUsuario().numerodocumento;
   
@@ -505,7 +508,6 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
       })
     );
   }
-
 
   descargarPlanTrabajo(item: any): void {
     if (Array.isArray(item.planTrabajo) && item.planTrabajo.length > 0) {
@@ -581,6 +583,15 @@ downloadCSV(csvContent: string, fileName: string) {
       link.click();
       document.body.removeChild(link);
   }
+}
+
+getSortedItems(): any[] {
+  return this.item.sort((a, b) => {
+    if (a.estado_fecha === b.estado_fecha) {
+      return 0; // Mantiene el orden si ambos tienen el mismo estado
+    } 
+    return a.estado_fecha ? -1 : 1; // Los no vencidos primero
+  });
 }
 
 openDialogoDetalle(data: any, tipo: string): void {
