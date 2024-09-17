@@ -122,7 +122,8 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
     this.dataSourceInvestigador.paginator = this.paginator;
     this.dataSourceProyecto.paginator = this.paginator2;
     this.dataSourceProducto.paginator = this.paginator3;
-    this.dataSourcePlanTrabajo.paginator= this.paginator4;
+    this.dataSourcePlanTrabajo.paginator = this.paginator4;
+
   }
 
   getNombreCompleto(id: string | number, lista: any[]): string {
@@ -422,21 +423,27 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
   
   obtenerPlanTrabajo() {
     this.proyectoyproductoService.getconfigplanTrabajo().subscribe(data => {
-      this.dataSourcePlanTrabajo.data = data;
-      console.log("verificar:", data); // Verifica los datos recibidos
-      const dataProject = data.reverse();
-      this.item = dataProject.map(x => ({
+      const sortedData = data.sort((a, b) => {
+        if (a.estado_fecha === b.estado_fecha) {
+          return 0;
+        }
+        return a.estado_fecha ? -1 : 1;
+      });
+  
+      this.dataSourcePlanTrabajo.data = sortedData.map(x => ({
         id: x.id,
-        plan: x.titulo,
+        plan: x.titulo, // Aquí asegúrate de que 'titulo' esté presente en los datos originales
         estado: x.estado,
         estado_manual: x.estado_manual,
         estado_fecha: x.estado_fecha,
         fecha: x.fecha,
-        planTrabajo: x.planTrabajo // Incluye la información detallada del plan
+        planTrabajo: x.planTrabajo
       }));
-      console.log("asignacion:", this.item); // Verifica la asignación de datos
+      
+      this.dataSourcePlanTrabajo.paginator = this.paginator4; // Asegúrate de esto
     });
   }
+  
   openDialogoEditarFecha(item: any): void {
     const dialogRef = this.dialog.open(DialogoEditarFechaComponent, {
       width: '300px',
@@ -586,14 +593,6 @@ downloadCSV(csvContent: string, fileName: string) {
   }
 }
 
-getSortedItems(): any[] {
-  return this.item.sort((a, b) => {
-    if (a.estado_fecha === b.estado_fecha) {
-      return 0; // Mantiene el orden si ambos tienen el mismo estado
-    } 
-    return a.estado_fecha ? -1 : 1; // Los no vencidos primero
-  });
-}
 
 openDialogoDetalle(data: any, tipo: string): void {
   let dialogData;
