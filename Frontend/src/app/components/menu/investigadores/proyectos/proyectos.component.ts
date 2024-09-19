@@ -120,9 +120,7 @@ export class ProyectosComponent implements OnInit {
   usuarioSesion!: UsuarioSesion;
   dataSources = new MatTableDataSource<any>(); 
   dataSourceses = new MatTableDataSource<any>(); 
-  dataSourcePlanproyectos = new MatTableDataSource<any>(); 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
-
   origenData: any[] = [
     {value: 'nacional', viewValue: 'nacional'},
     {value: 'internacional', viewValue: 'internacional'},
@@ -550,15 +548,8 @@ export class ProyectosComponent implements OnInit {
         const date1 = moment(x.fecha, 'YYYY-MM-DD'); 
         const date2 = moment(); 
         const diferenciaDias = date1.diff(date2, 'days');
+        const estadoEntregable = x.estado !== undefined ? x.estado : (diferenciaDias >= 0);
 
-        let estadoEntregable;
-        if (x.estado !== undefined) {
-          estadoEntregable = x.estado; // Priorizar el estado manual si está definido
-        } else {
-          const fechaPasada = diferenciaDias < 0;
-          estadoEntregable = !fechaPasada; // Si la fecha ha pasado, bloquear, si no, habilitar
-        }
-        
       return {
           descripcion: x.descripcion,
           estado: estadoEntregable,
@@ -582,16 +573,7 @@ export class ProyectosComponent implements OnInit {
         const date1 = moment(x.fecha, 'YYYY-MM-DD'); 
         const date2 = moment();
         const diferenciaDias = date1.diff(date2, 'days');
-        
-         // Si el estado es definido, usar ese estado. Si no, aplicar la lógica de fecha.
-         let estadoEntregable;
-         if (x.estado !== undefined) {
-           estadoEntregable = x.estado; // Priorizar el estado que ya está en la base de datos
-         } else {
-           const fechaPasada = diferenciaDias < 0;
-           estadoEntregable = !fechaPasada; // Si la fecha ha pasado, estado es false, si no, true.
-         }
-         
+        const estadoEntregable = x.estado !== undefined ? x.estado : (diferenciaDias >= 0);
 
         return {
           created_at: x.created_at,
@@ -1729,17 +1711,18 @@ thumbLabel6 = false;
   expandedElements: any | null = null;
   selectedPlanId: string = '';
   data: any[] = [];
-  @ViewChild('paginator1') paginator1!: MatPaginator; 
-  @ViewChild('paginator2') paginator2!: MatPaginator; 
 
   loadProjectsAndProducts() {
     this.investigatorService.getmostrarPyP().subscribe((data: Person[]) => {
-      const userData = this.AutenticacionService.obtenerDatosUsuario();
-      const userId = userData ? userData.numerodocumento : '';
-      this.dataSourcePlanproyectos.data = this.transformData(data, userId);
-      this.dataSourcePlanproyectos.paginator = this.paginator1;
+        const userData = this.AutenticacionService.obtenerDatosUsuario();
+        const userId = userData ? userData.numerodocumento : '';
+        this.data = this.transformData(data, userId);
     });
   }
+
+  @ViewChild('paginator1') paginator1!: MatPaginator; 
+  @ViewChild('paginator2') paginator2!: MatPaginator; 
+
   
   transformData(data: Person[], userId: string): any[] {
     const transformedData: any[] = [];
@@ -1790,26 +1773,15 @@ thumbLabel6 = false;
   }
   
   obtenerPlanTrabajo() {
-    this.ProyectoyproductoService.getconfigplanTrabajo().subscribe(data => {
-      console.log('Datos recibidos:', data);
-  
-      if (data && data.length > 0) {
-        this.idConfiguracion = data[0].id;
-  
-        // Ordenar los datos por el campo estado_fecha
-        const sortedData = data.sort((a, b) => {
-          if (a.estado_fecha === b.estado_fecha) {
-            return 0;
-          }
-          return a.estado_fecha ? -1 : 1; // Los elementos con estado_fecha irán primero
-        });
-  
-        this.dataSourceses.data = sortedData; // Asignar los datos ordenados
-        this.dataSourceses.paginator = this.paginator;
-      }
-    });
+  this.ProyectoyproductoService.getconfigplanTrabajo().subscribe(data => {
+    console.log('Datos recibidos:', data);
+    if (data && data.length > 0) {
+      this.idConfiguracion = data[0].id;
+    }
+    this.dataSourceses.data = data;
+    this.dataSourceses.paginator = this.paginator;
+  });
   }
-  
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -1943,5 +1915,4 @@ thumbLabel6 = false;
   }
   
 }
-
 
