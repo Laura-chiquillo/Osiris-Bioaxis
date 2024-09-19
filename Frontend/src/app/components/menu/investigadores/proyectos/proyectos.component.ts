@@ -548,15 +548,8 @@ export class ProyectosComponent implements OnInit {
         const date1 = moment(x.fecha, 'YYYY-MM-DD'); 
         const date2 = moment(); 
         const diferenciaDias = date1.diff(date2, 'days');
+        const estadoEntregable = x.estado !== undefined ? x.estado : (diferenciaDias >= 0);
 
-        let estadoEntregable;
-        if (x.estado !== undefined) {
-          estadoEntregable = x.estado; // Priorizar el estado manual si está definido
-        } else {
-          const fechaPasada = diferenciaDias < 0;
-          estadoEntregable = !fechaPasada; // Si la fecha ha pasado, bloquear, si no, habilitar
-        }
-        
       return {
           descripcion: x.descripcion,
           estado: estadoEntregable,
@@ -580,16 +573,7 @@ export class ProyectosComponent implements OnInit {
         const date1 = moment(x.fecha, 'YYYY-MM-DD'); 
         const date2 = moment();
         const diferenciaDias = date1.diff(date2, 'days');
-        
-         // Si el estado es definido, usar ese estado. Si no, aplicar la lógica de fecha.
-         let estadoEntregable;
-         if (x.estado !== undefined) {
-           estadoEntregable = x.estado; // Priorizar el estado que ya está en la base de datos
-         } else {
-           const fechaPasada = diferenciaDias < 0;
-           estadoEntregable = !fechaPasada; // Si la fecha ha pasado, estado es false, si no, true.
-         }
-         
+        const estadoEntregable = x.estado !== undefined ? x.estado : (diferenciaDias >= 0);
 
         return {
           created_at: x.created_at,
@@ -1931,5 +1915,4 @@ thumbLabel6 = false;
   }
   
 }
-
 
