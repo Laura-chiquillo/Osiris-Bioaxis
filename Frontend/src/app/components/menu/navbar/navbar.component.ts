@@ -7,7 +7,8 @@ import { InvestigadorService } from '../services/registroInvestigador';
 import Swal from 'sweetalert2'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ResetPasswordDialogComponent } from './reset-password-dialog/reset-password-dialog.component';
-import { MatDialog } from '@angular/material/dialog'; 
+import { MatDialog } from '@angular/material/dialog';
+import { ProyectoyproductoService } from '../services/proyectoyproducto'; 
 
 
 @Component({
@@ -18,7 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class NavbarComponent {
   pregrados: any[] = [];
   posgrados: any[] = [];
-  constructor(private router: Router, private InvestigadorService: InvestigadorService, private formBuilder: FormBuilder, private snackBar: MatSnackBar,
+  constructor(private router: Router, private InvestigadorService: InvestigadorService, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private proyectoyproductoService:ProyectoyproductoService,
     public dialog: MatDialog, private autenticacionService: AutenticacionService) {
     this.registroForm = this.formBuilder.group({
       nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
@@ -134,7 +135,19 @@ export class NavbarComponent {
     this.cargarInvestigadores();
     this.cargarPregrados();
     this.cargarPosgrados();
+    this.obtenerUsuarios();
   }
+
+  usuariosAdmin: any[] = [];
+  obtenerUsuarios(){
+    this.InvestigadorService.getUsuarios().subscribe((data) => {   
+      const usersAdmin = data.filter(u => u.rolinvestigador === 'Administrador');
+      usersAdmin.forEach(element => {
+        this.usuariosAdmin.push(element.numerodocumento);
+      });
+    });
+  }
+
   cargarInvestigadores() {
     this.InvestigadorService.getUsuarios().subscribe(
       (usuarios: any[]) => {
@@ -292,6 +305,12 @@ export class NavbarComponent {
               window.location.reload();
             }, 2000); // Espera 2 segundos antes de recargar
           });
+          this.notificar(
+            `Nuevo Usuario Registrado`,
+            investigador.correo, // Remitente puede ser un valor estático o dinámico
+            this.usuariosAdmin, // Reemplaza con destinatarios reales
+            `El usuario ${investigador.nombre} ${investigador.apellidos} se ha registrado. Por favor, active su cuenta.`
+          );
           this.registroForm.reset();
         },
         (error) => {
@@ -313,6 +332,24 @@ export class NavbarComponent {
       });
     }
   }
+  }
+  notificar(asunto:string,remitente:any,destinatario:string[],mensaje:string):void {
+    destinatario.forEach(admin => {
+      const notificacion = {
+        asunto: asunto,
+        remitente: remitente,
+        destinatario: admin,
+        mensaje: mensaje
+      }
+      this.proyectoyproductoService.notificar(notificacion).subscribe(
+        (resp: any) => {
+          console.log('Se ha registrado el proyecto exitosamente:', resp);
+        },
+        (error: any) => {
+          console.error('Error al registrar el proyecto:', error);
+        }
+      );
+    });
   }
    // Muestra un mensaje de éxito usando MatSnackBar
   showSuccessMessage() {
