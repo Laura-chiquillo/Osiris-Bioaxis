@@ -117,7 +117,7 @@ export class ProyectosComponent implements OnInit {
   activeInvestigators: { correo: string; }[] = [];
   selectedInvestigators: string[] = [];
   proyecto: Proyecto = {};
-  usuarioSesion!: UsuarioSesion;
+  usuarioSesion!: UsuarioSesion; 
   dataSources = new MatTableDataSource<any>(); 
   dataSourceses = new MatTableDataSource<any>(); 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
@@ -528,6 +528,7 @@ export class ProyectosComponent implements OnInit {
     this.obtenerCodigosProyectos();
     this.obtenerUsuarios();
     this.configurarDatasource();
+    this.configurarDatasourceses();
     this.obtenerDatosUsuarioSesion();
     this.obtenerEstudiantes();
     this.obtenerParticipantesExternos();
@@ -691,13 +692,19 @@ export class ProyectosComponent implements OnInit {
     });
   }
 
-  configurarDatasource(){
+  configurarDatasource(){ 
     this.dataSource.paginator = this.paginator;
     this.SearchService.getSearchQuery().subscribe(query => {
       this.dataSource.filter = query.trim().toLowerCase();
     });
   }
-
+  configurarDatasourceses() { 
+    this.dataSourceses.paginator = this.paginator; // Verifica si es correcto usar dataSourceses aquí
+    this.SearchService.getSearchQuery().subscribe(query => {
+      this.dataSourceses.filter = query.trim().toLowerCase(); // Ajusta según corresponda
+    });
+  }
+ 
   openDialogEstudiante(): void {
     const dialogRef = this.dialog.open(DialogoCreacionEstudiantesComponent, {
       data: {
