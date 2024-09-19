@@ -536,15 +536,24 @@ class notificacionesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
     
     def put(self, request, *args, **kwargs):
          # Obtener el ID de la solicitud
-        notification_id = request.data.get('id')
+        notification_id = kwargs.get('pk')
+
         try:
             # Obtener la notificación a actualizar usando el ID proporcionado en la solicitud
             obj = Notificaciones.objects.get(pk=notification_id)
         except Notificaciones.DoesNotExist:
             return Response({'detail': 'Notificación no encontrada.'}, status=status.HTTP_404_NOT_FOUND)
-        
-        obj.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+
+        # Actualizar los datos de la notificación con el serializer
+        serializer = self.serializer_class(obj, data=request.data, partial=True)  # partial=True permite actualizaciones parciales
+
+        if serializer.is_valid():
+            serializer.save()  # Guarda los cambios
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class avanceEntregableProductoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = AvanceEntregableProducto.objects.all()

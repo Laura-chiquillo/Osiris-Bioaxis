@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, throwError,tap  } from 'rxjs';
 import { Investigador, Investigadores } from '../modelo/investigador';
 import { Person } from '../modelo/person';
 import { AutenticacionService } from './autenticacion';
@@ -62,18 +62,24 @@ export class InvestigadorService {
     return this.http.get<any[]>(`${this.apiNotificaciones}`);
   }
 
-  leerNotificacion(notifica: any) {
+  leerNotificacion(notifica: any): Observable<void> {
+    if (!notifica || !notifica.id) {
+      return throwError('ID de notificación no válido');
+    }
     const url = `${this.apiNotificaciones}/${notifica.id}`;
-    return this.http.put(url, notifica).pipe(
+    console.log('Enviando solicitud PUT a:', url);
+    console.log('Datos de la notificación:', notifica);
+    return this.http.put<void>(url, notifica).pipe(
+      tap(() => {
+        console.log('Notificación marcada como leída');
+      }),
       catchError(error => {
-        if(error instanceof HttpErrorResponse) {
+        if (error instanceof HttpErrorResponse) {
           switch (error.status) {
             case 404:
-              // El investigador no existe
               return throwError('Investigador no encontrado');
             case 400:
-              // Datos inválidos
-              return throwError('Datos de investigador inválidos'); 
+              return throwError('Datos de investigador inválidos');
             default:
               return throwError('Error al actualizar investigador');
           }
@@ -82,7 +88,8 @@ export class InvestigadorService {
       })
     );
   }
-
+  
+  
   getInvestigadores(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl3}`);
   }
