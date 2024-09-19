@@ -120,7 +120,9 @@ export class ProyectosComponent implements OnInit {
   usuarioSesion!: UsuarioSesion;
   dataSources = new MatTableDataSource<any>(); 
   dataSourceses = new MatTableDataSource<any>(); 
+  dataSourcePlanproyectos = new MatTableDataSource<any>(); 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
+
   origenData: any[] = [
     {value: 'nacional', viewValue: 'nacional'},
     {value: 'internacional', viewValue: 'internacional'},
@@ -1727,18 +1729,17 @@ thumbLabel6 = false;
   expandedElements: any | null = null;
   selectedPlanId: string = '';
   data: any[] = [];
-
-  loadProjectsAndProducts() {
-    this.investigatorService.getmostrarPyP().subscribe((data: Person[]) => {
-        const userData = this.AutenticacionService.obtenerDatosUsuario();
-        const userId = userData ? userData.numerodocumento : '';
-        this.data = this.transformData(data, userId);
-    });
-  }
-
   @ViewChild('paginator1') paginator1!: MatPaginator; 
   @ViewChild('paginator2') paginator2!: MatPaginator; 
 
+  loadProjectsAndProducts() {
+    this.investigatorService.getmostrarPyP().subscribe((data: Person[]) => {
+      const userData = this.AutenticacionService.obtenerDatosUsuario();
+      const userId = userData ? userData.numerodocumento : '';
+      this.dataSourcePlanproyectos.data = this.transformData(data, userId);
+      this.dataSourcePlanproyectos.paginator = this.paginator1;
+    });
+  }
   
   transformData(data: Person[], userId: string): any[] {
     const transformedData: any[] = [];
@@ -1789,15 +1790,26 @@ thumbLabel6 = false;
   }
   
   obtenerPlanTrabajo() {
-  this.ProyectoyproductoService.getconfigplanTrabajo().subscribe(data => {
-    console.log('Datos recibidos:', data);
-    if (data && data.length > 0) {
-      this.idConfiguracion = data[0].id;
-    }
-    this.dataSourceses.data = data;
-    this.dataSourceses.paginator = this.paginator;
-  });
+    this.ProyectoyproductoService.getconfigplanTrabajo().subscribe(data => {
+      console.log('Datos recibidos:', data);
+  
+      if (data && data.length > 0) {
+        this.idConfiguracion = data[0].id;
+  
+        // Ordenar los datos por el campo estado_fecha
+        const sortedData = data.sort((a, b) => {
+          if (a.estado_fecha === b.estado_fecha) {
+            return 0;
+          }
+          return a.estado_fecha ? -1 : 1; // Los elementos con estado_fecha irán primero
+        });
+  
+        this.dataSourceses.data = sortedData; // Asignar los datos ordenados
+        this.dataSourceses.paginator = this.paginator;
+      }
+    });
   }
+  
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
