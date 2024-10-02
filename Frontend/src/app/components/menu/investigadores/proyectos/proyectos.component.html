@@ -227,22 +227,27 @@
           <form [formGroup]="firstFormGroup">
             <div class="titulo">
               <div class="custom-input-container">
-                <label for="codigo">Código del proyecto</label>
+                <label for="codigo">Código del proyecto <span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="codigo" (blur)="verificarCodigo()">
                 <div *ngIf="codigoExistente" style="color: red;">
                   {{ mensajeError }}
                 </div>
               </div>                                          
               <div class="custom-input-container">
-                <label for="codigo">Titulo</label>
+                <label for="codigo">Titulo <span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput id="titulo" placeholder="Ingrese el titulo" required formControlName="titulo">
               </div> 
               <div class="custom-input-container">
-                <label for="codigo">Grupo de investigación</label>
-                <input matInput id="grupoInvestigacionPro" placeholder="Grupo de investigación" required formControlName="grupoInvestigacionPro">
+                <label for="grupoInvestigacionPro">Grupo de investigación 
+                  <span class="required" title="Este campo es obligatorio">*</span> 
+                </label>
+                <mat-select id="grupoInvestigacionPro" placeholder="Seleccione un grupo" formControlName="grupoInvestigacionPro" required>
+                  <mat-option *ngFor="let grupo of gruposInvestigacion" [value]="grupo.nombre">
+                    {{ grupo.nombre }}
+                  </mat-option>
+                </mat-select>
               </div>
-           
-          
+              
             </div>
             <div class="titulo">
               <div class="custom-input-container">
@@ -273,7 +278,7 @@
               </div>
             
               <div class="custom-input-container">
-                <label for="unidadAcademica">Unidad académica</label>
+                <label for="unidadAcademica">Unidad académica <span class="required" title="Este campo es obligatorio">*</span></label>
                 <mat-select id="unidadAcademica" placeholder="Seleccione la unidad academica" formControlName="unidadAcademica">
                   <mat-option *ngFor="let data of unidadAcademicaData" [value]="data.value">
                     {{data.viewValue}}
@@ -282,13 +287,13 @@
               </div>
             
               <div class="custom-input-container">
-                <label for="area">Área</label>
+                <label for="area">Área <span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput id="area" placeholder="Ingrese el área" required formControlName="area">
               </div>
             </div>
             <div class="titulo">
               <div class="custom-input-container">
-                <label for="origenValue">Origen</label>
+                <label for="origenValue">Origen <span class="required" title="Este campo es obligatorio">*</span></label>
                 <mat-select id="origenValue" placeholder="Seleccione el origen" formControlName="origen">
                   <mat-option *ngFor="let data of origenData" [value]="data.value">
                     {{data.viewValue}}
@@ -296,7 +301,7 @@
                 </mat-select>
               </div>
               <div class="custom-input-container">
-                <label for="nivelRiesgoValue">Nivel de riesgo</label>
+                <label for="nivelRiesgoValue">Nivel de riesgo<span class="required" title="Este campo es obligatorio">*</span></label>
                 <mat-select id="nivelRiesgoValue" placeholder="Seleccione el nivel de riesgo" formControlName="nivelRiesgoEtico">
                   <mat-option *ngFor="let data of nivelRiesgoEticoData" [value]="data.value">
                     {{data.viewValue}}
@@ -304,7 +309,7 @@
                 </mat-select>
               </div>
               <div class="custom-input-container">
-                <label for="modalidadValue">Modalidad</label>
+                <label for="modalidadValue">Modalidad<span class="required" title="Este campo es obligatorio">*</span></label>
                 <mat-select id="modalidadValue" placeholder="Seleccione la modalidad" formControlName="modalidadProyecto">
                   <mat-option *ngFor="let data of modalidadData" [value]="data.value">
                     {{data.viewValue}}
@@ -315,12 +320,12 @@
             </div>
             <div class="titulo">
               <div class="custom-input-container">
-                <label for="codigo">Convocatoria</label>
+                <label for="codigo">Convocatoria<span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput id="convocatoria" placeholder="Ingrese la convocatoria" required formControlName="convocatoria">
               </div>
               
               <div class="custom-input-container">
-                <label for="codigo">Línea de investigación</label>
+                <label for="codigo">Línea de investigación<span class="required" title="Este campo es obligatorio">*</span></label>
                 <mat-select id="lineaInvestigacion" placeholder="Seleccione la línea de investigación" formControlName="lineaInvestigacion">
                     <mat-option *ngFor="let data of lineaInvestigacionData" [value]="data.value">
                       {{data.viewValue}}
@@ -418,21 +423,21 @@
             <span style="display:inline-block; width: 150px;"></span>
             <div class="titulo">
               <div class="custom-input-container form-field-spacing" appearance="fill">
-                <label for="codigo">Instalación</label>
+                <label for="codigo">Instalación<span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput formControlName="instalacion" autocomplete="off" placeholder="instalacion">
               </div>
               <div class="custom-input-container form-field-spacing" appearance="fill">
-                <label for="codigo">Municipio</label>
+                <label for="codigo">Municipio<span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput formControlName="municipio" autocomplete="off" placeholder="municipio">
               </div>
             </div>
             <div class="titulo">
               <div class="custom-input-container form-field-spacing" appearance="fill">
-                <label for="codigo">País</label>
+                <label for="codigo">País<span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput formControlName="pais" autocomplete="off" placeholder="pais">
               </div>
               <div class="custom-input-container form-field-spacing" appearance="fill">
-                <label for="codigo">Departamento</label>
+                <label for="codigo">Departamento<span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput formControlName="departamento" autocomplete="off" placeholder="departamento">
               </div>
             </div>
@@ -977,7 +982,7 @@
 
             <div class="titulo">
               <div class="custom-input-container ">
-                <label for="codigo">Código proyecto</label>
+                <label for="codigo">Código proyecto <span class="required" title="Este campo es obligatorio">*</span></label>
                 <mat-select formControlName="codigo" multiple>
                   <mat-option *ngFor="let codigo of codigosProyectosExistentes" [value]="codigo">
                     {{ codigo }}
@@ -985,14 +990,14 @@
                 </mat-select>
               </div>              
               <div class="custom-input-container">
-                <label for="codigoProducto">Código del producto</label>
+                <label for="codigoProducto">Código del producto <span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput id="codigoProducto" placeholder="Ingrese el código"  required formControlName="id" (blur)="verificarIds()">
                 <div *ngIf="idExistente" style="color: red;">
                   {{ mensajeErrorId }}
                 </div>
               </div>
               <div class="custom-input-container">
-                <label for="codigo">Titulo</label>
+                <label for="codigo">Titulo <span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="tituloProducto">
               </div> 
              
@@ -1000,15 +1005,15 @@
             
             <div class="titulo">
               <div class="custom-input-container">
-                <label for="codigo">Origen</label>
+                <label for="codigo">Origen<span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="origen">
               </div>
               <div class="custom-input-container">
-                <label for="codigo">publicación</label>
+                <label for="codigo">publicación<span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="publicacion">
               </div>
               <div class="custom-input-container">
-                <label for="codigo">Estado inicio semestre</label>
+                <label for="codigo">Estado inicio semestre<span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="estadoProdIniSemestre">
               </div>
               
@@ -1016,7 +1021,7 @@
             
             <div class="titulo">
               <div class="custom-input-container">
-                <label for="codigo">Observaciones</label>
+                <label for="codigo">Observaciones <span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput id="codigo" placeholder="Ingrese el código" required formControlName="observaciones">
               </div>
               <div class="custom-input-container form-field-spacing" appearance="fill">

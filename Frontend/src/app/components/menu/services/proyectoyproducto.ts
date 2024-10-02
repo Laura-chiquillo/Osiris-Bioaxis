@@ -310,9 +310,15 @@ export class ProyectoyproductoService {
     return this.http.get<ConfigPlanTrabajo>(this.planTrabajo);
   }
 
+  private grupoinvestigacion = 'http://localhost:8000/grupoinvestigacion'
+  getGruposInvestigacion(): Observable<any>{
+    return this.http.get<any>(this.grupoinvestigacion);
+  }
   //Trazabilidad
   private trazabilidad = 'http://localhost:8000/trazabilidad';
   getTrazabilidadData(): Observable<any> {
     return this.http.get<any>(this.trazabilidad);
   }
+
+
 }
