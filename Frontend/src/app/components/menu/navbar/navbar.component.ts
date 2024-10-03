@@ -42,11 +42,20 @@ export class NavbarComponent {
   loginForm: FormGroup;
 
   login(): void {
-    if (this.loginForm.valid) {
-      const correo = this.loginForm.get('correo')?.value;
-      const contrasena = this.loginForm.get('contrasena')?.value;
-      console.log('Contraseña enviada al backend:', contrasena);
-      
+    
+    console.log('Formulario válido:', this.loginForm.valid);
+
+    if (this.loginForm.invalid) {
+      console.log('Formulario inválido, mostrando mensaje de advertencia.');
+      this.showWarningMessage();
+      return;
+    }
+    const correo = this.loginForm.get('correo')?.value;
+    const contrasena = this.loginForm.get('contrasena')?.value;
+
+    // Validar el correo
+    console.log('Formulario y correo válidos, procediendo a iniciar sesión...');
+
       this.autenticacionService.login(correo, contrasena).subscribe(
         (response) => {
           console.log('Respuesta del servidor:', response);
@@ -95,9 +104,15 @@ export class NavbarComponent {
           });
         }
       );
-    }
+    
   }
-  
+  showWarningMessage() {
+    this.snackBar.open('Por favor, verifica que su correo tenga el formato correcto.', 'Cerrar', {
+        duration: 5000,
+        panelClass: ['warning-snackbar'] // Puedes definir estilos específicos si lo deseas
+    });
+}
+
    //metodo que abre el digalogo que contiene el formulario de restablecer contraseña
    openResetPasswordDialog() {
     const dialogRef = this.dialog.open(ResetPasswordDialogComponent);
