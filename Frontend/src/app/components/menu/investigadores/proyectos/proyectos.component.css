@@ -126,7 +126,23 @@ input.ng-invalid {
     margin-top: 5px;
     margin-left: 200px; /* Ajusta este valor según sea necesario */
   }
+
+  .info-icon {
+    background-color: #ffc107; /* Fondo amarillo para el ícono */
+    color: white; /* Color del ícono */
+    font-size: 18px; /* Tamaño del ícono */
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%; /* Hace que sea un círculo */
+    margin-right: 10px;
+  }
   
+  .info-text {
+    line-height: 1.5; /* Espaciado entre líneas */
+  }
   
   .anchoGuardar{
     width: 150px;

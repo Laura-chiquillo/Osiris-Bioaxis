@@ -441,15 +441,22 @@
                 <input matInput formControlName="departamento" autocomplete="off" placeholder="departamento">
               </div>
             </div>
-          </div>
+      </div>
+          
           <div class="titulo">
             <mat-button-toggle-group  aria-label="Ingredients" multiple (change)="onSelectionChange2($event)">
+              <label for="origenValue" class="info-label">
+                <span class="info-icon" title="Seleccione una de las opciones para agregar información adicional sobre su proyecto, si llega a contener financiación, la entidad a la cual se postuló, las transacciones realizadas o el producto asociado al proyecto.">
+                  ℹ️
+                </span>
+              </label>
               <mat-button-toggle value="flour">Entidad a la cual se postulo</mat-button-toggle>
               <mat-button-toggle value="eggs">Financiación</mat-button-toggle>
               <mat-button-toggle value="sugar">Transacciones</mat-button-toggle>
               <mat-button-toggle value="producto">Producto</mat-button-toggle>
             </mat-button-toggle-group>
           </div>
+
           <div *ngIf="selectedOption.includes('eggs')">
             <span style="display:inline-block; width: 150px;"></span>
             <h3 style="text-align: center;"> FINANCIACIÓN</h3>
@@ -474,7 +481,7 @@
           </div>
           
         </div>
-        
+
         <div *ngIf="selectedOption.includes('flour')">
           <span style="display:inline-block; width: 150px;"></span>
           <h3 style="text-align: center;"> ENTIDAD A LA CUAL SE POSTULO</h3>
@@ -1118,6 +1125,11 @@
               </div>
             </div>
            
+            <label for="origenValue" class="info-label">
+              <span class="info-icon" title="Seleccione una de las opciones para agregar el tipo de producto, después llene los datos correspondientes">
+                ℹ️
+              </span>
+            </label>
             <div formGroupName="listaProducto">
               <mat-tab-group class="nuevo vertical-tabs" mat-stretch-tabs="True" mat-align-tabs="end">
                 <mat-tab label="Capitulos">
