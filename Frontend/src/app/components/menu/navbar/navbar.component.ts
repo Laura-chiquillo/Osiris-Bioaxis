@@ -22,11 +22,11 @@ export class NavbarComponent {
   constructor(private router: Router, private InvestigadorService: InvestigadorService, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private proyectoyproductoService:ProyectoyproductoService,
     public dialog: MatDialog, private autenticacionService: AutenticacionService) {
     this.registroForm = this.formBuilder.group({
-      nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
-      apellidos: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
+      nombre: ['', [Validators.required, Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ]*$/)]],
+      apellidos: ['', [Validators.required, Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ]*$/)]],
       correo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@unbosque\.edu\.co$/)]],
       tipodocumento: ['', [Validators.required]],
-      numerodocumento: ['', [Validators.required,Validators.pattern(/^[0-9]+$/), Validators.minLength(9)]],
+      numerodocumento: ['', [Validators.required,Validators.pattern(/^[0-9]+$/), Validators.minLength(7)]],
       contrasena: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)]],
       confirmarContrasena: ['', [Validators.required]],
     });
