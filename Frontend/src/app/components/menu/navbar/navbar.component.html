@@ -1,7 +1,10 @@
 <mat-card class="example-card">
   <div class="login">
     <img src="./assets/img/login.png" width="150">
-    <h3>Inicio de Sesión</h3>
+    <h3 matTooltip="Para iniciar sesión, primero debe haberse registrado en el sistema">
+      Inicio de Sesión
+    </h3>
+    
     <form [formGroup]="loginForm">
       <mat-form-field class="ancho" appearance="outline">
         <mat-label>Correo institucional</mat-label>
@@ -106,10 +109,10 @@
     </mat-tab>
     
     <!-- Pestaña de Registro -->
-    <mat-tab label="Registro">
+    <mat-tab label="Registrarse">
       <div class="tab-content">
         <div class="registro-container">
-          <h2>Registrarte</h2>
+          <h2>Registrate</h2>
           <form [formGroup]="registroForm">
             <div class="reg">
               <mat-form-field appearance="outline">
@@ -117,7 +120,7 @@
                 <input matInput autocomplete="off" formControlName="nombre">
                 <mat-error *ngIf="registroForm.get('nombre')?.hasError('required')">El nombre es requerido</mat-error>
                 <mat-error *ngIf="registroForm.get('nombre')?.hasError('pattern')">Solo se permiten letras y espacios</mat-error>
-              </mat-form-field>
+              </mat-form-field>              
               <mat-form-field appearance="outline">
                 <mat-label>Apellidos</mat-label>
                 <input matInput autocomplete="off" formControlName="apellidos">

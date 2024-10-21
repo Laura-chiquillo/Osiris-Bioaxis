@@ -10,11 +10,10 @@ import { ResetPasswordDialogComponent } from './reset-password-dialog/reset-pass
 import { MatDialog } from '@angular/material/dialog';
 import { ProyectoyproductoService } from '../services/proyectoyproducto'; 
 
-
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent {
   pregrados: any[] = [];
@@ -22,8 +21,8 @@ export class NavbarComponent {
   constructor(private router: Router, private InvestigadorService: InvestigadorService, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private proyectoyproductoService:ProyectoyproductoService,
     public dialog: MatDialog, private autenticacionService: AutenticacionService) {
     this.registroForm = this.formBuilder.group({
-      nombre: ['', [Validators.required, Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ]*$/)]],
-      apellidos: ['', [Validators.required, Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ]*$/)]],
+      nombre: ['', [Validators.required, Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)]],
+      apellidos: ['', [Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)]],
       correo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@unbosque\.edu\.co$/)]],
       tipodocumento: ['', [Validators.required]],
       numerodocumento: ['', [Validators.required,Validators.pattern(/^[0-9]+$/), Validators.minLength(7)]],
