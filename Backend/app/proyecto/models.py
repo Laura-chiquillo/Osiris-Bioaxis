@@ -383,7 +383,6 @@ class Producto(models.Model):
         else:
             return 'NA'
 
-       
     class Meta:
         db_table = 'proyecto_Producto'
 

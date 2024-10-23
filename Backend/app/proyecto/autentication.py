@@ -482,27 +482,33 @@ class CrearProyecto(APIView):
             )
 
         # Crear o obtener el objeto ListaProducto
-        lista_producto_proyectoCursoProducto = list_producto.get('proyectoCursoProducto')
-        lista_producto_proyectoFormuladoProducto = list_producto.get('proyectoFormuladoProducto')
-        lista_producto_proyectoRSUProducto= list_producto.get('proyectoRSUProducto')
-        lista_producto, _ = ListaProducto.objects.get_or_create(
-            id=ListaProducto.objects.count() + 1,
-            evento=evento,
-            articulo=articulo,
-            capitulo=capitulo,
-            libro=libro,
-            software=software,
-            prototipoIndustrial=prototipoIndustrial,
-            reconocimiento=reconocimiento,
-            consultoria=consultoria,
-            contenido=contenido,
-            pregFinalizadoyCurso=pregFinalizadoyCurso,
-            apropiacion=apropiacion,
-            maestria=maestria,
-            proyectoCursoProducto=lista_producto_proyectoCursoProducto,
-            proyectoFormuladoProducto=lista_producto_proyectoFormuladoProducto,
-            proyectoRSUProducto=lista_producto_proyectoRSUProducto
+        lista_producto_proyectoCursoProducto = list_producto.get('proyectoCursoProducto')  or 'NA'
+        lista_producto_proyectoFormuladoProducto = list_producto.get('proyectoFormuladoProducto')  or 'NA'
+        lista_producto_proyectoRSUProducto= list_producto.get('proyectoRSUProducto')  or 'NA'
+        if (lista_producto_proyectoCursoProducto != 'NA' or
+            lista_producto_proyectoFormuladoProducto != 'NA' or
+            lista_producto_proyectoRSUProducto != 'NA'):
+            
+            lista_producto, _ = ListaProducto.objects.get_or_create(
+                id=ListaProducto.objects.count() + 1,
+                evento=evento,
+                articulo=articulo,
+                capitulo=capitulo,
+                libro=libro,
+                software=software,
+                prototipoIndustrial=prototipoIndustrial,
+                reconocimiento=reconocimiento,
+                consultoria=consultoria,
+                contenido=contenido,
+                pregFinalizadoyCurso=pregFinalizadoyCurso,
+                apropiacion=apropiacion,
+                maestria=maestria,
+                proyectoCursoProducto=lista_producto_proyectoCursoProducto,
+                proyectoFormuladoProducto=lista_producto_proyectoFormuladoProducto,
+                proyectoRSUProducto=lista_producto_proyectoRSUProducto
             )
+        else:
+            lista_producto = None  
         
         producto_data = {
             'id': producto.get('id'),
@@ -736,28 +742,33 @@ class CrearNuevoProducto(APIView):
             )
 
         # Crear o obtener el objeto ListaProducto
-        lista_producto_proyectoCursoProducto = data_general.get('proyectoCursoProducto')
-        lista_producto_proyectoFormuladoProducto = data_general.get('proyectoFormuladoProducto')
-        lista_producto_proyectoRSUProducto= data_general.get('proyectoRSUProducto')
-        lista_producto, _ = ListaProducto.objects.get_or_create(
-            id=ListaProducto.objects.count() + 1,
-            evento=evento,
-            articulo=articulo,
-            capitulo=capitulo,
-            libro=libro,
-            software=software,
-            prototipoIndustrial=prototipoIndustrial,
-            reconocimiento=reconocimiento,
-            consultoria=consultoria,
-            contenido=contenido,
-            pregFinalizadoyCurso=pregFinalizadoyCurso,
-            apropiacion=apropiacion,
-            maestria=maestria,
-            proyectoCursoProducto=lista_producto_proyectoCursoProducto,
-            proyectoFormuladoProducto=lista_producto_proyectoFormuladoProducto,
-            proyectoRSUProducto=lista_producto_proyectoRSUProducto
+        lista_producto_proyectoCursoProducto = data_general.get('proyectoCursoProducto') or 'NA'
+        lista_producto_proyectoFormuladoProducto = data_general.get('proyectoFormuladoProducto') or 'NA'
+        lista_producto_proyectoRSUProducto= data_general.get('proyectoRSUProducto') or 'NA'
+        if (lista_producto_proyectoCursoProducto != 'NA' or
+            lista_producto_proyectoFormuladoProducto != 'NA' or
+            lista_producto_proyectoRSUProducto != 'NA'):
+            
+            lista_producto, _ = ListaProducto.objects.get_or_create(
+                id=ListaProducto.objects.count() + 1,
+                evento=evento,
+                articulo=articulo,
+                capitulo=capitulo,
+                libro=libro,
+                software=software,
+                prototipoIndustrial=prototipoIndustrial,
+                reconocimiento=reconocimiento,
+                consultoria=consultoria,
+                contenido=contenido,
+                pregFinalizadoyCurso=pregFinalizadoyCurso,
+                apropiacion=apropiacion,
+                maestria=maestria,
+                proyectoCursoProducto=lista_producto_proyectoCursoProducto,
+                proyectoFormuladoProducto=lista_producto_proyectoFormuladoProducto,
+                proyectoRSUProducto=lista_producto_proyectoRSUProducto
             )
-        
+        else:
+            lista_producto = None  
 
         producto_data = {
             'id': request.data.get('id'),
