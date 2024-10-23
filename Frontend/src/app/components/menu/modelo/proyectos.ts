@@ -162,6 +162,8 @@ export interface Coinvestigador {
   id?: string;
   coinvestigador?: string;
   correo?: string;
+  nombre?: string;
+  apellidos?: string;
 }
 
 export interface financiacion{

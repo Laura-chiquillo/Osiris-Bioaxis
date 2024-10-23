@@ -119,6 +119,7 @@ export class ProyectosComponent implements OnInit {
   proyecto: Proyecto = {};
   usuarioSesion!: UsuarioSesion; 
   dataSources = new MatTableDataSource<any>(); 
+  dataSourceproyectos = new MatTableDataSource();  
   dataSourceses = new MatTableDataSource<any>(); 
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
   origenData: any[] = [
@@ -716,7 +717,7 @@ export class ProyectosComponent implements OnInit {
     });
   }
   configurarDatasourceses() { 
-    this.dataSourceses.paginator = this.paginator; // Verifica si es correcto usar dataSourceses aquí
+    this.dataSourceses.paginator = this.paginator2; // Verifica si es correcto usar dataSourceses aquí
     this.SearchService.getSearchQuery().subscribe(query => {
       this.dataSourceses.filter = query.trim().toLowerCase(); // Ajusta según corresponda
     });
@@ -1674,10 +1675,12 @@ thumbLabel6 = false;
 
   @ViewChild('paginator', { static: true }) paginator!: MatPaginator;
 
+  @ViewChild('paginator2', { static: true }) paginator2!: MatPaginator;
 
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSourceproyectos.paginator = this.paginator3;
     
     console.log("DATOS TRAIDOS:" ,this.ProyectoyproductoService.getProductosDelUsuario())
     forkJoin([
@@ -1738,18 +1741,25 @@ thumbLabel6 = false;
   selectedPlanId: string = '';
   data: any[] = [];
 
+  @ViewChild('paginator1') paginator1!: MatPaginator; 
+  @ViewChild('paginator3') paginator3!: MatPaginator;
+
   loadProjectsAndProducts() {
     this.investigatorService.getmostrarPyP().subscribe((data: Person[]) => {
-        const userData = this.AutenticacionService.obtenerDatosUsuario();
-        const userId = userData ? userData.numerodocumento : '';
-        this.data = this.transformData(data, userId);
+      const userData = this.AutenticacionService.obtenerDatosUsuario();
+      const userId = userData ? userData.numerodocumento : '';
+      
+      const transformedData = this.transformData(data, userId);
+      console.log("Datos transformados:", transformedData); // Verifica los datos transformados
+
+      this.dataSourceproyectos.data = transformedData; // Set the transformed data
+      console.log("proyectos asociados", this.dataSourceproyectos.data); // Verifica los datos aquí
+
+      // Asigna el paginador después de establecer los datos
+      this.dataSourceproyectos.paginator = this.paginator3; 
     });
-  }
+}
 
-  @ViewChild('paginator1') paginator1!: MatPaginator; 
-  @ViewChild('paginator2') paginator2!: MatPaginator; 
-
-  
   transformData(data: Person[], userId: string): any[] {
     const transformedData: any[] = [];
   
@@ -1799,13 +1809,14 @@ thumbLabel6 = false;
   }
   
   obtenerPlanTrabajo() {
+    this.dataSourceses.paginator = this.paginator2;
   this.ProyectoyproductoService.getconfigplanTrabajo().subscribe(data => {
     console.log('Datos recibidos:', data);
     if (data && data.length > 0) {
       this.idConfiguracion = data[0].id;
     }
     this.dataSourceses.data = data;
-    this.dataSourceses.paginator = this.paginator;
+    
   });
   }
 
