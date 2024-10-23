@@ -11,6 +11,7 @@ import { CommonModule, NgFor } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import * as moment from 'moment';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-carga-estudios',
   standalone: true,
@@ -20,6 +21,7 @@ import * as moment from 'moment';
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -66,15 +68,15 @@ export class CargaEstudiosComponent implements OnInit{
 
     if(this.type === 'Pregrado'){
       this.firstFormGroup = this.formBuilder.group({
-        titulo: ['', [Validators.required, Validators.pattern('[A-Za-zÁÉÍÓÚáéíóúÑñ]+')]],
+        titulo: ['', [Validators.required, Validators.pattern('^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\\s\\W]+$')]],
         fecha: ['', [Validators.required]],
-        institucion: ['', [Validators.required, Validators.pattern('[A-Za-zÁÉÍÓÚáéíóúÑñ]+')]],
+        institucion: ['', [Validators.required, Validators.pattern('^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\\s\\W]+$')]],
       });
     } else {
       this.secondFormGroup = this.formBuilder.group({
-        titulo2: ['', [Validators.required, Validators.pattern('[A-Za-zÁÉÍÓÚáéíóúÑñ]+')]],
+        titulo2: ['', [Validators.required, Validators.pattern('^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\\s\\W]+$')]],
         fecha2: ['', [Validators.required]],
-        institucion2: ['', [Validators.required, Validators.pattern('[A-Za-zÁÉÍÓÚáéíóúÑñ]+')]],
+        institucion2: ['', [Validators.required, Validators.pattern('^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\\s\\W]+$')]],
         tipo2: ['', [Validators.required]],
       });
     }

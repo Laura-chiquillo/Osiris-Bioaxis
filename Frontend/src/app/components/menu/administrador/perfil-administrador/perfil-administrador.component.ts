@@ -15,6 +15,8 @@ import { UsuarioSesion } from '../../modelo/usuario';
 import Swal from 'sweetalert2';
 import { MatIconModule } from '@angular/material/icon';
 import { CargaEstudiosComponent } from './carga-estudios/carga-estudios.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 @Component({
   selector: 'app-perfil-administrador',
   templateUrl: './perfil-administrador.component.html',
@@ -23,6 +25,7 @@ import { CargaEstudiosComponent } from './carga-estudios/carga-estudios.componen
   imports: [
     FormsModule, 
     MatFormFieldModule, 
+    MatTooltipModule,
     MatInputModule,
     MatSelectModule,
     CommonModule,
@@ -71,11 +74,11 @@ export class PerfilAdministradorComponent  implements OnInit {
   ) { 
     this.firstFormGroup = this.formBuilder.group({
       numerodocumento: [{ value: '', disabled: true }, Validators.required],
-      nombre: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('[A-Za-zÁÉÍÓÚáéíóúÑñ]+')]],
-      apellidos: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('[A-Za-zÁÉÍÓÚáéíóúÑñ]+')]],
+      nombre: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s\\W]+$')]],
+      apellidos: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('^[A-Za-zÁÉÍÓÚáéíóúÑñ0\\s\\W]+$')]],
       correo: [{ value: '', disabled: this.inputDeshabilitado },[ Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@unbosque\.edu\.co')]],
       tipodocumento: [{ value: '', disabled: this.inputDeshabilitado }, Validators.required],
-      escalofonodocente: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('[A-Za-zÁÉÍÓÚáéíóúÑñ]+')]],
+      escalofonodocente: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\\s\\W]+$')]],
       horasestricto: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('^[0-9]*$')]],
       horasformacion: [{ value: '', disabled: this.inputDeshabilitado }, [Validators.required, Validators.pattern('^[0-9]*$')]],
       lineainvestigacion: [{ value: '', disabled: this.inputDeshabilitado },Validators.required],
