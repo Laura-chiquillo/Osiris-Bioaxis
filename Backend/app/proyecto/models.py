@@ -322,7 +322,7 @@ class Producto(models.Model):
     tituloProducto = models.CharField(max_length=50)
     investigador = models.CharField(max_length=50)
     coinvestigador = models.ManyToManyField(Investigador)
-    listaProducto = models.ForeignKey(ListaProducto,null=False,blank=False,on_delete=models.CASCADE)
+    listaProducto = models.ForeignKey(ListaProducto, null=True, blank=True, on_delete=models.CASCADE)
     publicacion = models.CharField(max_length=50)
     estudiantes = models.ManyToManyField(Estudiantes)
     porcentanjeAvanFinSemestre= models.IntegerField()
@@ -347,6 +347,9 @@ class Producto(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
     
     def tipo_producto(self):
+        if self.listaProducto is None:
+            return 'NA'
+        
         if self.listaProducto.articulo is not None:
             return 'Articulo'
         elif self.listaProducto.capitulo is not None:
@@ -377,7 +380,10 @@ class Producto(models.Model):
             return 'proyectoFormuladoProducto'
         elif self.listaProducto.proyectoRSUProducto is not None:
             return 'proyectoRSUProducto'
-        
+        else:
+            return 'NA'
+
+       
     class Meta:
         db_table = 'proyecto_Producto'
 
