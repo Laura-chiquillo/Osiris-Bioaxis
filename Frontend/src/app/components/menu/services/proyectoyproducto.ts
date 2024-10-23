@@ -258,6 +258,12 @@ export class ProyectoyproductoService {
   getCategoria(): Observable<any[]> {
     return this.http.get<any[]>(`${this.categoria}`);
   }
+
+  private tipoProducto = 'http://localhost:8000/tipoProducto';
+  getTipoProducto(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.tipoProducto}`);
+  }
+
   //Plan de trabajo
   private configplanTrabajo = 'http://localhost:8000/ConfiguracionPlanTrabajo';
   

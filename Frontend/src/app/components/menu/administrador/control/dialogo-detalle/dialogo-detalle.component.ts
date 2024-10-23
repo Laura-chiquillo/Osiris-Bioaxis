@@ -72,7 +72,7 @@ export class DialogoDetalleComponent implements OnInit {
   ubicacionData: any[] = [];
   transaccionesData: any[] = [];
   financiacionData: any[] = [];
-
+  tipoProductoData: any[] = [];
   estadosProceso: string[] = [
     'Aprobado',
     'Rechazado',
@@ -134,7 +134,8 @@ export class DialogoDetalleComponent implements OnInit {
     if(this.type == 'Proyecto'){
       this.obtenerEstadosProyecto();
       this.obtenerEstadoProyecto();
-
+      this.obtenerTipoProducto();
+      
       this.firstFormGroup = this.formBuilder.group({
         codigo: [{value: this.data?.codigo, disabled: this.isEdit ? true : false}, [Validators.required]],
         titulo: [this.data?.titulo,[Validators.required]],
@@ -155,6 +156,8 @@ export class DialogoDetalleComponent implements OnInit {
         porcentajeAvance: [this.data?.porcentajeAvance,[Validators.required]],
         porcentajeEjecucionCorte: [this.data?.porcentajeEjecucionCorte,[Validators.required]],
         porcentajeEjecucionFinCorte: [this.data?.porcentajeEjecucionFinCorte,[Validators.required]],
+        tipoProducto: [this.data?.tipoProducto,[Validators.required]],
+        cantidadProducto:[this.data?.cantidadProducto,[Validators.required]],
       });
 
       console.log('Form Group Value:', this.firstFormGroup.value);
@@ -341,6 +344,11 @@ export class DialogoDetalleComponent implements OnInit {
     });
   }
 
+  obtenerTipoProducto(){
+    this.proyectoyproductoService.getTipoProducto().subscribe((data) => {    
+      this.tipoProductoData = data;
+    });
+  }
   obtenerParticipantesExternos(){
     this.participantesExternosService.getParticipantesExternos().subscribe((data) => {    
       this.participanteExternoData = data;

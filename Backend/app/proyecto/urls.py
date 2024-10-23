@@ -19,7 +19,7 @@ from .viewsets import (apropiacionList, apropiacionRetrieveUpdateDestroy,
                        avanceEntregableProyectoRetrieveUpdateDestroy,
                        configuracionEntregableProductoList,
                        configuracionEntregableProductoRetrieveUpdateDestroy,
-                       configuracionEntregableProyectoList,
+                       configuracionEntregableProyectoList, tipoProductoList,
                        configuracionEntregableProyectoRetrieveUpdateDestroy,
                        estadoProductoList, estadoProyectoList, estudiantesList,
                        estudiantesRetrieveUpdateDestroy,
@@ -74,6 +74,7 @@ urlpatterns = [
     path('mostrar-plan-trabajo', MostrarPlanTrabajo.as_view(), name='mostrar-plan-trabajo'),
     path('mostrarPyP', MostrarPyPdeInvestigador.as_view(), name='mostrarPyP'),
 
+    path('tipoProducto', tipoProductoList.as_view(), name='create-tipoProducto-list'),
 
     path('investigador', investigadorList.as_view(), name='create-investigador-list'),
     path('grupoinvestigacion', grupoInvestigacionList.as_view(), name='create-grupoinvestigacion-list'),
