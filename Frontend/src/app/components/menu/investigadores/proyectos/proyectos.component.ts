@@ -1558,7 +1558,7 @@ thumbLabel6 = false;
     console.log("Editar")
   }
   
-  // ------- plan de trabajo -----------------------------------
+ // ------- plan de trabajo -----------------------------------
   //--------------------------------------------------------------------------------------
   //--------------------------------------------------------------------------------------
 
@@ -1573,18 +1573,9 @@ thumbLabel6 = false;
     this.investigatorService.getmostrarPyP().subscribe((data: Person[]) => {
         const userData = this.AutenticacionService.obtenerDatosUsuario();
         const userId = userData ? userData.numerodocumento : '';
-        // Asignar los datos transformados
-      this.dataSourceses2.data = this.transformData(data, userId);
-      
-      // Reasignar el paginador después de cargar los datos
-      setTimeout(() => {
-        if (this.paginator2) {
-          this.dataSourceses2.paginator = this.paginator2;
-        }
-      });
+        this.data = this.transformData(data, userId);
     });
   }
-
 
   
   transformData(data: Person[], userId: string): any[] {
@@ -1641,17 +1632,10 @@ thumbLabel6 = false;
     if (data && data.length > 0) {
       this.idConfiguracion = data[0].id;
     }
-     // Asignar los datos
-     this.dataSourceses.data = data;
-      
-     // Reasignar el paginador después de cargar los datos
-     setTimeout(() => {
-       if (this.paginator1) {
-         this.dataSourceses.paginator = this.paginator1;
-       }
-     });
-   });
- }
+    this.dataSourceses.data = data;
+    this.dataSourceses.paginator = this.paginator;
+  });
+  }
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -1672,11 +1656,6 @@ thumbLabel6 = false;
     this.expandedElements = this.expandedElements === element ? null : element;
     if (this.expandedElements) {
       this.selectedPlanId = this.expandedElements.id;  // Guarda el ID del plan seleccionado
-      setTimeout(() => {
-        if (this.paginator2) {
-          this.dataSourceses2.paginator = this.paginator2;
-        }
-      });
     } else {
       this.selectedPlanId = ' ';
     }
@@ -1788,13 +1767,6 @@ thumbLabel6 = false;
       } 
     });
   }
-  refreshPaginators() {
-    if (this.paginator1) {
-      this.dataSourceses.paginator = this.paginator1;
-    }
-    if (this.paginator2) {
-      this.dataSourceses2.paginator = this.paginator2;
-    }
-  }
-
+  
+    
 }

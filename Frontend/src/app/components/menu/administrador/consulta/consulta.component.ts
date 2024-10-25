@@ -314,6 +314,8 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
 
   exportAsXLSX(data: any = undefined, tipo: string): void {
     let filter: any[] = [];
+    console.log('Iniciando exportación:', { data, tipo });
+
     switch(tipo) { 
       case 'Proyectos': {
         if(data == undefined){
@@ -332,19 +334,88 @@ export class ConsultaComponent implements OnInit, AfterViewInit {
         break; 
       } 
       default: {        
-        if(data == undefined){
-          filter = this.investigadoresData;
+        if (data == undefined) {
+          // Descarga general: solo exportar los datos básicos de los investigadores
+          filter = this.investigadoresData.map(inv => ({
+            tipodocumento: inv.tipodocumento,
+            numerodocumento: inv.numerodocumento,
+            nombre: inv.nombre,
+            apellidos: inv.apellidos,
+            correo: inv.correo
+          }));
         } else {
-          filter = this.investigadoresData.filter(x => x.numerodocumento == data.numerodocumento);
+          // Descarga individual: agregar proyectos y productos del investigador
+          console.log('Buscando investigador con documento:', data.numerodocumento);
+          const investigador = this.investigadoresData.filter(x => x.numerodocumento == data.numerodocumento);
+          console.log('Investigadores encontrados:', investigador);
+
+          investigador.forEach(inv => {
+            // Crear diferentes variantes del nombre para la búsqueda
+            const nombreCompleto = `${inv.nombre} ${inv.apellidos}`;
+            const nombreCompletoTrim = nombreCompleto.trim();
+            
+            console.log('Buscando por nombre completo:', nombreCompleto);
+            
+            const proyectosInv = this.proyectosData.filter(p => {
+              const invNombre = (p.investigador || '').trim();
+              return invNombre === nombreCompletoTrim;
+            });
+
+            const productosInv = this.productosData.filter(p => {
+              const invNombre = (p.investigador || '').trim();
+              return invNombre === nombreCompletoTrim;
+            });
+            
+            console.log('Proyectos encontrados:', proyectosInv);
+            console.log('Productos encontrados:', productosInv);
+            
+            const maxLength = Math.max(proyectosInv.length, productosInv.length);
+            
+            // Si no hay proyectos ni productos, al menos mostrar los datos del investigador
+            if (maxLength === 0) {
+              filter.push({
+                tipodocumento: inv.tipodocumento,
+                numerodocumento: inv.numerodocumento,
+                nombre: inv.nombre,
+                apellidos: inv.apellidos,
+                correo: inv.correo,
+                codigoProyecto: '',
+                tituloProyecto: '',
+                idProducto: '',
+                tituloProducto: ''
+              });
+            } else {
+              for (let i = 0; i < maxLength; i++) {
+                filter.push({
+                  tipodocumento: i === 0 ? inv.tipodocumento : '',
+                  numerodocumento: i === 0 ? inv.numerodocumento : '',
+                  nombre: i === 0 ? inv.nombre : '',
+                  apellidos: i === 0 ? inv.apellidos : '',
+                  correo: i === 0 ? inv.correo : '',
+                  codigoProyecto: proyectosInv[i]?.codigo || '',
+                  tituloProyecto: proyectosInv[i]?.titulo || '',
+                  idProducto: productosInv[i]?.id || '',
+                  tituloProducto: productosInv[i]?.tituloProducto || ''
+                });
+              }
+            }
+          });
         }
         break; 
       } 
     } 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filter);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, tipo);
-    XLSX.writeFile(wb, `Reporte${tipo}.xls`);
-  }
+
+    console.log('Datos finales a exportar:', filter);
+    
+    if (filter.length > 0) {
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filter);
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, tipo);
+      XLSX.writeFile(wb, `Reporte${tipo}.xls`);
+    } else {
+      console.error('No hay datos para exportar');
+    }
+}
 
   openDialogoEstadistica(data: any = undefined, type:string, detail:boolean): void {
     const dialogRef = this.dialog.open(DialogoEstadisticaComponent, {
