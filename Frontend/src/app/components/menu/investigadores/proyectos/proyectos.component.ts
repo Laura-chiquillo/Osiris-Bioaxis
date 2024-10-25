@@ -114,12 +114,13 @@ export class ProyectosComponent implements OnInit {
   separatorKeysCodes: number[] = [13, 188];
   investigatorCtrl = new FormControl('');
   filteredInvestigators!: Observable<{ correo: string; }[]>;
-  activeInvestigators: { correo: string; }[] = [];
+  activeInvestigators: { correo: string; nombre:string; apellidos:string; }[] = [];
   selectedInvestigators: string[] = [];
   proyecto: Proyecto = {};
   usuarioSesion!: UsuarioSesion; 
   dataSources = new MatTableDataSource<any>(); 
-  dataSourceses = new MatTableDataSource<any>(); 
+  dataSourceses = new MatTableDataSource<any>();
+  dataSourceses2 = new MatTableDataSource<any>();
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
   origenData: any[] = [
     {value: 'nacional', viewValue: 'nacional'},
@@ -185,7 +186,7 @@ export class ProyectosComponent implements OnInit {
     private ProyectoyproductoService: ProyectoyproductoService,
     private formBuilder: FormBuilder,
     private investigatorService: InvestigadorService,
-    private SearchService:SearchService,
+    private searchService: SearchService, 
     private AutenticacionService:AutenticacionService,
     private estudiantesService: EstudiantesService,
     private participantesExternosService: ParticipantesExternosService,
@@ -197,7 +198,7 @@ export class ProyectosComponent implements OnInit {
       titulo: [''],
       investigador: [''],
       unidadAcademica: [''],
-      coinvestigadores: ['', this.selectedInvestigators],
+      coinvestigadores: [''],
       estudiantesProyecto: ['', this.estudiantesData],
       participantesExternosProyecto: ['', this.participanteExternoData],
       area: [''],
@@ -435,11 +436,10 @@ export class ProyectosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
     this.ngAfterViewInit();
     this.obtenerCodigosProyectos();
     this.obtenerUsuarios();
-    this.configurarDatasource();
-    this.configurarDatasourceses();
     this.obtenerDatosUsuarioSesion();
     this.obtenerEstudiantes();
     this.obtenerParticipantesExternos();
@@ -451,6 +451,13 @@ export class ProyectosComponent implements OnInit {
     this.obtenerPlanTrabajo();
     this.loadProjectsAndProducts();
     this.obtenerTipoProducto();
+
+    this.searchService.getSearchQuery().subscribe(query => {
+      this.dataSource.filter = query.trim().toLowerCase();
+      this.dataSourceses.filter = query.trim().toLowerCase();
+      this.dataSourceses2.filter = query.trim().toLowerCase();
+    });
+    
   }
 
   obtenerEntregableProyecto(){
@@ -555,16 +562,17 @@ export class ProyectosComponent implements OnInit {
   estudiantesData: Estudiantes[] = []; 
   participanteExternoData: ParticipanteExterno[] = [];
   tipoProductoData: tipoProducto[] = []; 
-  obtenerDatosUsuarioSesion(){
-    this.usuarioSesion = this.AutenticacionService.obtenerDatosUsuario();
-  }
-
+  
   obtenerTipoProducto(){
     this.ProyectoyproductoService.getTipoProducto().subscribe((data) => {    
       console.log('Datos recibidos de tipoProducto:', data);
       this.tipoProductoData = data;
     });
   }
+  obtenerDatosUsuarioSesion(){
+    this.usuarioSesion = this.AutenticacionService.obtenerDatosUsuario();
+  }
+
   obtenerEstudiantes(){
     this.estudiantesService.getEstudiantes().subscribe((data) => {    
       this.estudiantesData = data;
@@ -587,41 +595,8 @@ export class ProyectosComponent implements OnInit {
 
   usuariosData: UsuarioSesion[] = [];
   usuariosAdmin: any[] = [];
-  obtenerUsuarios(){
-    this.activeInvestigators = []; // Inicializa activeInvestigators como un array vacío
-    this.selectedInvestigators = []; // Asegúrate de que selectedInvestigators esté vacío al principio
-    this.investigatorService.getUsuarios().subscribe((data) => {   
-      const usersAdmin = data.filter(u => u.rolinvestigador === 'Administrador');
-      usersAdmin.forEach(element => {
-        this.usuariosAdmin.push(element.numerodocumento);
-      });
-      this.usuariosData = data.filter(x => x.correo !== this.usuarioSesion.correo);
-      const activeInvestigators = data.filter(x => x.correo !== this.usuarioSesion.correo).map((investigador) => ({
-        correo: investigador.correo,
-      }));
 
-      this.filteredInvestigators = this.investigatorCtrl.valueChanges.pipe(
-        startWith(''),
-        map((value: string | null) =>
-          value ? this._filter(value) : activeInvestigators.slice()
-        )
-      );
-    });
-  }
 
-  configurarDatasource(){ 
-    this.dataSource.paginator = this.paginator;
-    this.SearchService.getSearchQuery().subscribe(query => {
-      this.dataSource.filter = query.trim().toLowerCase();
-    });
-  }
-  configurarDatasourceses() { 
-    this.dataSourceses.paginator = this.paginator; // Verifica si es correcto usar dataSourceses aquí
-    this.SearchService.getSearchQuery().subscribe(query => {
-      this.dataSourceses.filter = query.trim().toLowerCase(); // Ajusta según corresponda
-    });
-  }
- 
   openDialogEstudiante(): void {
     const dialogRef = this.dialog.open(DialogoCreacionEstudiantesComponent, {
       data: {
@@ -664,106 +639,152 @@ export class ProyectosComponent implements OnInit {
     });
   }
 
-  addCoinvestigador(investigador: {
-    correo: string;
-  }) {
+  obtenerUsuarios(){
+    this.activeInvestigators = []; // Inicializa activeInvestigators como un array vacío
+    this.selectedInvestigators = []; // Asegúrate de que selectedInvestigators esté vacío al principio
+    this.investigatorService.getUsuarios().subscribe((data) => {   
+      const usersAdmin = data.filter(u => u.rolinvestigador === 'Administrador');
+      usersAdmin.forEach(element => {
+        this.usuariosAdmin.push(element.numerodocumento);
+      });
+      this.usuariosData = data.filter(x => x.correo !== this.usuarioSesion.correo);
+      const activeInvestigators = data.filter(x => x.correo !== this.usuarioSesion.correo).map((investigador) => ({
+        correo: investigador.correo,
+        nombre: investigador.nombre,      // Asegurarse de que estos campos existan
+        apellidos: investigador.apellidos, // Asegurarse de que estos campos existan
+      }));
+      
+
+      this.filteredInvestigators = this.investigatorCtrl.valueChanges.pipe(
+        startWith(''),
+        map((value: string | null) =>
+          value ? this._filter(value) : activeInvestigators.slice()
+        )
+      );
+    });
+  }
+
+  addCoinvestigador(investigador: { correo: string; nombre: string; apellidos: string }) {
     const newCoinvestigador: Coinvestigador = {
       correo: investigador.correo,
+      coinvestigador: investigador.correo  // Usa correo como identificador
     };
+  
     if (!this.proyecto.coinvestigadores) {
-      this.proyecto.coinvestigadores = [newCoinvestigador];
-    } else {
-      this.proyecto.coinvestigadores.push(newCoinvestigador);
+      this.proyecto.coinvestigadores = []; // Inicializa como array vacío si no existe
+    }
+  
+    // Verifica si ya existe
+    const existe = this.proyecto.coinvestigadores.some(
+      c => c.coinvestigador === investigador.correo
+    );
+  
+    if (!existe) {
+      this.proyecto.coinvestigadores.push(newCoinvestigador); // Agrega si no existe
+    }
+  }
+  
+
+  removeCoinvestigador(investigator: any): void {
+    // Elimina al investigador de la lista de investigadores activos
+    const index = this.activeInvestigators.indexOf(investigator);
+    if (index >= 0) {
+      this.activeInvestigators.splice(index, 1);
+  
+      // Actualiza el FormControl coinvestigadores
+      const coinvestigadores = this.form.get('coinvestigadores')?.value || [];
+      const correoIndex = coinvestigadores.indexOf(investigator.correo);
+      if (correoIndex >= 0) {
+        coinvestigadores.splice(correoIndex, 1);
+        this.form.get('coinvestigadores')?.setValue(coinvestigadores);
+      }
     }
   }
 
-  removeCoinvestigador(investigador: { correo: string }) {
-    if (this.proyecto.coinvestigadores) {
-      this.proyecto.coinvestigadores = this.proyecto.coinvestigadores.filter(
-        (c) =>
-          c.coinvestigador !==
-          `${investigador.correo}`
-      );
-    }
-  }
-
-  private _filter(value: string): { correo: string }[] {
+  private _filter(value: string): { correo: string; }[] {
     const filterValue = value.toLowerCase();
-
+  
     if (!filterValue) {
-      return this.activeInvestigators.slice(); // Devuelve una copia de todos los investigadores activos si no hay entrada de usuario
+      return this.usuariosData.map(user => ({
+        correo: user.correo
+      }));
     }
-
-    // Filtrar investigadores activos que no estén en la lista de investigadores seleccionados
-    const filteredActiveInvestigators = this.activeInvestigators.filter(
-      (investigador) =>
-        `${investigador.correo.toLowerCase()}`.includes(
-          filterValue
-        )
-    );
-
-    // Filtrar investigadores seleccionables que no estén ya seleccionados
-    return filteredActiveInvestigators.filter(
-      (investigador) =>
-        !this.selectedInvestigators.includes(
-          `${investigador.correo}`
-        )
-    );
+  
+    // Filtra usando nombre y apellidos también
+    return this.usuariosData
+      .filter(user => 
+        user.nombre.toLowerCase().includes(filterValue) ||
+        user.apellidos.toLowerCase().includes(filterValue) ||
+        user.correo.toLowerCase().includes(filterValue)
+      )
+      .map(user => ({
+        correo: user.correo
+      }));
   }
-
+  
   trackByFn(
     index: number,
     item: { correo: string }
   ): number {
     return index;
+  
   }
 
-  remove(investigador: { correo: string }): void {
+  remove(investigador: { correo: string; nombre: string; apellidos: string }): void {
     const index = this.activeInvestigators.indexOf(investigador);
-
     if (index >= 0) {
       this.activeInvestigators.splice(index, 1);
+      this.removeCoinvestigador(investigador);  // Asegúrate de llamar a esta función
     }
   }
+ 
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
     if (value) {
       const [correo] = value;
-      this.activeInvestigators.push({ correo });
+      this.activeInvestigators.push({ nombre:'', apellidos:'' ,correo });
+
     }
     event.chipInput!.clear();
     this.investigatorCtrl.setValue(null);
   }
-
+ 
   selected(event: MatAutocompleteSelectedEvent): void {
-    const correo = event.option.value.correo;
-    // Verificar si el investigador ya está en activeInvestigators
-    const investigadorExistente = this.activeInvestigators.find(
-      (investigador) =>
-        investigador.correo === correo
-    );
-
-    if (!investigadorExistente) {
-      // Agregar el investigador seleccionado solo si no está en la lista
-      this.activeInvestigators.push({ correo });
-      this.selectedInvestigators.push(`${correo}`);
+    const investigadorSeleccionado = event.option.value;
+    const correo = investigadorSeleccionado.correo;
+  
+    const usuarioCompleto = this.usuariosData.find(u => u.correo === correo);
+  
+    if (usuarioCompleto && !this.activeInvestigators.some(inv => inv.correo === correo)) {
+      this.activeInvestigators.push({
+        correo: correo,
+        nombre: usuarioCompleto.nombre,
+        apellidos: usuarioCompleto.apellidos
+      });
+  
+      const coinvestigadores = this.firstFormGroup.get('coinvestigadores')?.value || [];
+      coinvestigadores.push(correo);
+      this.firstFormGroup.get('coinvestigadores')?.setValue(coinvestigadores);
+  
+      this.addCoinvestigador(usuarioCompleto);
     }
-
+    
     this.investigatorInput.nativeElement.value = '';
     this.investigatorCtrl.setValue(null);
   }
-
-  displayInvestigator(investigator: Investigador): string {
-    if (
-      investigator &&
-      investigator.correo
-    ) {
-      return `${investigator.correo}`;
-    } else {
-      return '';
+  
+  
+  displayInvestigator(investigator: any): string {
+    // Busca el usuario completo en usuariosData usando el correo
+    const usuarioCompleto = this.usuariosData.find(u => u.correo === investigator.correo);
+    if (usuarioCompleto) {
+      return `${usuarioCompleto.nombre} ${usuarioCompleto.apellidos}`;
     }
+    return investigator.correo || '';
   }
+  
+
 
   //subir archivo proyecto
   selectedFileProyecto: File = null!;
@@ -944,7 +965,6 @@ export class ProyectosComponent implements OnInit {
     return this.firstFormGroup.get('cantidadProducto')
   }
 
-
   onSaveForm(): void {
     console.log('proyecto:', this.firstFormGroup.value);
   }
@@ -982,15 +1002,17 @@ export class ProyectosComponent implements OnInit {
           'porcentajeEjecucionCorte'
         )?.value,
         entidadPostulo: this.firstFormGroup.get('entidadPostulo')?.value,
-        financiacion: this.firstFormGroup.get('financiacion')?.value,
+        financiacion: {
+          valorPropuestoFin: this.firstFormGroup.get('valorPropuestoFin')?.value,
+          valorEjecutadoFin: this.firstFormGroup.get('valorEjecutadoFin')?.value,
+        },
         grupoInvestigacionPro: this.firstFormGroup.get('grupoInvestigacionPro')
           ?.value,
         porcentajeEjecucionFinCorte: this.firstFormGroup.get(
           'porcentajeEjecucionFinCorte'
         )?.value,
         porcentajeAvance: this.firstFormGroup.get('porcentajeAvance')?.value,
-        soporte: this.selectedFileProyecto,
-        soporteProducto: this.selectedFileProduct,
+        soporte: this.selectedFileProyecto || null,
         transacciones: {
           fecha: this.firstFormGroup.get('transacciones.fecha')?.value,
           descripcion: this.firstFormGroup.get('transacciones.descripcion')?.value,
@@ -1009,7 +1031,6 @@ export class ProyectosComponent implements OnInit {
         participantesExternos: this.firstFormGroup.get(
           'participantesExternosProyecto'
         )?.value,
-               
       };
       console.log("datos de proyeeeecto",proyecto);
       proyecto.estadoProyecto = "Espera";
@@ -1027,6 +1048,7 @@ export class ProyectosComponent implements OnInit {
           }).then(() => {
             window.location.reload(); 
           });
+          this.firstFormGroup.reset();
           this.ngAfterViewInit();
           this.ngOnInit();
           this.demo1TabIndex = 0;
@@ -1365,7 +1387,7 @@ thumbLabel6 = false;
         porcentajeComSemestral: this.productoFormGroup.value.porcentajeComSemestral,
         porcentajeRealMensual: this.productoFormGroup.value.porcentajeRealMensual,
         origen: this.productoFormGroup.value.origen,
-        Soporte: this.selectedFileProduct,
+        Soporte: this.selectedFileProduct ||null,
         estudiantesProducto:  this.productoFormGroup.value.estudiantesProducto,
         participantesExternosProducto:  this.productoFormGroup.value.participantesExternosProducto,
         coinvestigadoresProducto:  this.productoFormGroup.value.coinvestigadoresProducto,
@@ -1476,12 +1498,17 @@ thumbLabel6 = false;
   
   expandedDetail = false;
 
-  @ViewChild('paginator', { static: true }) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
+  @ViewChild('paginator1') paginator1!: MatPaginator;
+  @ViewChild('paginator2') paginator2!: MatPaginator;
+
 
 
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSourceses.paginator = this.paginator1;
+    this.dataSourceses2.paginator = this.paginator2;
     
     console.log("DATOS TRAIDOS:" ,this.ProyectoyproductoService.getProductosDelUsuario())
     forkJoin([
@@ -1546,12 +1573,18 @@ thumbLabel6 = false;
     this.investigatorService.getmostrarPyP().subscribe((data: Person[]) => {
         const userData = this.AutenticacionService.obtenerDatosUsuario();
         const userId = userData ? userData.numerodocumento : '';
-        this.data = this.transformData(data, userId);
+        // Asignar los datos transformados
+      this.dataSourceses2.data = this.transformData(data, userId);
+      
+      // Reasignar el paginador después de cargar los datos
+      setTimeout(() => {
+        if (this.paginator2) {
+          this.dataSourceses2.paginator = this.paginator2;
+        }
+      });
     });
   }
 
-  @ViewChild('paginator1') paginator1!: MatPaginator; 
-  @ViewChild('paginator2') paginator2!: MatPaginator; 
 
   
   transformData(data: Person[], userId: string): any[] {
@@ -1608,10 +1641,17 @@ thumbLabel6 = false;
     if (data && data.length > 0) {
       this.idConfiguracion = data[0].id;
     }
-    this.dataSourceses.data = data;
-    this.dataSourceses.paginator = this.paginator;
-  });
-  }
+     // Asignar los datos
+     this.dataSourceses.data = data;
+      
+     // Reasignar el paginador después de cargar los datos
+     setTimeout(() => {
+       if (this.paginator1) {
+         this.dataSourceses.paginator = this.paginator1;
+       }
+     });
+   });
+ }
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -1632,6 +1672,11 @@ thumbLabel6 = false;
     this.expandedElements = this.expandedElements === element ? null : element;
     if (this.expandedElements) {
       this.selectedPlanId = this.expandedElements.id;  // Guarda el ID del plan seleccionado
+      setTimeout(() => {
+        if (this.paginator2) {
+          this.dataSourceses2.paginator = this.paginator2;
+        }
+      });
     } else {
       this.selectedPlanId = ' ';
     }
@@ -1743,5 +1788,13 @@ thumbLabel6 = false;
       } 
     });
   }
-  
+  refreshPaginators() {
+    if (this.paginator1) {
+      this.dataSourceses.paginator = this.paginator1;
+    }
+    if (this.paginator2) {
+      this.dataSourceses2.paginator = this.paginator2;
+    }
+  }
+
 }

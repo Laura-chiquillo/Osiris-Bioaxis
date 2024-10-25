@@ -43,8 +43,9 @@
               <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumn.length">
                 <div class="expanded-row-detail" *ngIf="expandedElements === element">
                   <div class="inner-table-container mat-elevation-z8">
-                    <table mat-table [dataSource]="data" matSort>
-                      
+                    <table mat-table [dataSource]="dataSourceses2" matSort 
+                           matTooltip="Seleccione los proyectos y productos que va a manejar en el semestre. Se observan los proyectos y productos propios y en los que se encuentra participando.">
+
                       <!-- Checkbox Column -->
                       <ng-container matColumnDef="select">
                         <th mat-header-cell *matHeaderCellDef>
@@ -105,7 +106,10 @@
                     </table>
                     
                     <!-- Pagination Controls -->
-                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
+                    <mat-paginator #paginator2 
+                    [pageSize]="5" 
+                    [pageSizeOptions]="[5, 10, 25]" 
+                    showFirstLastButtons>
                     </mat-paginator>
                     <button mat-raised-button  style="background-color: #6AABA0; color: white;" class="save-button" (click)="guardar()">Guardar</button>
                   </div>
@@ -119,7 +123,7 @@
             <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
           </table>
           
-          <mat-paginator #paginator2 [pageSize]="5" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons aria-label="Select page of periodic elements"></mat-paginator>
+          <mat-paginator #paginator1 [pageSize]="5" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons aria-label="Select page of periodic elements"></mat-paginator>
         </div>
       </div>
     </mat-tab>
@@ -127,7 +131,7 @@
     <mat-tab label="Proyectos y Productos">
       <!-- tabla -->
       <div class="mat-elevation-z8">
-        <table mat-table [dataSource]="dataSource" multiTemplateDataRows matTooltip="Se observan los proyectos y productos que usted como investigador principal creo.">
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows  matTooltip="Se observan los proyectos y productos que usted como investigador principal creo.">
 
           <!-- Columnas de la tabla -->
           <ng-container matColumnDef="tipo">
@@ -238,7 +242,7 @@
                 <input matInput id="titulo" placeholder="Ingrese el titulo" required formControlName="titulo">
               </div> 
               <div class="custom-input-container">
-                <label for="grupoInvestigacionPro" matTooltip="Seleccione el grupo de investigación la cual pertenezca el proyecto.">Grupo de investigación 
+                <label for="grupoInvestigacionPro" matTooltip="Seleccione el grupo de investigación la cual pertenezca el proyecto.">Grupo de investigación
                   <span class="required" title="Este campo es obligatorio">*</span> 
                 </label>
                 <mat-select id="grupoInvestigacionPro" placeholder="Seleccione un grupo" formControlName="grupoInvestigacionPro" required>
@@ -246,35 +250,20 @@
                     {{ grupo.nombre }}
                   </mat-option>
                 </mat-select>
-              </div>             
+              </div>
+              
             </div>
             <div class="titulo">
-              <div class="custom-input-container">
-                <label for="investigatorInput" matTooltip="Seleccione los investigadores que van a participar en el proyecto como COINVESTIGADORES.">Coinvestigadores</label>
-                <div class="custom-chip-list">
-                  <mat-chip-grid formControlName="coinvestigadores" #chipGrid aria-label="Active Investigators">
-                    <mat-chip-row
-                      *ngFor="let investigator of activeInvestigators; let i = index; trackBy: trackByFn"
-                      (removed)="remove(investigator)">
-                      {{ investigator.correo }}
-                      <button matChipRemove
-                        [attr.aria-label]="'remove ' + investigator.correo"
-                        (click)="removeCoinvestigador(investigator)">
-                        <mat-icon>cancel</mat-icon>
-                      </button>
-                    </mat-chip-row>
-                  </mat-chip-grid>
-                  <input matInput placeholder="Añadir coinvestigador" #investigatorInput [formControl]="investigatorCtrl"
-                    [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)" />
-                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                    <mat-option *ngFor="let investigator of filteredInvestigators | async; trackBy: trackByFn"
-                      [value]="investigator">
-                      {{ displayInvestigator(investigator) }}
-                    </mat-option>
-                  </mat-autocomplete>
-                </div>
-              </div>   
+              <div class="custom-input-container form-field-spacing" appearance="fill">
+                <label for="codigo"matTooltip="Seleccione los investigadores que van a participar en el producto como COINVESTIGADORES.">Coinvestigadores</label>
+                <mat-select formControlName="coinvestigadores" multiple>
+                  <mat-option *ngFor="let data of usuariosData" [value]="data.correo">
+                    {{data.nombre}} {{data.apellidos}}
+                  </mat-option>
+                </mat-select>                
+                
+              </div>     
+            
               <div class="custom-input-container">
                 <label for="unidadAcademica" matTooltip="Seleccione la facultad a la cual pertenece el proyecto.">Unidad académica <span class="required" title="Este campo es obligatorio">*</span></label>
                 <mat-select id="unidadAcademica" placeholder="Seleccione la unidad academica" formControlName="unidadAcademica">
@@ -283,6 +272,7 @@
                   </mat-option>
                 </mat-select>
               </div>
+            
               <div class="custom-input-container">
                 <label for="area"  matTooltip="Ingrese el area de investigación de la facultad.">Área <span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput id="area" placeholder="Ingrese el área" required formControlName="area">
@@ -313,6 +303,7 @@
                   </mat-option>
                 </mat-select>
               </div>
+
             </div>
             <div class="titulo">
               <div class="custom-input-container">
@@ -321,7 +312,7 @@
               </div>
               
               <div class="custom-input-container">
-                <label for="codigo" matTooltip="Seleccione el tipo de línea de investigación al que pertenece el proyecto. EJEMPLO: Ingeniería de software y sociedad.">Línea de investigación<span class="required" title="Este campo es obligatorio">*</span></label>
+               <label for="codigo" matTooltip="Seleccione el tipo de línea de investigación al que pertenece el proyecto. EJEMPLO: Ingeniería de software y sociedad.">Línea de investigación<span class="required" title="Este campo es obligatorio">*</span></label>
                 <mat-select id="lineaInvestigacion" placeholder="Seleccione la línea de investigación" formControlName="lineaInvestigacion">
                     <mat-option *ngFor="let data of lineaInvestigacionData" [value]="data.value">
                       {{data.viewValue}}
@@ -329,8 +320,8 @@
                   </mat-select>
               </div>
               <div class="custom-input-container">
-                <label for="coinvestigadoresProducto" matTooltip="Si tiene un documento inicial, agregue el documento.">Acta de inicio</label>
-              <input formControlName="soporte" type="file" (change)="onFileSelected($event)" />
+                <label for="coinvestigadoresProducto" matTooltip="ingrese el documento de propuesta inicial.">Acta de inicio<span class="required" title="Este campo es obligatorio">*</span></label>
+              <input  required formControlName="soporte" type="file" (change)="onFileSelected($event)" />
             </div>
             </div>
           <!----Porcentajes-->
@@ -381,7 +372,8 @@
                   {{data.numeroDocumento}} - {{data.nombres}} {{data.apellidos}}
                 </mat-option>
               </mat-select>
-            </div>  
+            </div>
+            
             <div class="example-button-row">
               <div class="example-flex-container">
                 <div class="example-button-container">
@@ -390,7 +382,8 @@
                   </button>
                 </div>
               </div>
-            </div>           
+            </div>
+            
           </div>
           <div class="titulo">
             <div class="custom-input-container form-field-spacing" appearance="fill">
@@ -413,7 +406,7 @@
           </div>
           <div formGroupName="ubicacionProyecto">
             <span style="display:inline-block; width: 150px;"></span>
-            <h3 style="text-align: center;" matTooltip="Ingrese la ubicación donde se desarrolla el proyecto.">UBICACIÓN DEL PROYECTO</h3>
+            <h3 style="text-align: center;" matTooltip="Ingrese la ubicación donde se desarrolla el proyecto."> UBICACIÓN DEL PROYECTO</h3>
             <span style="display:inline-block; width: 150px;"></span>
             <div class="titulo">
               <div class="custom-input-container form-field-spacing" appearance="fill">
@@ -435,17 +428,15 @@
                 <input matInput formControlName="departamento" autocomplete="off" placeholder="departamento">
               </div>
             </div>
-      </div>
-          
-          <div class="titulo" matTooltip="ISeleccione una de las opciones para agregar información adicional sobre su proyecto, si llega a contener financiación, la entidad con la que se postuló, las transacciones realizadas o el producto asociado al proyecto.">
+          </div>
+          <div class="titulo" matTooltip="Seleccione una de las opciones para agregar información adicional sobre su proyecto, si llega a contener financiación, la entidad con la que se postuló, las transacciones realizadas o el producto asociado al proyecto.">
             <mat-button-toggle-group  aria-label="Ingredients" multiple (change)="onSelectionChange2($event)">
-              <mat-button-toggle value="flour">Entidad con la que se postuló</mat-button-toggle>
+              <mat-button-toggle value="flour">Entidad con la cual se postulo</mat-button-toggle>
               <mat-button-toggle value="eggs">Financiación</mat-button-toggle>
               <mat-button-toggle value="sugar">Transacciones</mat-button-toggle>
               <mat-button-toggle value="producto">Producto</mat-button-toggle>
             </mat-button-toggle-group>
           </div>
-
           <div *ngIf="selectedOption.includes('eggs')">
             <span style="display:inline-block; width: 150px;"></span>
             <h3 style="text-align: center;"> FINANCIACIÓN</h3>
@@ -470,7 +461,7 @@
           </div>
           
         </div>
-
+        
         <div *ngIf="selectedOption.includes('flour')">
           <span style="display:inline-block; width: 150px;"></span>
           <h3 style="text-align: center;"> ENTIDAD CON LA CUAL SE POSTULO</h3>
@@ -536,7 +527,6 @@
                 <input matInput formControlName="cantidadProducto" autocomplete="off" placeholder="cantidadProducto">
               </div>
             </div>
-            
           </div>
            
           <button mat-button (click)="guardarProyecto()">Guardar</button>
@@ -581,7 +571,7 @@
                 </mat-select>
               </div>
               <div class="custom-input-container">
-                <label for="codigo"  matTooltip="Medio en el cual es publicado el producto. EJEMPLO: Q1, Q2 derechos de autor.">publicación<span class="required" title="Este campo es obligatorio">*</span></label>
+                <label for="codigo">publicación<span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput id="codigo" placeholder="Ingrese la publicación" required formControlName="publicacion">
               </div>
               <div class="custom-input-container">
@@ -593,20 +583,20 @@
             
             <div class="titulo">
               <div class="custom-input-container">
-                <label for="codigo" matTooltip="Ingrese las observaciones que tiene con respecto al proyecto.">Observaciones <span class="required" title="Este campo es obligatorio">*</span></label>
+                <label for="codigo">Observaciones <span class="required" title="Este campo es obligatorio">*</span></label>
                 <input matInput id="codigo" placeholder="Ingrese las observaciones" required formControlName="observaciones">
               </div>
               <div class="custom-input-container form-field-spacing" appearance="fill">
                 <label for="codigo"matTooltip="Seleccione los investigadores que van a participar en el producto como COINVESTIGADORES.">Coinvestigadores</label>
                 <mat-select formControlName="coinvestigadoresProducto" multiple>
                   <mat-option *ngFor="let data of usuariosData" [value]="data.correo">
-                    {{data.correo}}
+                  {{data.nombre}} {{data.apellidos}}
                   </mat-option>
                 </mat-select>
               </div>              
               <div class="custom-input-container">
-                <label for="soporte"matTooltip="Si tiene un documento inicial, agregue el documento.">Acta de inicio</label>
-                <input formControlName="Soporte" type="file" (change)="onFileSelected2($event)" />
+                <label for="soporte"matTooltip="Si tiene un documento inicial, agregue el documento.">Acta de inicio<span class="required" title="Este campo es obligatorio">*</span></label>
+                <input required formControlName="Soporte" type="file" (change)="onFileSelected2($event)" />
               </div>
             </div>
             <div class="titulo">
