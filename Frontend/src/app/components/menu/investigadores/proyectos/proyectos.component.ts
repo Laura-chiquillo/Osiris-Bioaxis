@@ -595,8 +595,34 @@ export class ProyectosComponent implements OnInit {
 
   usuariosData: UsuarioSesion[] = [];
   usuariosAdmin: any[] = [];
+  
+  obtenerUsuarios(){
+    this.activeInvestigators = []; // Inicializa activeInvestigators como un array vacío
+    this.selectedInvestigators = []; // Asegúrate de que selectedInvestigators esté vacío al principio
+    this.investigatorService.getUsuarios().subscribe((data) => {   
+      const usersAdmin = data.filter(u => u.rolinvestigador === 'Administrador');
+      usersAdmin.forEach(element => {
+        this.usuariosAdmin.push(element.numerodocumento);
+      });
+      this.usuariosData = data.filter(x => x.correo !== this.usuarioSesion.correo);
+      const activeInvestigators = data.filter(x => x.correo !== this.usuarioSesion.correo).map((investigador) => ({
+        correo: investigador.correo,
+        nombre: investigador.nombre,      // Asegurarse de que estos campos existan
+        apellidos: investigador.apellidos, // Asegurarse de que estos campos existan
+      }));
+      
 
+      this.filteredInvestigators = this.investigatorCtrl.valueChanges.pipe(
+        startWith(''),
+        map((value: string | null) =>
+          value ? this._filter(value) : activeInvestigators.slice()
+        )
+      );
+    });
+  }
 
+ 
+ 
   openDialogEstudiante(): void {
     const dialogRef = this.dialog.open(DialogoCreacionEstudiantesComponent, {
       data: {
@@ -639,31 +665,6 @@ export class ProyectosComponent implements OnInit {
     });
   }
 
-  obtenerUsuarios(){
-    this.activeInvestigators = []; // Inicializa activeInvestigators como un array vacío
-    this.selectedInvestigators = []; // Asegúrate de que selectedInvestigators esté vacío al principio
-    this.investigatorService.getUsuarios().subscribe((data) => {   
-      const usersAdmin = data.filter(u => u.rolinvestigador === 'Administrador');
-      usersAdmin.forEach(element => {
-        this.usuariosAdmin.push(element.numerodocumento);
-      });
-      this.usuariosData = data.filter(x => x.correo !== this.usuarioSesion.correo);
-      const activeInvestigators = data.filter(x => x.correo !== this.usuarioSesion.correo).map((investigador) => ({
-        correo: investigador.correo,
-        nombre: investigador.nombre,      // Asegurarse de que estos campos existan
-        apellidos: investigador.apellidos, // Asegurarse de que estos campos existan
-      }));
-      
-
-      this.filteredInvestigators = this.investigatorCtrl.valueChanges.pipe(
-        startWith(''),
-        map((value: string | null) =>
-          value ? this._filter(value) : activeInvestigators.slice()
-        )
-      );
-    });
-  }
-
   addCoinvestigador(investigador: { correo: string; nombre: string; apellidos: string }) {
     const newCoinvestigador: Coinvestigador = {
       correo: investigador.correo,
@@ -683,9 +684,8 @@ export class ProyectosComponent implements OnInit {
       this.proyecto.coinvestigadores.push(newCoinvestigador); // Agrega si no existe
     }
   }
-  
 
-  removeCoinvestigador(investigator: any): void {
+removeCoinvestigador(investigator: any): void {
     // Elimina al investigador de la lista de investigadores activos
     const index = this.activeInvestigators.indexOf(investigator);
     if (index >= 0) {
@@ -737,7 +737,6 @@ export class ProyectosComponent implements OnInit {
       this.removeCoinvestigador(investigador);  // Asegúrate de llamar a esta función
     }
   }
- 
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
@@ -749,7 +748,7 @@ export class ProyectosComponent implements OnInit {
     event.chipInput!.clear();
     this.investigatorCtrl.setValue(null);
   }
- 
+
   selected(event: MatAutocompleteSelectedEvent): void {
     const investigadorSeleccionado = event.option.value;
     const correo = investigadorSeleccionado.correo;
@@ -773,7 +772,6 @@ export class ProyectosComponent implements OnInit {
     this.investigatorInput.nativeElement.value = '';
     this.investigatorCtrl.setValue(null);
   }
-  
   
   displayInvestigator(investigator: any): string {
     // Busca el usuario completo en usuariosData usando el correo
@@ -1499,9 +1497,9 @@ thumbLabel6 = false;
   expandedDetail = false;
 
   @ViewChild('paginator') paginator!: MatPaginator;
-  @ViewChild('paginatores') paginatores!: MatPaginator;
+  @ViewChild('paginator1') paginator1!: MatPaginator;
   @ViewChild('paginator2') paginator2!: MatPaginator;
-
+  @ViewChild('paginatores') paginatores!: MatPaginator;
 
   dataSourceProyectos = new MatTableDataSource<any>([]);
   dataSourceProductos = new MatTableDataSource<any>([]);
@@ -1554,14 +1552,23 @@ thumbLabel6 = false;
       // Filtered data sources
       this.dataSourceProyectos.data = combinedData.filter(item => item.tipo === 'Proyecto');
       this.dataSourceProductos.data = combinedData.filter(item => item.tipo === 'Producto');
+
+      
     });
+    setTimeout(() => {
+      if (this.paginator2) {
+        this.dataSourceses2.paginator = this.paginator2;
+      }
+    });
+  
   }
+
   
   accionUno(element: any) {
     console.log("Editar")
   }
   
- // ------- plan de trabajo -----------------------------------
+  // ------- plan de trabajo -----------------------------------
   //--------------------------------------------------------------------------------------
   //--------------------------------------------------------------------------------------
 
@@ -1576,9 +1583,18 @@ thumbLabel6 = false;
     this.investigatorService.getmostrarPyP().subscribe((data: Person[]) => {
         const userData = this.AutenticacionService.obtenerDatosUsuario();
         const userId = userData ? userData.numerodocumento : '';
-        this.data = this.transformData(data, userId);
+        // Asignar los datos transformados
+      this.dataSourceses2.data = this.transformData(data, userId);
+      
+      // Reasignar el paginador después de cargar los datos
+      setTimeout(() => {
+        if (this.paginator2) {
+          this.dataSourceses2.paginator = this.paginator2;
+        }
+      });
     });
   }
+
 
   
   transformData(data: Person[], userId: string): any[] {
@@ -1635,10 +1651,17 @@ thumbLabel6 = false;
     if (data && data.length > 0) {
       this.idConfiguracion = data[0].id;
     }
-    this.dataSourceses.data = data;
-    this.dataSourceses.paginator = this.paginator;
-  });
-  }
+     // Asignar los datos
+     this.dataSourceses.data = data;
+      
+     // Reasignar el paginador después de cargar los datos
+     setTimeout(() => {
+       if (this.paginator1) {
+         this.dataSourceses.paginator = this.paginator1;
+       }
+     });
+   });
+ }
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -1659,6 +1682,12 @@ thumbLabel6 = false;
     this.expandedElements = this.expandedElements === element ? null : element;
     if (this.expandedElements) {
       this.selectedPlanId = this.expandedElements.id;  // Guarda el ID del plan seleccionado
+      
+      setTimeout(() => {
+        if (this.paginator2) {
+          this.dataSourceses2.paginator = this.paginator2;
+        }
+      });
     } else {
       this.selectedPlanId = ' ';
     }
@@ -1686,7 +1715,7 @@ thumbLabel6 = false;
   }
   
   guardar() {
-    const datosAGuardar = this.data
+    const datosAGuardar = this.dataSourceses2.data
       .filter(row => row.isSelected && row.horasestricto !== undefined)
       .map(row => ({
         configPlanTrabajoId: this.selectedPlanId || this.idConfiguracion,
@@ -1727,6 +1756,8 @@ thumbLabel6 = false;
               row.horasestricto = undefined;
             }
           });
+          this.dataSourceses2._updateChangeSubscription();
+
   
           // Retarda la recarga para permitir que se completen las notificaciones
           setTimeout(() => {
@@ -1770,6 +1801,4 @@ thumbLabel6 = false;
       } 
     });
   }
-  
-    
 }
