@@ -13,15 +13,17 @@ import { ProyectoyproductoService } from '../../../services/proyectoyproducto';
 import { MatNativeDateModule, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
 import { InvestigadorService } from '../../../services/registroInvestigador';
 import { HttpErrorResponse } from '@angular/common/http';
-import { forkJoin, Observable, catchError, of} from 'rxjs';
-import {  switchMap,  } from 'rxjs/operators';
+import { forkJoin, Observable, catchError, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { AutenticacionService } from '../../../services/autenticacion';
+import Swal from 'sweetalert2'; // <- Importa SweetAlert2
+
 export const MY_DATE_FORMATS = {
   parse: {
-    dateInput: 'YYYY-MM-DD', // Formato para parsear la fecha
+    dateInput: 'YYYY-MM-DD',
   },
   display: {
-    dateInput: 'YYYY-MM-DD', // Formato para mostrar la fecha
+    dateInput: 'YYYY-MM-DD',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'YYYY-MM-DD',
     monthYearA11yLabel: 'MMMM YYYY',
@@ -47,7 +49,7 @@ export const MY_DATE_FORMATS = {
   ],
   providers: [
     { provide: DateAdapter, useClass: NativeDateAdapter },
-    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' }, // o el idioma preferido
+    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
   ],
 })
@@ -58,6 +60,7 @@ export class DialogoPlanDeTrabajoComponent implements OnInit {
   title!: string;
   hide = true;
   fechaMinima: Date;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public dialogData: { title: string, buttonTitle: string },
     private formBuilder: FormBuilder,
@@ -86,10 +89,6 @@ export class DialogoPlanDeTrabajoComponent implements OnInit {
     return this.registroForm.get('titulo');
   }
 
-  get estado() {
-    return this.registroForm.get('estado');
-  }
-
   private readonly _currentYear = new Date().getFullYear();
   readonly minDate = new Date(this._currentYear - 20, 0, 1);
   readonly maxDate = new Date(this._currentYear + 1, 11, 31);
@@ -107,13 +106,13 @@ export class DialogoPlanDeTrabajoComponent implements OnInit {
       const fecha = this.fecha?.value ? new Date(this.fecha?.value) : new Date();
       fecha.setHours(23, 59, 59, 999); // Establece la fecha límite al final del día
       const fechaISO = this.formatDateToISO(fecha);
-  
+
       const configuracion: ConfiguracionPlanTrabajo = {
         titulo: this.titulo?.value,
         fecha: fechaISO,
         estado: "true"
       };
-  
+
       this.ProyectoyproductoService.creargetconfigplanTrabajo(configuracion).pipe(
         switchMap((resp) => {
           console.log('Se ha registrado el plan de trabajo exitosamente:', resp);
@@ -122,33 +121,50 @@ export class DialogoPlanDeTrabajoComponent implements OnInit {
       ).subscribe(
         () => {
           console.log('Todas las notificaciones han sido enviadas');
-          this.registroForm.reset();
-          this.dialogRef.close(true);
+          Swal.fire({
+            icon: 'success',
+            title: 'Registro exitoso',
+            text: 'El plan de trabajo ha sido registrado exitosamente',
+            showConfirmButton: true,
+            timer: 3000
+          }).then(() => {
+            this.registroForm.reset();
+            this.dialogRef.close(true);
+          });
         },
         (error) => {
           console.error('Error en el proceso:', error);
-          // Manejar el error (mostrar mensaje al usuario, etc.)
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un problema al registrar el plan de trabajo',
+          });
         }
       );
     } else {
       console.error('Formulario inválido. Verifica los campos.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Formulario inválido',
+        text: 'Por favor, completa todos los campos requeridos',
+      });
     }
   }
-  
+
   notificarInvestigadores(planTrabajo: ConfiguracionPlanTrabajo): Observable<any> {
     const usuarioActualDocumento = this.AutenticacionService.obtenerDatosUsuario().numerodocumento;
-  
+
     return this.investigadorService.getInvestigadores().pipe(
       switchMap(investigadores => {
         const investigadoresFiltrados = investigadores.filter(
           investigador => investigador.numerodocumento !== usuarioActualDocumento
         );
-  
+
         if (investigadoresFiltrados.length === 0) {
           console.log('No hay investigadores para notificar.');
-          return of([]); // Retorna un observable vacío si no hay investigadores para notificar
+          return of([]);
         }
-  
+
         const notificaciones = investigadoresFiltrados.map(investigador => {
           const notificacion = {
             asunto: 'Nuevo Plan de Trabajo Creado',
@@ -159,19 +175,18 @@ export class DialogoPlanDeTrabajoComponent implements OnInit {
           };
           return this.enviarNotificacion(notificacion);
         });
-  
+
         return forkJoin(notificaciones);
       })
     );
   }
-  
+
   enviarNotificacion(notificacion: any): Observable<any> {
     return this.ProyectoyproductoService.notificar(notificacion).pipe(
       catchError(error => {
         console.error('Error al enviar la notificación:', error);
-        return of(null); // Retorna un observable vacío para que forkJoin no se detenga
+        return of(null);
       })
     );
   }
 }
-  
